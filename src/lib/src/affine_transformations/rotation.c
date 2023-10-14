@@ -1,6 +1,6 @@
 #include "obj_viewer.h"
 
-void obj_viewer_rotate(ObjViewerMesh* mesh) {
+void objviewer_rotate(ObjViewerMesh* mesh, float x, float y, float z) {
   ;
   ;
 }

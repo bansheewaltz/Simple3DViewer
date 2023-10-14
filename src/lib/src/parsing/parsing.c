@@ -4,7 +4,7 @@
 #include "obj_viewer.h"
 
 // temporary solution
-ObjViewerMesh* obj_viewer_read(const char* path) {
+ObjViewerMesh* objviewer_read(const char* path) {
   fastObjMesh* mesh_orig = fast_obj_read(path);
   ObjViewerMesh* mesh = calloc(1, sizeof(ObjViewerMesh));
   assert(mesh);
@@ -17,7 +17,7 @@ ObjViewerMesh* obj_viewer_read(const char* path) {
   return mesh;
 }
 
-void obj_viewer_destroy(ObjViewerMesh* mesh) {
+void objviewer_destroy(ObjViewerMesh* mesh) {
   ;
   ;
 }

@@ -1,6 +1,6 @@
 #include "obj_viewer.h"
 
-void obj_viewer_translate(ObjViewerMesh* mesh) {
+void objviewer_translate(ObjViewerMesh* mesh, float x, float y, float z) {
   ;
   ;
 }

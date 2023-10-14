@@ -1,6 +1,6 @@
 #include "obj_viewer.h"
 
-void obj_viewer_scale(ObjViewerMesh* mesh) {
+void objviewer_scale(ObjViewerMesh* mesh, float x, float y, float z) {
   ;
   ;
 }

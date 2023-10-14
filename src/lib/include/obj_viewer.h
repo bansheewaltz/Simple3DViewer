@@ -24,11 +24,34 @@ typedef struct {
 
 } ObjViewerMesh;
 
-ObjViewerMesh* obj_viewer_read(const char* path);
-void obj_viewer_destroy(ObjViewerMesh* mesh);
+ObjViewerMesh* objviewer_read(const char* path);
+void objviewer_destroy(ObjViewerMesh* mesh);
+void objviewer_rotate(ObjViewerMesh* mesh, float x, float y, float z);
+void objviewer_rotate_x(ObjViewerMesh* mesh, float angle);
+void objviewer_rotate_y(ObjViewerMesh* mesh, float agnle);
+void objviewer_rotate_z(ObjViewerMesh* mesh, float angle);
+void objviewer_rotate_set_initial(ObjViewerMesh* mesh);
+void objviewer_rotate_set_initial_x(ObjViewerMesh* mesh);
+void objviewer_rotate_set_initial_y(ObjViewerMesh* mesh);
+void objviewer_rotate_set_initial_z(ObjViewerMesh* mesh);
 
-void obj_viewer_rotate(ObjViewerMesh* mesh);
-void obj_viewer_scale(ObjViewerMesh* mesh);
-void obj_viewer_translate(ObjViewerMesh* mesh);
+void objviewer_scale(ObjViewerMesh* mesh, float x, float y, float z);
+void objviewer_scale_uniformly(ObjViewerMesh* mesh, float factor);
+void objviewer_scale_x(ObjViewerMesh* mesh, float factor);
+void objviewer_scale_y(ObjViewerMesh* mesh, float factor);
+void objviewer_scale_z(ObjViewerMesh* mesh, float factor);
+void objviewer_scale_set_initial(ObjViewerMesh* mesh);
+void objviewer_scale_set_initial_x(ObjViewerMesh* mesh);
+void objviewer_scale_set_initial_y(ObjViewerMesh* mesh);
+void objviewer_scale_set_initial_z(ObjViewerMesh* mesh);
+
+void objviewer_translate(ObjViewerMesh* mesh, float x, float y, float z);
+void objviewer_translate_x(ObjViewerMesh* mesh, float x);
+void objviewer_translate_y(ObjViewerMesh* mesh, float y);
+void objviewer_translate_z(ObjViewerMesh* mesh, float z);
+void objviewer_translate_set_initial(ObjViewerMesh* mesh);
+void objviewer_translate_set_initial_x(ObjViewerMesh* mesh);
+void objviewer_translate_set_initial_y(ObjViewerMesh* mesh);
+void objviewer_translate_set_initial_z(ObjViewerMesh* mesh);
 
 #endif  // OBJ_VIEWER_H_
