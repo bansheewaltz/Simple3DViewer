@@ -1,8 +1,10 @@
 qt_add_executable(${APP_NAME}
-    mainwindow.ui
-    mainwindow.cpp
     main.cpp
+    mainwindow.cpp mainwindow.hpp mainwindow.ui
+    viewport.cpp viewport.hpp
 )
+
+target_include_directories(${APP_NAME} PRIVATE .)
 
 set_target_properties(${APP_NAME} PROPERTIES
     WIN32_EXECUTABLE ON
