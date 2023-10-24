@@ -1,4 +1,3 @@
-CC := gcc
 BUILD_DIR := build
 
 
@@ -19,12 +18,16 @@ buildv: config
 	VERBOSE=1 cmake --build $(BUILD_DIR)
 .PHONY: buildc
 
-lint:
-	clang-format --style=google -n $(shell find src \
-	                                           -not -path "src/lib/extern/*" \
-	                                           -type f \
-																						 \( -name '*.h' -or -name '*.c' \))
-.PHONY: lint
+LINTFLAGS := --style=google
+lint:     LINTFLAGS += -n
+lint_fix: LINTFLAGS += -i
+lint lint_fix:
+	clang-format ${LINTFLAGS} $(shell find src \
+	                                      -not -path "src/lib/extern/*" \
+	                                      -type f \
+													              \( -name '*.h'   -or -name '*.c' -or \
+													                 -name '*.hpp' -or -name '*.cpp' \))
+.PHONY: lint lint_fix
 
 clean:
 	$(RM) -r build
