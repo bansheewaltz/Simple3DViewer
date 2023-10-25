@@ -4,8 +4,22 @@
 #include <QOpenGLWidget>
 #include <QWidget>
 
-OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) { ; }
+OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
+  resetSettings();
+}
 OpenGLWidget::~OpenGLWidget() { ; }
+
+void OpenGLWidget::resetSettings() {
+  // Colors
+  setBackgroundColor(QColor("#EFE5D7"));
+  setLineColor(QColor("#974F4C"));
+  setPointColor(getLineColor());
+  // Camera
+  setCameraSpeed(0.2f);
+  setRotX(-30);
+  setRotY(-30);
+  setRotZ(0);
+}
 
 void OpenGLWidget::initializeGL() {
   // Set up the rendering context, load shaders and other resources, etc.
@@ -51,8 +65,15 @@ void OpenGLWidget::paintGL() {
 
   // Paint the object
   drawCube(0, 0, 0, 1);
-  drawCube(0, +1.5, 0, 0.33);
-  drawCube(0, -1.5, 0, 0.33);
+  float vspacing = 1.5;
+  drawCube(0, +vspacing, 0, 0.33);
+  drawCube(0, -vspacing, 0, 0.33);
+  //  float hspacing = 1.2;
+  //  drawCube(0, 0, +hspacing, 0.33);
+  //  drawCube(0, 0, +hspacing, 0.33);
+  //  drawCube(-hspacing, 0, 0, 0.33);
+  //  drawCube(+hspacing, 0, 0, 0.33);
+
   //  paintObject(this->mesh);
 }
 
@@ -65,7 +86,8 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
   if (this->is_line_drawing_active) {
     QColor lc = getLineColor();
     glColor3d(lc.redF(), lc.greenF(), lc.blueF());
-    glLineWidth(6);
+    float lw = getLineWidth();
+    glLineWidth(lw);
 
     const unsigned int *index_offset = &m.indices[0];
     for (unsigned int i = 0; i < m.face_count; i++) {
@@ -79,7 +101,8 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
   if (this->is_point_drawing_active) {
     QColor pc = getPointColor();
     glColor3d(pc.redF(), pc.greenF(), pc.blueF());
-    glPointSize(30);
+    float ps = getPointSize();
+    glPointSize(ps);
 
     glDrawArrays(GL_POINTS, 0, m.position_count);
   }

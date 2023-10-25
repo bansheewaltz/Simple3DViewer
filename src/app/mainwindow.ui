@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>422</height>
+    <width>600</width>
+    <height>585</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -67,6 +67,12 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
      <width>200</width>
@@ -76,7 +82,7 @@
    <property name="maximumSize">
     <size>
      <width>524287</width>
-     <height>500</height>
+     <height>445</height>
     </size>
    </property>
    <property name="palette">
@@ -105,6 +111,12 @@
     <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
     <property name="minimumSize">
      <size>
       <width>200</width>
@@ -112,30 +124,10 @@
      </size>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="1">
-        <widget class="QSlider" name="horizontalSlider">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="0" column="0">
+     <property name="rightMargin">
+      <number>12</number>
+     </property>
+     <item row="0" column="0" rowspan="3">
       <layout class="QVBoxLayout" name="mainPanelLayout">
        <item>
         <widget class="QLabel" name="displaySettingsLabel">
@@ -163,7 +155,7 @@
          <item>
           <widget class="QLabel" name="backgroundLabel">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -191,36 +183,64 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="displayLinesCheckBox">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>lines</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="displayLinesCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>lines</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="lineStyleDashedCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>dashed</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <layout class="QGridLayout" name="lineSettingsLayout">
+         <item row="1" column="0">
+          <widget class="QLabel" name="lineWidthLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>width</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="1">
           <widget class="QPushButton" name="lineColorPushButton">
            <property name="text">
             <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSlider" name="lineWidthHorizontalSlider">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="tracking">
-            <bool>true</bool>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
@@ -242,23 +262,19 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lineWidthLabel">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>13</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>width</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
+         <item row="1" column="1">
+          <layout class="QHBoxLayout" name="pointSizeSetterLayout_4">
+           <item>
+            <widget class="QSlider" name="pointSizeHorizontalSlider_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="pointSizeDoubleSpinBox_8"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -276,13 +292,6 @@
        </item>
        <item>
         <layout class="QGridLayout" name="pointSettingsLayout">
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pointColorPushButton">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="pointColorLabel">
            <property name="enabled">
@@ -345,6 +354,13 @@
            </item>
           </layout>
          </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pointColorPushButton">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="pointSizeLabel">
            <property name="enabled">
@@ -365,26 +381,151 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QLabel" name="cameraSettingsLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Location</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="LocationLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="pointSizeLabel_2">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>X</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QSlider" name="pointSizeHorizontalSlider_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="pointSizeDoubleSpinBox_3"/>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="pointSizeLabel_3">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Y</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QSlider" name="pointSizeHorizontalSlider_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="pointSizeDoubleSpinBox_5"/>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="pointSizeLabel_4">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Z</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QSlider" name="pointSizeHorizontalSlider_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="pointSizeDoubleSpinBox_6"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
       </layout>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="cameraSettingsLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-        </font>
-       </property>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Camera settings</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>

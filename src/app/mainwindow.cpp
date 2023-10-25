@@ -113,6 +113,7 @@ QString formColoredButtonStyleSheet(const QColor &c) {
 
 void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
   setLayoutWidgetsState(ui->lineSettingsLayout, checked);
+  ui->lineStyleDashedCheckBox->setEnabled(checked);
   //  setLayoutWidgetsVisibility(ui->lineSettingsLayout, checked);
 
   // Convert the button color to a greyscale
