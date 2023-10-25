@@ -99,10 +99,14 @@ QString formColoredButtonStyleSheet(const QColor &c) {
   return qss;
 }
 
-QColor convertColorToGreyscale(const QColor &c) {
+::QColor convertColorToGreyscale(const QColor &c) {
   // Formula from the documentaiton:
   // https://doc.qt.io/archives/qt-4.8/qcolor.html#qGray
   int greyv = (c.red() * 11 + c.green() * 16 + c.blue() * 5) / 32;
+  const int bound = (float)255 / 100 * 44;
+  if (greyv < bound) {
+    greyv = bound;
+  }
   QColor result = QColor(greyv, greyv, greyv);
   return result;
 }
@@ -116,7 +120,7 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
   color = ui->viewport->getLineColor();
   QColor result = color;
   if (checked == false) {
-    result = convertColorToGreyscale(color);
+    result = ::convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
   ui->linesColorPushButton->setStyleSheet(qss);
@@ -130,7 +134,7 @@ void MainWindow::on_displayVerticesCheckBox_toggled(bool checked) {
   color = ui->viewport->getPointColor();
   QColor result = color;
   if (checked == false) {
-    result = convertColorToGreyscale(color);
+    result = ::convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
   ui->pointColorPushButton->setStyleSheet(qss);
