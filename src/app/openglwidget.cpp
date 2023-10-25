@@ -1,8 +1,8 @@
+#include "openglwidget.hpp"
+
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <QWidget>
-
-#include "openglwidget.hpp"
 
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) { ; }
 OpenGLWidget::~OpenGLWidget() { ; }

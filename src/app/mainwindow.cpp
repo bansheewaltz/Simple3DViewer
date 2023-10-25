@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
   //
   PaintLineColorButton();
   PaintBackgroundColorButton();
-  PaintVertexColorButton();
+  PaintPointColorButton();
   // apply style to label-widgets
   //  changeLabelPalette(ui->backgroundLabel);
 }
@@ -58,7 +58,7 @@ void MainWindow::on_backgroundColorPushButton_clicked() {
   ui->viewport->update();
   PaintBackgroundColorButton();
 }
-void MainWindow::on_linesColorPushButton_clicked() {
+void MainWindow::on_lineColorPushButton_clicked() {
   QColor prev_color = ui->viewport->getLineColor();
   QColor color = QColorDialog::getColor(prev_color, this);
   ui->viewport->setLineColor(color);
@@ -68,9 +68,9 @@ void MainWindow::on_linesColorPushButton_clicked() {
 void MainWindow::on_pointColorPushButton_clicked() {
   QColor prev_color = ui->viewport->getPointColor();
   QColor color = QColorDialog::getColor(prev_color, this);
-  ui->viewport->setVertexColor(color);
+  ui->viewport->setPointColor(color);
   ui->viewport->update();
-  PaintVertexColorButton();
+  PaintPointColorButton();
 }
 
 void setLayoutWidgetsVisibility(const QLayout *layout, bool visibility) {
@@ -123,7 +123,7 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
     result = ::convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
-  ui->linesColorPushButton->setStyleSheet(qss);
+  ui->lineColorPushButton->setStyleSheet(qss);
 }
 
 void MainWindow::on_displayVerticesCheckBox_toggled(bool checked) {
@@ -147,14 +147,14 @@ void MainWindow::on_displayVerticesCheckBox_toggled(bool checked) {
 void MainWindow::PaintLineColorButton() {
   QColor c = ui->viewport->getLineColor();
   QString qss = formColoredButtonStyleSheet(c);
-  ui->linesColorPushButton->setStyleSheet(qss);
+  ui->lineColorPushButton->setStyleSheet(qss);
 }
 void MainWindow::PaintBackgroundColorButton() {
   QColor c = ui->viewport->getBackgroundColor();
   QString qss = formColoredButtonStyleSheet(c);
   ui->backgroundColorPushButton->setStyleSheet(qss);
 }
-void MainWindow::PaintVertexColorButton() {
+void MainWindow::PaintPointColorButton() {
   QColor c = ui->viewport->getPointColor();
   QString qss = formColoredButtonStyleSheet(c);
   ui->pointColorPushButton->setStyleSheet(qss);

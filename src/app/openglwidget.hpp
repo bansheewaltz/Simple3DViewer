@@ -22,9 +22,9 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // Display settings
   QColor background_color = QColor("#EFE5D7");
   QColor line_color = QColor("#974F4C");
-  QColor vertex_color = line_color;
+  QColor point_color = line_color;
   float line_width;
-  float vertex_size;
+  float point_size;
   // Mouse camera control
   float camera_speed = 0.2;
   QPoint mouse_pos;
@@ -58,14 +58,14 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // Color
   void setBackgroundColor(const QColor &color) { background_color = color; }
   void setLineColor(const QColor &color) { line_color = color; }
-  void setVertexColor(const QColor &color) { vertex_color = color; }
+  void setPointColor(const QColor &color) { point_color = color; }
   QColor getBackgroundColor() const { return background_color; }
   QColor getLineColor() const { return line_color; }
-  QColor getPointColor() const { return vertex_color; }
+  QColor getPointColor() const { return point_color; }
   // Primitives' width/size
-  void setVertexSize(float size) { vertex_size = size; }
+  void setPointSize(float size) { point_size = size; }
   void setLineWidth(float width) { line_width = width; }
-  float getVertexSize() const { return vertex_size; }
+  float getPointSize() const { return point_size; }
   float getLineWidth() const { return line_width; }
 };
 
