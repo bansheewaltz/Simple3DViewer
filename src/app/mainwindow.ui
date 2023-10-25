@@ -70,7 +70,7 @@
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>400</height>
+     <height>422</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -81,25 +81,13 @@
    </property>
    <property name="palette">
     <palette>
-     <active>
-      <colorrole role="Dark">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>66</red>
-         <green>66</green>
-         <blue>66</blue>
-        </color>
-       </brush>
-      </colorrole>
-     </active>
+     <active/>
      <inactive/>
      <disabled/>
     </palette>
    </property>
    <property name="styleSheet">
-    <string notr="true">QDockWidget::title {
-    color: solid
-}</string>
+    <string notr="true"/>
    </property>
    <property name="floating">
     <bool>false</bool>
