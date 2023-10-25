@@ -12,7 +12,7 @@ typedef struct {
 
   /* Face data: one element for each face */
   unsigned int face_count;
-  unsigned int* face_vertices_counts;
+  unsigned int* face_vertex_counts;
 
   /* Index data: one element for each face vertex */
   unsigned int index_count;
