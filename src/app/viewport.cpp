@@ -4,17 +4,15 @@
 #include <QOpenGLWidget>
 #include <QWidget>
 
-Viewport::Viewport(QWidget *parent) : QOpenGLWidget(parent) {
-  //  setBackgroundColor(QColor(255, 0, 0, 127));
-}
-
+Viewport::Viewport(QWidget *parent) : QOpenGLWidget(parent) { ; }
 Viewport::~Viewport() { ; }
 
 void Viewport::initializeGL() {
   // Set up the rendering context, load shaders and other resources, etc.
 
+  // Retrieve OpenGL functions from graphics card's drivers
   initializeOpenGLFunctions();
-  // set proper rendering of element overlay
+  // Set proper rendering of overlappint elements
   glEnable(GL_DEPTH_TEST);
 }
 
@@ -28,48 +26,16 @@ void Viewport::resizeGL(int w, int h) {
   // m_projection.perspective(45.0f, w / float(h), 0.01f, 100.0f);
 }
 
-static const float positions[] = {
-    0.5,  -0.5, -0.5,  //
-    0.5,  -0.5, -1,    //
-    -0.5, -0.5, -0.5,  //
-    -0.5, -0.5, -1,    //
-
-    0.5,  0.5,  -0.5,  //
-    0.5,  0.5,  -1,    //
-    -0.5, 0.5,  -0.5,  //
-    -0.5, 0.5,  -1,    //
-};
-static const float cols[] = {
-    0.5,  -0.5, 0.5,  //
-    0.5,  -0.5, 1,    //
-    -0.5, -0.5, 0.5,  //
-    -0.5, -0.5, 1,    //
-
-    0.5,  0.5,  0.5,  //
-    0.5,  0.5,  1,    //
-    -0.5, 0.5,  0.5,  //
-    -0.5, 0.5,  1,    //
-};
-
-static const unsigned int indices[] = {3, 2, 0, 1,   // bottom
-                                       4, 5, 7, 6,   // top
-                                       2, 3, 7, 6,   // left
-                                       0, 1, 5, 4,   // right
-                                       0, 4, 6, 2,   // near
-                                       1, 3, 7, 5};  // far
-static const unsigned int face_vertices_counts[] = {4, 4, 4, 4, 4, 4};
-
 void Viewport::paintGL() {
-  // Draw the scene:
+  // Draw the scene
 
-  // set the background color
-  //  glClearColor(0.99f, 0.99f, 0.97f, 0.5f);
+  // Set the background color
   QColor bc = getBackgroundColor();
   glClearColor(bc.redF(), bc.greenF(), bc.blueF(), bc.alphaF());
   // clear the viewport by setting all the pixels to the background color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // set the model-view matrix
+  // Set the model-view matrix
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glScalef(0.5, 0.5, 0.5);
@@ -77,54 +43,83 @@ void Viewport::paintGL() {
   glRotatef(mouse_rotx, 1, 0, 0);
   glRotatef(mouse_roty, 0, 1, 0);
 
-  // set projection matrix
+  // Set projection matrix
   glMatrixMode(GL_PROJECTION);
-  float ar = (float)this->w / (float)this->h;
   glLoadIdentity();
-  float l = -1;
-  float r = 1;
-  glOrtho((float)l / ar, (float)r / ar, -1, 1, 0, 2);
+  float ar = (float)this->w / (float)this->h;
+  glOrtho(-1 * ar, 1 * ar, -1, 1, 0, 2);
 
-  unsigned int face_count = 6;
-  unsigned int index_count = 8;
+  // Paint the object
+  drawCube(0, 0, 0, 1);
+  drawCube(0, +1.5, 0, 0.33);
+  drawCube(0, -1.5, 0, 0.33);
+  //  paintObject(this->mesh);
+}
 
-  // set the buffers
-  glVertexPointer(3, GL_FLOAT, 0, positions);
+void Viewport::paintObject(const ObjViewerMesh &m) {
+  // Set up the buffers
   glEnableClientState(GL_VERTEX_ARRAY);
-  //  glColorPointer(3, GL_FLOAT, 0, cols);
-  //  glEnableClientState(GL_COLOR_ARRAY);
+  glVertexPointer(3, GL_FLOAT, 0, m.positions);
 
-  // send the line draw calls
-  QColor lc = getLineColor();
-  glColor3d(lc.redF(), lc.greenF(), lc.blueF());
+  // Send the line draw calls
   if (this->is_line_drawing_active) {
+    QColor lc = getLineColor();
+    glColor3d(lc.redF(), lc.greenF(), lc.blueF());
     glLineWidth(6);
-    const unsigned int *index_offset = &indices[0];
-    for (unsigned int i = 0; i < face_count; i++) {
-      glDrawElements(GL_LINE_LOOP, face_vertices_counts[i], GL_UNSIGNED_INT,
+
+    const unsigned int *index_offset = &m.indices[0];
+    for (unsigned int i = 0; i < m.face_count; i++) {
+      glDrawElements(GL_LINE_LOOP, m.face_vertex_counts[i], GL_UNSIGNED_INT,
                      index_offset);
-      index_offset += face_vertices_counts[i];
+      index_offset += m.face_vertex_counts[i];
     }
   }
 
-  // send the point draw calls
-  QColor pc = getPointColor();
-  glColor3d(pc.redF(), pc.greenF(), pc.blueF());
+  // Send the point draw calls
   if (this->is_point_drawing_active) {
+    QColor pc = getPointColor();
+    glColor3d(pc.redF(), pc.greenF(), pc.blueF());
     glPointSize(30);
-    glDrawArrays(GL_POINTS, 0, index_count);
+
+    glDrawArrays(GL_POINTS, 0, m.position_count);
   }
 
-  // disable the buffers
-  //  glDisableClientState(GL_COLOR_ARRAY);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  //  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-// set interactive rotation in the viewport with a mouse
+void Viewport::drawCube(float x, float y, float z, float side_len) {
+  const float hside = side_len / 2;
+  static unsigned int position_count = 8;
+  float positions[] = {
+      x + hside, y - hside, z + hside,  // right bottom front
+      x + hside, y - hside, z - hside,  // right bottom back
+      x - hside, y - hside, z + hside,  // left bottom front
+      x - hside, y - hside, z - hside,  // left bottom back
+
+      x + hside, y + hside, z + hside,  // right top front
+      x + hside, y + hside, z - hside,  // right top back
+      x - hside, y + hside, z + hside,  // left top front
+      x - hside, y + hside, z - hside,  // left top back
+  };
+  static unsigned int face_count = 6;
+  static unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
+  static unsigned int index_count = 8;
+  static unsigned int indices[] = {3, 2, 0, 1,   // bottom
+                                   4, 5, 7, 6,   // top
+                                   2, 3, 7, 6,   // left
+                                   0, 1, 5, 4,   // right
+                                   0, 4, 6, 2,   // near
+                                   1, 3, 7, 5};  // far
+  ObjViewerMesh m = {position_count,     positions,   face_count,
+                     face_vertex_counts, index_count, indices};
+  paintObject(m);
+}
+
+// Set interactive rotation in the viewport with a mouse
 void Viewport::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
 void Viewport::mouseMoveEvent(QMouseEvent *m) {
-  mouse_rotx += mouse_speed * (m->pos().y() - mouse_pos.y());
-  mouse_roty += mouse_speed * (m->pos().x() - mouse_pos.x());
+  mouse_rotx += camera_speed * (m->pos().y() - mouse_pos.y());
+  mouse_roty += camera_speed * (m->pos().x() - mouse_pos.x());
   mouse_pos = m->pos();
   update();
 }
