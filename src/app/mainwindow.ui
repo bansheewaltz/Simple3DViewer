@@ -52,7 +52,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="Viewport" name="viewport">
+     <widget class="OpenGLWidget" name="viewport">
       <property name="minimumSize">
        <size>
         <width>400</width>
@@ -395,9 +395,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Viewport</class>
+   <class>OpenGLWidget</class>
    <extends>QOpenGLWidget</extends>
-   <header>viewport.hpp</header>
+   <header>openglwidget.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

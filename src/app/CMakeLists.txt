@@ -1,7 +1,7 @@
 qt_add_executable(${APP_NAME}
     main.cpp
     mainwindow.cpp mainwindow.hpp mainwindow.ui
-    viewport.cpp viewport.hpp
+    openglwidget.cpp openglwidget.hpp
 )
 
 target_include_directories(${APP_NAME} PRIVATE .)

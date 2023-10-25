@@ -1,13 +1,13 @@
-#include "viewport.hpp"
-
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <QWidget>
 
-Viewport::Viewport(QWidget *parent) : QOpenGLWidget(parent) { ; }
-Viewport::~Viewport() { ; }
+#include "openglwidget.hpp"
 
-void Viewport::initializeGL() {
+OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) { ; }
+OpenGLWidget::~OpenGLWidget() { ; }
+
+void OpenGLWidget::initializeGL() {
   // Set up the rendering context, load shaders and other resources, etc.
 
   // Retrieve OpenGL functions from graphics card's drivers
@@ -16,7 +16,7 @@ void Viewport::initializeGL() {
   glEnable(GL_DEPTH_TEST);
 }
 
-void Viewport::resizeGL(int w, int h) {
+void OpenGLWidget::resizeGL(int w, int h) {
   // Update projection matrix and other size related settings
 
   glViewport(0, 0, w, h);
@@ -26,7 +26,7 @@ void Viewport::resizeGL(int w, int h) {
   // m_projection.perspective(45.0f, w / float(h), 0.01f, 100.0f);
 }
 
-void Viewport::paintGL() {
+void OpenGLWidget::paintGL() {
   // Draw the scene
 
   // Set the background color
@@ -56,7 +56,7 @@ void Viewport::paintGL() {
   //  paintObject(this->mesh);
 }
 
-void Viewport::paintObject(const ObjViewerMesh &m) {
+void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
   // Set up the buffers
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, m.positions);
@@ -87,7 +87,7 @@ void Viewport::paintObject(const ObjViewerMesh &m) {
   //  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void Viewport::drawCube(float x, float y, float z, float side_len) {
+void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
   const float hside = side_len / 2;
   static unsigned int position_count = 8;
   float positions[] = {
@@ -116,8 +116,8 @@ void Viewport::drawCube(float x, float y, float z, float side_len) {
 }
 
 // Set interactive rotation in the viewport with a mouse
-void Viewport::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
-void Viewport::mouseMoveEvent(QMouseEvent *m) {
+void OpenGLWidget::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
+void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
   mouse_rotx += camera_speed * (m->pos().y() - mouse_pos.y());
   mouse_roty += camera_speed * (m->pos().x() - mouse_pos.x());
   mouse_pos = m->pos();

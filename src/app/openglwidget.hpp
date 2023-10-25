@@ -1,5 +1,5 @@
-#ifndef VIEWPORT_HPP
-#define VIEWPORT_HPP
+#ifndef OPENGLWIDGET_H
+#define OPENGLWIDGET_H
 
 #define GL_SILENCE_DEPRECATION
 
@@ -10,7 +10,7 @@
 
 #include "obj_viewer.h"
 
-class Viewport : public QOpenGLWidget, protected QOpenGLFunctions {
+class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
  private:
@@ -39,8 +39,8 @@ class Viewport : public QOpenGLWidget, protected QOpenGLFunctions {
   bool is_line_drawing_active;
 
  public:
-  Viewport(QWidget *parent = nullptr);
-  ~Viewport();
+  OpenGLWidget(QWidget *parent = nullptr);
+  ~OpenGLWidget();
 
  private:
   // Template functions
@@ -69,4 +69,4 @@ class Viewport : public QOpenGLWidget, protected QOpenGLFunctions {
   float getLineWidth() const { return line_width; }
 };
 
-#endif  // VIEWPORT_HPP
+#endif  // OPENGLWIDGET_H
