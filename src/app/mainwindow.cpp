@@ -12,30 +12,24 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
 
   // Line drawing
-  ui->displayLinesCheckBox->setCheckState(Qt::CheckState::Checked);
+  ui->displayPointsCheckBox->setCheckState(Qt::CheckState::Checked);
   ui->viewport->is_line_drawing_active = true;
   on_displayLinesCheckBox_toggled(true);
   // Point drawing
-  ui->displayVerticesCheckBox->setCheckState(Qt::CheckState::Unchecked);
+  ui->displayPointsCheckBox->setCheckState(Qt::CheckState::Unchecked);
   ui->viewport->is_point_drawing_active = false;
-  on_displayVerticesCheckBox_toggled(false);
+  on_displayPointsCheckBox_toggled(false);
   //
+  //  paintButton(ui->backgroundColorPushButton,
+  //  &ui->viewport->getBackgroundColor);
   PaintLineColorButton();
   PaintBackgroundColorButton();
   PaintPointColorButton();
-  // apply style to label-widgets
-  //  changeLabelPalette(ui->backgroundLabel);
 }
-
-// void changeLabelPalette(QWidget *l) {
-//   QPalette pal = QPalette();
-//   pal.setColor(QPalette::Active, QPalette::WindowText, (QColor) "#D0D0D0");
-//   l->setPalette(pal);
-// }
 
 MainWindow::~MainWindow() { delete ui; }
 
-void MainWindow::on_displayVerticesCheckBox_stateChanged(int arg1) {
+void MainWindow::on_displayPointsCheckBox_stateChanged(int arg1) {
   bool state = ui->viewport->is_point_drawing_active;
   ui->viewport->is_point_drawing_active = !state;
   ui->viewport->update();
@@ -103,10 +97,12 @@ QString formColoredButtonStyleSheet(const QColor &c) {
   // Formula from the documentaiton:
   // https://doc.qt.io/archives/qt-4.8/qcolor.html#qGray
   int greyv = (c.red() * 11 + c.green() * 16 + c.blue() * 5) / 32;
+  // Set the lower bound
   const int bound = (float)255 / 100 * 44;
   if (greyv < bound) {
     greyv = bound;
   }
+
   QColor result = QColor(greyv, greyv, greyv);
   return result;
 }
@@ -127,7 +123,7 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
   ui->lineColorPushButton->setStyleSheet(qss);
 }
 
-void MainWindow::on_displayVerticesCheckBox_toggled(bool checked) {
+void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
   setLayoutWidgetsState(ui->pointSettingsLayout, checked);
 
   // Convert the button color to a greyscale if the checkbox is disabled
@@ -150,6 +146,7 @@ void MainWindow::PaintLineColorButton() {
   QString qss = formColoredButtonStyleSheet(c);
   ui->lineColorPushButton->setStyleSheet(qss);
 }
+
 void MainWindow::PaintBackgroundColorButton() {
   QColor c = ui->viewport->getBackgroundColor();
   QString qss = formColoredButtonStyleSheet(c);
@@ -160,3 +157,9 @@ void MainWindow::PaintPointColorButton() {
   QString qss = formColoredButtonStyleSheet(c);
   ui->pointColorPushButton->setStyleSheet(qss);
 }
+// void MainWindow::paintButton(QPushButton *b,
+//                              QColor (OpenGLWidget::*getColor)()) {
+//   QColor c = ui->viewport->getColor();
+//   QString qss = formColoredButtonStyleSheet(c);
+//   b->setStyleSheet(qss);
+// }
