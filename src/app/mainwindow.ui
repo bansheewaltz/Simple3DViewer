@@ -293,7 +293,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="lineStyleDashedCheckBox_2">
+            <widget class="QCheckBox" name="pointStyleSquareCheckBox">
              <property name="text">
               <string>square</string>
              </property>

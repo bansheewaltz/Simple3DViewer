@@ -83,7 +83,7 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
   glVertexPointer(3, GL_FLOAT, 0, m.positions);
 
   // Send the line draw calls
-  if (this->is_line_drawing_active) {
+  if (this->isLineDisplayEnabled()) {
     QColor lc = getLineColor();
     glColor3d(lc.redF(), lc.greenF(), lc.blueF());
     float lw = getLineWidth();
@@ -98,7 +98,7 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
   }
 
   // Send the point draw calls
-  if (this->is_point_drawing_active) {
+  if (this->isPointDisplayEnabled()) {
     QColor pc = getPointColor();
     glColor3d(pc.redF(), pc.greenF(), pc.blueF());
     float ps = getPointSize();

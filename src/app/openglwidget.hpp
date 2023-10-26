@@ -41,10 +41,6 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   int w, h;
 
  public:
-  bool is_point_drawing_active;
-  bool is_line_drawing_active;
-
- public:
   OpenGLWidget(QWidget *parent = nullptr);
   ~OpenGLWidget();
 
@@ -62,7 +58,12 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void mouseMoveEvent(QMouseEvent *) override;
 
  public:
-  // Primitives' Colors
+  // Primitives' display status
+  void setLineDisplayEnabled(bool e) { line_display_enabled = e; }
+  void setPointDisplayEnabled(bool e) { point_display_enabled = e; }
+  bool isLineDisplayEnabled() const { return line_display_enabled; }
+  bool isPointDisplayEnabled() const { return point_display_enabled; }
+  // Primitives' colors
   void setBackgroundColor(const QColor &color) { background_color = color; }
   void setLineColor(const QColor &color) { line_color = color; }
   void setPointColor(const QColor &color) { point_color = color; }
