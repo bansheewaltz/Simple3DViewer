@@ -11,19 +11,18 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
-  // Set line display status
-  ui->displayLinesCheckBox->setChecked(true);
-  ui->displayLinesCheckBox->toggled(true);
-  // Set point display status
-  ui->displayPointsCheckBox->setChecked(false);
-  ui->displayPointsCheckBox->toggled(false);
+  PaintLineColorButton();
+  PaintBackgroundColorButton();
+  PaintPointColorButton();
+
+  // Set lines display status
+  on_displayLinesCheckBox_toggled(true);
+  // Set points display status
+  on_displayPointsCheckBox_toggled(false);
 
   // An attempt to generalize:
   //  paintButton(ui->backgroundColorPushButton,
   //  &ui->viewport->getBackgroundColor);
-  PaintLineColorButton();
-  PaintBackgroundColorButton();
-  PaintPointColorButton();
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -99,11 +98,14 @@ QString formColoredButtonStyleSheet(const QColor &c) {
 }
 
 void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
+  // Set the state in the viewport
   ui->viewport->setLineDisplayEnabled(checked);
+  ui->viewport->update();
+  // Set the checkbox check
+  ui->displayLinesCheckBox->setChecked(checked);
+  // Disable the settings' frame
   setLayoutWidgetsState(ui->lineSettingsLayout, checked);
   ui->lineStyleDashedCheckBox->setEnabled(checked);
-  //  setLayoutWidgetsVisibility(ui->lineSettingsLayout, checked);
-
   // Convert the button color to a greyscale
   static QColor color;
   color = ui->viewport->getLineColor();
@@ -116,10 +118,14 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
 }
 
 void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
+  // Set the state in the viewport
   ui->viewport->setPointDisplayEnabled(checked);
+  ui->viewport->update();
+  // Set the checkbox check
+  ui->displayPointsCheckBox->setChecked(checked);
+  // Disable the settings' frame
   setLayoutWidgetsState(ui->pointSettingsLayout, checked);
   ui->pointStyleSquareCheckBox->setEnabled(checked);
-
   // Convert the button color to a greyscale if the checkbox is disabled
   static QColor color;
   color = ui->viewport->getPointColor();
@@ -156,3 +162,29 @@ void MainWindow::PaintPointColorButton() {
 //   QString qss = formColoredButtonStyleSheet(c);
 //   b->setStyleSheet(qss);
 // }
+
+void MainWindow::on_pointSizeSlider_valueChanged(int value) {
+  ui->viewport->setPointSize(value);
+  ui->viewport->update();
+}
+
+void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
+  if (checked == true)
+    ui->viewport->setPointStyle(PointStyle::SQUARE);
+  else
+    ui->viewport->setPointStyle(PointStyle::CIRCLE);
+  ui->viewport->update();
+}
+
+void MainWindow::on_lineWidthSlider_valueChanged(int value) {
+  ui->viewport->setLineWidth(value);
+  ui->viewport->update();
+}
+
+void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
+  if (checked == true)
+    ui->viewport->setLineStyle(LineStyle::DASHED);
+  else
+    ui->viewport->setLineStyle(LineStyle::SOLID);
+  ui->viewport->update();
+}

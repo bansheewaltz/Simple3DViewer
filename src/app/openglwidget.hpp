@@ -10,13 +10,20 @@
 
 #include "obj_viewer.h"
 
+enum LineStyle { SOLID, DASHED };
+enum PointStyle { CIRCLE, SQUARE };
+
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
  private:
   ObjViewerMesh mesh;
-  //  ObjViewerMatrix4x4 model_matrix;
-  //  ObjViewerMatrix4x4 view_matrix;
+  ObjViewerMatrix4x4 norm_matrix;
+  float scalex, scaley, scalez;
+  float rotx, roty, rot;
+  float trnsx, trnsy, trnsz;
+  ObjViewerMatrix4x4 model_matrix;
+  ObjViewerMatrix4x4 view_matrix;
   //  ObjViewerMatrix4x4 projection_matrix;
 
   // Display settings
@@ -25,20 +32,16 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   QColor point_color;
   bool line_display_enabled;
   bool point_display_enabled;
-  enum LineStyle { SOLID, DASHED };
-  enum PointStyle { CIRCLE, SQUARE };
   LineStyle line_style;
   PointStyle point_style;
   float line_width;
   float point_size;
-  // Mouse camera control
+  // Camera control
   float camera_speed;
   QPoint mouse_pos;
-  float mouse_rotx;
-  float mouse_roty;
-  float mouse_rotz;
-  // Window settings
-  int w, h;
+  float camera_rotx, camera_roty, camera_rotz;
+  // Viewport settings
+  int viewport_w, viewport_h;
 
  public:
   OpenGLWidget(QWidget *parent = nullptr);
@@ -51,8 +54,9 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void paintGL() override;
   // Helpers
   void resetSettings();
+  virtual void drawAxes();
+  virtual void drawObject(const ObjViewerMesh &);
   virtual void drawCube(float, float, float, float);
-  virtual void paintObject(const ObjViewerMesh &);
   // Events
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
@@ -76,17 +80,19 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   float getLineWidth() const { return line_width; }
   float getPointSize() const { return point_size; }
   // Primitives' style
-  void setLineStyle(LineStyle ls) { ; }
-  void setPointStyle(PointStyle ps) { ; }
+  void setLineStyle(LineStyle ls) { line_style = ls; }
+  void setPointStyle(PointStyle ps) { point_style = ps; }
+  LineStyle getLineStyle() const { return line_style; }
+  PointStyle getPointStyle() const { return point_style; }
   // Camera
   void setCameraSpeed(float speed) { camera_speed = speed; }
-  void setRotX(int angle = 0) { mouse_rotx = angle; }
-  void setRotY(int angle = 0) { mouse_roty = angle; }
-  void setRotZ(int angle = 0) { mouse_rotz = angle; }
+  void setRotX(int angle = 0) { camera_rotx = angle; }
+  void setRotY(int angle = 0) { camera_roty = angle; }
+  void setRotZ(int angle = 0) { camera_rotz = angle; }
   float getCameraSpees() const { return camera_speed; }
-  float getRotX() const { return mouse_rotx; }
-  float getRotY() const { return mouse_roty; }
-  float getRotZ() const { return mouse_rotz; }
+  float getRotX() const { return camera_rotx; }
+  float getRotY() const { return camera_roty; }
+  float getRotZ() const { return camera_rotz; }
 };
 
 #endif  // OPENGLWIDGET_H

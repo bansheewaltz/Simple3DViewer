@@ -14,6 +14,8 @@ void OpenGLWidget::resetSettings() {
   setBackgroundColor(QColor("#EFE5D7"));
   setLineColor(QColor("#974F4C"));
   setPointColor(getLineColor());
+  // Primitives' style
+  setPointStyle(PointStyle::CIRCLE);
   // Camera
   setCameraSpeed(0.2f);
   setRotX(-30);
@@ -34,8 +36,8 @@ void OpenGLWidget::resizeGL(int w, int h) {
   // Update projection matrix and other size related settings
 
   glViewport(0, 0, w, h);
-  this->w = w;
-  this->h = h;
+  this->viewport_w = w;
+  this->viewport_h = h;
   // m_projection.setToIdentity();
   // m_projection.perspective(45.0f, w / float(h), 0.01f, 100.0f);
 }
@@ -54,13 +56,13 @@ void OpenGLWidget::paintGL() {
   glLoadIdentity();
   glScalef(0.5, 0.5, 0.5);
   glTranslatef(0, 0, -1);
-  glRotatef(mouse_rotx, 1, 0, 0);
-  glRotatef(mouse_roty, 0, 1, 0);
+  glRotatef(camera_rotx, 1, 0, 0);
+  glRotatef(camera_roty, 0, 1, 0);
 
   // Set projection matrix
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  float ar = (float)this->w / (float)this->h;
+  float ar = (float)this->viewport_w / (float)this->viewport_h;
   glOrtho(-1 * ar, 1 * ar, -1, 1, 0, 2);
 
   // Paint the object
@@ -77,7 +79,7 @@ void OpenGLWidget::paintGL() {
   //  paintObject(this->mesh);
 }
 
-void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
+void OpenGLWidget::drawObject(const ObjViewerMesh &m) {
   // Set up the buffers
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, m.positions);
@@ -88,6 +90,10 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
     glColor3d(lc.redF(), lc.greenF(), lc.blueF());
     float lw = getLineWidth();
     glLineWidth(lw);
+    if (getLineStyle() == LineStyle::DASHED) {
+      glEnable(GL_LINE_STIPPLE);
+      glLineStipple(10, 0x3333);
+    }
 
     const unsigned int *index_offset = &m.indices[0];
     for (unsigned int i = 0; i < m.face_count; i++) {
@@ -95,6 +101,8 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
                      index_offset);
       index_offset += m.face_vertex_counts[i];
     }
+
+    glDisable(GL_LINE_STIPPLE);
   }
 
   // Send the point draw calls
@@ -103,8 +111,13 @@ void OpenGLWidget::paintObject(const ObjViewerMesh &m) {
     glColor3d(pc.redF(), pc.greenF(), pc.blueF());
     float ps = getPointSize();
     glPointSize(ps);
+    if (getPointStyle() == PointStyle::CIRCLE) {
+      glEnable(GL_POINT_SMOOTH);
+    }
 
     glDrawArrays(GL_POINTS, 0, m.position_count);
+
+    glDisable(GL_POINT_SMOOTH);
   }
 
   //  glDisableClientState(GL_VERTEX_ARRAY);
@@ -135,14 +148,19 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
                                    1, 3, 7, 5};  // far
   ObjViewerMesh m = {position_count,     positions,   face_count,
                      face_vertex_counts, index_count, indices};
-  paintObject(m);
+  drawObject(m);
+}
+
+void OpenGLWidget::drawAxes() {
+  ;
+  ;
 }
 
 // Set interactive rotation in the viewport with a mouse
 void OpenGLWidget::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
-  mouse_rotx += camera_speed * (m->pos().y() - mouse_pos.y());
-  mouse_roty += camera_speed * (m->pos().x() - mouse_pos.x());
+  camera_rotx += camera_speed * (m->pos().y() - mouse_pos.y());
+  camera_roty += camera_speed * (m->pos().x() - mouse_pos.x());
   mouse_pos = m->pos();
   update();
 }

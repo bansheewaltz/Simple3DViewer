@@ -81,8 +81,8 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>524287</width>
-     <height>900</height>
+     <width>224</width>
+     <height>851</height>
     </size>
    </property>
    <property name="palette">
@@ -111,6 +111,12 @@
     <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
     <property name="minimumSize">
      <size>
       <width>200</width>
@@ -229,6 +235,12 @@
            </item>
            <item row="0" column="1">
             <widget class="QPushButton" name="lineColorPushButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -238,6 +250,12 @@
             <widget class="QLabel" name="lineColorLabel">
              <property name="enabled">
               <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
              <property name="font">
               <font>
@@ -253,14 +271,17 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <layout class="QHBoxLayout" name="pointSizeSetterLayout_4">
+            <layout class="QHBoxLayout" name="lineWidthSetterLayout">
              <item>
-              <widget class="QSlider" name="pointSizeHorizontalSlider_8">
+              <widget class="QSlider" name="lineWidthSlider">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="maximum">
+                <number>12</number>
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -268,7 +289,17 @@
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="pointSizeDoubleSpinBox_8"/>
+              <widget class="QDoubleSpinBox" name="lineWidthSpinBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -354,14 +385,17 @@
            <item row="1" column="1">
             <layout class="QHBoxLayout" name="pointSizeSetterLayout">
              <item>
-              <widget class="QSlider" name="pointSizeHorizontalSlider">
+              <widget class="QSlider" name="pointSizeSlider">
+               <property name="maximum">
+                <number>30</number>
+               </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="pointSizeDoubleSpinBox"/>
+              <widget class="QDoubleSpinBox" name="pointSizeSpinBox"/>
              </item>
             </layout>
            </item>
@@ -398,6 +432,9 @@
      </item>
      <item>
       <layout class="QVBoxLayout" name="cameraLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
        <item>
         <widget class="QLabel" name="cameraLabel">
          <property name="sizePolicy">

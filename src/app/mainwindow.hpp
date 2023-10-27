@@ -32,6 +32,10 @@ class MainWindow : public QMainWindow {
   void on_pointColorPushButton_clicked();
   void on_displayLinesCheckBox_toggled(bool checked);
   void on_displayPointsCheckBox_toggled(bool checked);
+  void on_pointSizeSlider_valueChanged(int value);
+  void on_pointStyleSquareCheckBox_toggled(bool checked);
+  void on_lineWidthSlider_valueChanged(int value);
+  void on_lineStyleDashedCheckBox_toggled(bool checked);
 };
 
 #endif  // MAINWINDOW_HPP
