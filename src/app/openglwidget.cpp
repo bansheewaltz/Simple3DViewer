@@ -14,6 +14,8 @@ void OpenGLWidget::resetSettings() {
   setBackgroundColor(QColor("#EFE5D7"));
   setLineColor(QColor("#974F4C"));
   setPointColor(getLineColor());
+  //
+  setLineWidth(3);
   // Primitives' style
   setPointStyle(PointStyle::CIRCLE);
   // Camera
@@ -51,6 +53,14 @@ void OpenGLWidget::paintGL() {
   // clear the viewport by setting all the pixels to the background color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  //  glMatrixMode(GL_MODELVIEW);
+  //  glLoadIdentity();
+  //  glRotatef(45, 0, 1, 0);
+  //  glRotatef(camera_rotx, 1, 0, 0);
+  //  glRotatef(camera_roty, 0, 1, 0);
+  //  drawAxes();
+  //  drawCube(0, 0, 0, 0.7);
+
   // Set the model-view matrix
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -58,6 +68,7 @@ void OpenGLWidget::paintGL() {
   glTranslatef(0, 0, -1);
   glRotatef(camera_rotx, 1, 0, 0);
   glRotatef(camera_roty, 0, 1, 0);
+  drawAxes();
 
   // Set projection matrix
   glMatrixMode(GL_PROJECTION);
@@ -70,11 +81,6 @@ void OpenGLWidget::paintGL() {
   float vspacing = 1.5;
   drawCube(0, +vspacing, 0, 0.33);
   drawCube(0, -vspacing, 0, 0.33);
-  //  float hspacing = 1.2;
-  //  drawCube(0, 0, +hspacing, 0.33);
-  //  drawCube(0, 0, +hspacing, 0.33);
-  //  drawCube(-hspacing, 0, 0, 0.33);
-  //  drawCube(+hspacing, 0, 0, 0.33);
 
   //  paintObject(this->mesh);
 }
@@ -152,8 +158,26 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
 }
 
 void OpenGLWidget::drawAxes() {
-  ;
-  ;
+  static float fmax = 1000;
+  static float fmin = -fmax;
+
+  static unsigned int position_count = 6;
+  static float positions[] = {
+      fmin, 0,    0,     // -x
+      fmax, 0,    0,     // +x
+      0,    fmin, 0,     // -y
+      0,    fmax, 0,     // +y
+      0,    0,    fmin,  // -z
+      0,    0,    fmax,  // +z
+  };
+  //  static unsigned int face_count = 6;
+  //  static unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
+  static unsigned int index_count = 6;
+  static unsigned int indices[] = {0, 1, 2, 3, 4, 5};
+
+  glVertexPointer(3, GL_FLOAT, 0, positions);
+  glLineWidth(1);
+  glDrawArrays(GL_LINES, 0, position_count);
 }
 
 // Set interactive rotation in the viewport with a mouse
