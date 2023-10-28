@@ -82,7 +82,7 @@
    <property name="maximumSize">
     <size>
      <width>224</width>
-     <height>851</height>
+     <height>847</height>
     </size>
    </property>
    <property name="palette">
@@ -209,6 +209,9 @@
          </item>
          <item>
           <layout class="QGridLayout" name="lineSettingsLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetFixedSize</enum>
+           </property>
            <item row="1" column="0">
             <widget class="QLabel" name="lineWidthLabel">
              <property name="enabled">
@@ -541,8 +544,11 @@
           <layout class="QHBoxLayout" name="xLocationSetterLayout">
            <item>
             <widget class="QSlider" name="xLocationSlider">
+             <property name="value">
+              <number>0</number>
+             </property>
              <property name="sliderPosition">
-              <number>50</number>
+              <number>0</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>

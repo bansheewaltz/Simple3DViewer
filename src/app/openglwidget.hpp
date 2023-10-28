@@ -18,15 +18,16 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  private:
   ObjViewerMesh mesh;
+  /* Affine transformations */
+  // translates to the world origin and scales to 1x1x1 cube
   ObjViewerMatrix4x4 norm_matrix;
+  // model matrix transformations
   float scalex, scaley, scalez;
-  float rotx, roty, rot;
+  float rotx, roty, rotz;
   float trnsx, trnsy, trnsz;
   ObjViewerMatrix4x4 model_matrix;
   ObjViewerMatrix4x4 view_matrix;
-  //  ObjViewerMatrix4x4 projection_matrix;
-
-  // Display settings
+  /* Display settings */
   QColor background_color;
   QColor line_color;
   QColor point_color;
@@ -36,63 +37,82 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   PointStyle point_style;
   float line_width;
   float point_size;
-  // Camera control
+  /* Camera control */
   float camera_speed;
   QPoint mouse_pos;
   float camera_rotx, camera_roty, camera_rotz;
-  // Viewport settings
-  int viewport_w, viewport_h;
+  /* Viewport settings */
+  float ar;  // aspect raio
 
  public:
   OpenGLWidget(QWidget *parent = nullptr);
   ~OpenGLWidget();
 
  private:
-  // Template functions
+  /* Template functions */
   void initializeGL() override;
   void resizeGL(int w, int h) override;
   void paintGL() override;
-  // Helpers
+  /* Helpers */
   void resetSettings();
   virtual void drawAxes();
   virtual void drawObject(const ObjViewerMesh &);
   virtual void drawCube(float, float, float, float);
-  // Events
+  /* Events */
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
 
  public:
-  // Primitives' display status
-  void setLineDisplayEnabled(bool e) { line_display_enabled = e; }
-  void setPointDisplayEnabled(bool e) { point_display_enabled = e; }
+  /* Object transformation */
+  void setScaleX(float factor = 1) { scalex = factor; }
+  void setScaleY(float factor = 1) { scaley = factor; }
+  void setScaleZ(float factor = 1) { scalez = factor; }
+  float getScaleX() const { return scalex; }
+  float getScaleY() const { return scaley; }
+  float getScaleZ() const { return scalez; }
+  void setRotX(float angle = 0) { rotx = angle; }
+  void setRotY(float angle = 0) { roty = angle; }
+  void setRotZ(float angle = 0) { rotz = angle; }
+  float getRotX() const { return rotx; }
+  float getRotY() const { return roty; }
+  float getRotZ() const { return rotz; }
+  void setTranslationX(float value = 0) { trnsx = value; }
+  void setTranslationY(float value = 0) { trnsy = value; }
+  void setTranslationZ(float value = 0) { trnsz = value; }
+  float getTranslationX() const { return trnsx; }
+  float getTranslationY() const { return trnsy; }
+  float getTranslationZ() const { return trnsz; }
+  /* Primitives' display status */
+  void setLineDisplayEnabled(bool e = true) { line_display_enabled = e; }
+  void setPointDisplayEnabled(bool e = true) { point_display_enabled = e; }
   bool isLineDisplayEnabled() const { return line_display_enabled; }
   bool isPointDisplayEnabled() const { return point_display_enabled; }
-  // Primitives' colors
+  /* Primitives' colors */
   void setBackgroundColor(const QColor &color) { background_color = color; }
   void setLineColor(const QColor &color) { line_color = color; }
   void setPointColor(const QColor &color) { point_color = color; }
   QColor getBackgroundColor() const { return background_color; }
   QColor getLineColor() const { return line_color; }
   QColor getPointColor() const { return point_color; }
-  // Primitives' width/size
-  void setLineWidth(float width) { line_width = width; }
-  void setPointSize(float size) { point_size = size; }
+  /* Primitives' width/size */
+  void setLineWidth(float width = 1) { line_width = width; }
+  void setPointSize(float size = 1) { point_size = size; }
   float getLineWidth() const { return line_width; }
   float getPointSize() const { return point_size; }
-  // Primitives' style
-  void setLineStyle(LineStyle ls) { line_style = ls; }
-  void setPointStyle(PointStyle ps) { point_style = ps; }
+  /* Primitives' style */
+  void setLineStyle(LineStyle ls = LineStyle::SOLID) { line_style = ls; }
+  void setPointStyle(PointStyle ps = PointStyle::CIRCLE) { point_style = ps; }
   LineStyle getLineStyle() const { return line_style; }
   PointStyle getPointStyle() const { return point_style; }
-  // Camera
-  void setCameraSpeed(float speed) { camera_speed = speed; }
-  void setRotX(int angle = 0) { camera_rotx = angle; }
-  void setRotY(int angle = 0) { camera_roty = angle; }
-  void setRotZ(int angle = 0) { camera_rotz = angle; }
-  float getCameraSpees() const { return camera_speed; }
-  float getRotX() const { return camera_rotx; }
-  float getRotY() const { return camera_roty; }
-  float getRotZ() const { return camera_rotz; }
+  /* Camera settings */
+  void setCameraSpeed(float speed = 0.2) { camera_speed = speed; }
+  void setCameraRotX(float angle = 0) { camera_rotx = angle; }
+  void setCameraRotY(float angle = 0) { camera_roty = angle; }
+  void setCameraRotZ(float angle = 0) { camera_rotz = angle; }
+  float getCameraSpeed() const { return camera_speed; }
+  float getCameraRotX() const { return camera_rotx; }
+  float getCameraRotY() const { return camera_roty; }
+  float getCameraRotZ() const { return camera_rotz; }
 };
 
 #endif  // OPENGLWIDGET_H

@@ -7,6 +7,12 @@
 
 // void changeLabelPalette(QWidget *l);
 
+enum Limits {
+  LOCATION_SLIDER = 100,
+  ROTATION_SLIDER = 1800,
+  SCALE_SLIDER = 100,
+};
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -19,6 +25,19 @@ MainWindow::MainWindow(QWidget *parent)
   on_displayLinesCheckBox_toggled(true);
   // Set points display status
   on_displayPointsCheckBox_toggled(false);
+  /* Set up location controls */
+  ui->xLocationSlider->setSingleStep(1);
+  ui->xLocationSlider->setValue(0);
+  ui->xLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
+  ui->xLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
+  ui->yLocationSlider->setSingleStep(1);
+  ui->yLocationSlider->setValue(0);
+  ui->yLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
+  ui->yLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
+  ui->zLocationSlider->setSingleStep(1);
+  ui->zLocationSlider->setValue(0);
+  ui->zLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
+  ui->zLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
 
   // An attempt to generalize:
   //  paintButton(ui->backgroundColorPushButton,
@@ -167,6 +186,10 @@ void MainWindow::on_pointSizeSlider_valueChanged(int value) {
   ui->viewport->setPointSize(value);
   ui->viewport->update();
 }
+void MainWindow::on_lineWidthSlider_valueChanged(int value) {
+  ui->viewport->setLineWidth(value);
+  ui->viewport->update();
+}
 
 void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
   if (checked == true)
@@ -175,16 +198,23 @@ void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
     ui->viewport->setPointStyle(PointStyle::CIRCLE);
   ui->viewport->update();
 }
-
-void MainWindow::on_lineWidthSlider_valueChanged(int value) {
-  ui->viewport->setLineWidth(value);
-  ui->viewport->update();
-}
-
 void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
   if (checked == true)
     ui->viewport->setLineStyle(LineStyle::DASHED);
   else
     ui->viewport->setLineStyle(LineStyle::SOLID);
+  ui->viewport->update();
+}
+
+void MainWindow::on_xLocationSlider_valueChanged(int value) {
+  ui->viewport->setTranslationX((float)value / Limits::LOCATION_SLIDER);
+  ui->viewport->update();
+}
+void MainWindow::on_yLocationSlider_valueChanged(int value) {
+  ui->viewport->setTranslationY((float)value / Limits::LOCATION_SLIDER);
+  ui->viewport->update();
+}
+void MainWindow::on_zLocationSlider_valueChanged(int value) {
+  ui->viewport->setTranslationZ((float)value / Limits::LOCATION_SLIDER);
   ui->viewport->update();
 }

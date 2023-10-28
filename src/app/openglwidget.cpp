@@ -20,9 +20,9 @@ void OpenGLWidget::resetSettings() {
   setPointStyle(PointStyle::CIRCLE);
   // Camera
   setCameraSpeed(0.2f);
-  setRotX(-30);
-  setRotY(-30);
-  setRotZ(0);
+  setCameraRotX(-30);
+  setCameraRotY(-30);
+  setCameraRotZ(0);
 }
 
 void OpenGLWidget::initializeGL() {
@@ -36,12 +36,8 @@ void OpenGLWidget::initializeGL() {
 
 void OpenGLWidget::resizeGL(int w, int h) {
   // Update projection matrix and other size related settings
-
   glViewport(0, 0, w, h);
-  this->viewport_w = w;
-  this->viewport_h = h;
-  // m_projection.setToIdentity();
-  // m_projection.perspective(45.0f, w / float(h), 0.01f, 100.0f);
+  this->ar = (float)w / (float)h;
 }
 
 void OpenGLWidget::paintGL() {
@@ -50,33 +46,30 @@ void OpenGLWidget::paintGL() {
   // Set the background color
   QColor bc = getBackgroundColor();
   glClearColor(bc.redF(), bc.greenF(), bc.blueF(), bc.alphaF());
-  // clear the viewport by setting all the pixels to the background color
+  // Clear the viewport by setting all the pixels to the background color
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //  glMatrixMode(GL_MODELVIEW);
-  //  glLoadIdentity();
-  //  glRotatef(45, 0, 1, 0);
-  //  glRotatef(camera_rotx, 1, 0, 0);
-  //  glRotatef(camera_roty, 0, 1, 0);
-  //  drawAxes();
-  //  drawCube(0, 0, 0, 0.7);
+  // Set the projection matrix
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-1 * this->ar, 1 * this->ar, -1, 1, -1, 1);
+  // Draw the world axes
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glRotatef(getCameraRotX(), 1, 0, 0);
+  glRotatef(getCameraRotY(), 0, 1, 0);
+  drawAxes();
 
   // Set the model-view matrix
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glScalef(0.5, 0.5, 0.5);
-  glTranslatef(0, 0, -1);
   glRotatef(camera_rotx, 1, 0, 0);
   glRotatef(camera_roty, 0, 1, 0);
+  glTranslatef(getTranslationX(), getTranslationY(), getTranslationZ());
+  //  glRotatef(camera_rotz, 0, 0, 1);
+  glScalef(0.5, 0.5, 0.5);
+
+  // Draw the objects
   drawAxes();
-
-  // Set projection matrix
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  float ar = (float)this->viewport_w / (float)this->viewport_h;
-  glOrtho(-1 * ar, 1 * ar, -1, 1, 0, 2);
-
-  // Paint the object
   drawCube(0, 0, 0, 1);
   float vspacing = 1.5;
   drawCube(0, +vspacing, 0, 0.33);
@@ -170,8 +163,6 @@ void OpenGLWidget::drawAxes() {
       0,    0,    fmin,  // -z
       0,    0,    fmax,  // +z
   };
-  //  static unsigned int face_count = 6;
-  //  static unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
   static unsigned int index_count = 6;
   static unsigned int indices[] = {0, 1, 2, 3, 4, 5};
 

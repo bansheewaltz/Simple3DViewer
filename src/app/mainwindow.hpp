@@ -36,6 +36,9 @@ class MainWindow : public QMainWindow {
   void on_pointStyleSquareCheckBox_toggled(bool checked);
   void on_lineWidthSlider_valueChanged(int value);
   void on_lineStyleDashedCheckBox_toggled(bool checked);
+  void on_xLocationSlider_valueChanged(int value);
+  void on_yLocationSlider_valueChanged(int value);
+  void on_zLocationSlider_valueChanged(int value);
 };
 
 #endif  // MAINWINDOW_HPP
