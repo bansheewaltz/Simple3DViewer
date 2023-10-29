@@ -161,21 +161,19 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   /* Connect the slider with the corresponding spinbox and vice versa*/
   connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
   connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::LOCATION;
+  const float sb_limit = 1.0f;
+  const float sb_step = sb_limit / steps_count;
+  sb->setSingleStep(sb_step);
+  sb->setDecimals(3);
+  sb->setMinimum(-sb_limit);
+  sb->setMaximum(+sb_limit);
   /* Set up the slider */
   s->setMinimum(-steps_count);
   s->setMaximum(+steps_count);
   // internally the slider is of int type but emits the signal of type double
   s->divisor = steps_count;
-  s->setValue(0);
-  /* Set up the spinbox */
-  const float sb_limit = 1.0f;
-  const float sb_step = sb_limit / steps_count;
-  sb->setSingleStep(sb_step);
-  sb->setDecimals(3);
-  sb->setMinimumWidth(62);
-  sb->setMinimum(-sb_limit);
-  sb->setMaximum(+sb_limit);
 }
 void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
   ui->viewport->setTranslationX(value);
@@ -202,8 +200,8 @@ void MainWindow::setupRotationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
   connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
   /* Set up the spinbox */
-  const float sb_limit = 180.0f;
   const unsigned int steps_count = ControlSteps::ROTATION;
+  const float sb_limit = 180.0f;
   const float sb_step = sb_limit / steps_count;
   sb->setSingleStep(sb_step);
   sb->setDecimals(1);
@@ -240,8 +238,8 @@ void MainWindow::setupScaleControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
   connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
   /* Set up the spinbox */
-  const float sb_limit = 10.0f;
   const unsigned int steps_count = ControlSteps::SCALE;
+  const float sb_limit = 10.0f;
   const float sb_step = sb_limit / steps_count;
   sb->setSingleStep(sb_step);
   sb->setDecimals(2);
