@@ -201,24 +201,14 @@ void MainWindow::updateLocation(double value, bool x, bool y, bool z) {
 void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
   updateLocation(value, 1, 0, 0);
 }
-void MainWindow::on_xLocationSpinbox_valueChanged(double value) {
-  updateLocation(value, 1, 0, 0);
-}
 void MainWindow::on_yLocationSlider_doubleValueChanged(double value) {
   updateLocation(value, 0, 1, 0);
 }
-void MainWindow::on_yLocationSpinbox_valueChanged(double value) {
-  updateLocation(value, 0, 1, 0);
-}
 void MainWindow::on_zLocationSlider_doubleValueChanged(double value) {
-  updateLocation(value, 0, 0, 1);
-}
-void MainWindow::on_zLocationSpinbox_valueChanged(double value) {
   updateLocation(value, 0, 0, 1);
 }
 void MainWindow::on_locationResetPushButton_clicked() {
   ui->xLocationSlider->setValue(0);
   ui->yLocationSlider->setValue(0);
   ui->zLocationSlider->setValue(0);
-  ui->viewport->update();
 }

@@ -40,12 +40,8 @@ class MainWindow : public QMainWindow {
   void on_lineStyleDashedCheckBox_toggled(bool checked);
   /* Location */
   void on_xLocationSlider_doubleValueChanged(double value);
-  void on_xLocationSpinbox_valueChanged(double value);
   void on_yLocationSlider_doubleValueChanged(double value);
-  void on_yLocationSpinbox_valueChanged(double value);
   void on_zLocationSlider_doubleValueChanged(double value);
-  void on_zLocationSpinbox_valueChanged(double value);
-
   void on_locationResetPushButton_clicked();
 };
 
