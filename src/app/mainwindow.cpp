@@ -48,10 +48,10 @@ void MainWindow::paintButton(QPushButton *b,
 }
 
 QColor convertColorToGreyscale(const QColor &c) {
-  // Formula from the documentaiton:
+  // formula from the documentaiton:
   // https://doc.qt.io/archives/qt-4.8/qcolor.html#qGray
   int greyv = (c.red() * 11 + c.green() * 16 + c.blue() * 5) / 32;
-  // Set the bounds
+  /* Set the bounds */
   static const int lbound = 43 * (float)255 / 100;  // lower
   static const int ubound = 81 * (float)255 / 100;  // upper
   if (greyv < lbound) {
@@ -104,37 +104,39 @@ void MainWindow::on_pointColorPicker_clicked() {
 }
 
 void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
-  // Set the state in the viewport
+  /* Set the state in the viewport */
   ui->viewport->setLineDisplayEnabled(checked);
   ui->viewport->update();
-  // Set the checkbox check
+  /* Set the checkbox check */
   ui->displayLinesCheckBox->setChecked(checked);
-  // Disable the settings' frame
+  /* Disable the settings' frame */
   setLayoutWidgetsState(ui->lineSettingsLayout, checked);
   ui->lineStyleDashedCheckBox->setEnabled(checked);
-  // Convert the button color to a greyscale
+  // remember the color to use it when the button will be enabled next time
   static QColor color;
   color = ui->viewport->getLineColor();
+  /* Update the color */
   QColor result = color;
   if (checked == false) {
-    result = ::convertColorToGreyscale(color);
+    result = convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
   ui->lineColorPicker->setStyleSheet(qss);
 }
 
 void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
-  // Set the state in the viewport
+  /* Set the state in the viewport */
   ui->viewport->setPointDisplayEnabled(checked);
   ui->viewport->update();
-  // Set the checkbox check
+  /* Set the checkbox check */
   ui->displayPointsCheckBox->setChecked(checked);
-  // Disable the settings' frame
+  /* Disable the settings' frame */
   setLayoutWidgetsState(ui->pointSettingsLayout, checked);
   ui->pointStyleSquareCheckBox->setEnabled(checked);
-  // Convert the button color to a greyscale if the checkbox is disabled
+  // remember the color to use it when the button will be enabled next time
   static QColor color;
   color = ui->viewport->getPointColor();
+  /* Update the color */
   QColor result = color;
   if (checked == false) {
     result = ::convertColorToGreyscale(color);
