@@ -5,8 +5,6 @@
 
 #include "./ui_mainwindow.h"
 
-// void changeLabelPalette(QWidget *l);
-
 enum Limits {
   LOCATION_SLIDER = 100,
   ROTATION_SLIDER = 1800,
@@ -17,93 +15,78 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
-  PaintLineColorButton();
-  PaintBackgroundColorButton();
-  PaintPointColorButton();
-
-  // Set lines display status
+  /* Paint the color picker buttons */
+  paintButton(ui->backgroundColorPicker, &OpenGLWidget::getBackgroundColor);
+  paintButton(ui->lineColorPicker, &OpenGLWidget::getLineColor);
+  paintButton(ui->pointColorPicker, &OpenGLWidget::getPointColor);
+  /* Set primitives' display status */
   on_displayLinesCheckBox_toggled(true);
-  // Set points display status
   on_displayPointsCheckBox_toggled(false);
   /* Set up location controls */
-  setupLocationSliders();
-
-  // An attempt to generalize:
-  //  paintButton(ui->backgroundColorPushButton,
-  //  &ui->viewport->getBackgroundColor);
+  setupLocationControls(ui->xLocationSlider, ui->xLocationSpinbox);
+  setupLocationControls(ui->yLocationSlider, ui->yLocationSpinbox);
+  setupLocationControls(ui->zLocationSlider, ui->zLocationSpinbox);
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
-void MainWindow::setupLocationSliders() {
-  const float spinbox_step = 1.0f / Limits::LOCATION_SLIDER;
-  const float spinbox_limit = 1;
+QString formColoredButtonStyleSheet(const QColor &c) {
+  QString qss = QString(
+                    "background-color: %1; border-width: 2px;"
+                    "border-style: solid; border-radius: 5px;")
+                    .arg(c.name());
+  return qss;
+}
 
-  connect(ui->xLocationSlider, &DoubleSlider::doubleValueChanged,
-          ui->xLocationSpinbox, &QDoubleSpinBox::setValue);
-  connect(ui->xLocationSpinbox, &QDoubleSpinBox::valueChanged,
-          ui->xLocationSlider, &DoubleSlider::setDoubleValue);
-  ui->xLocationSlider->divisor = Limits::LOCATION_SLIDER;
-  ui->xLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
-  ui->xLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
-  ui->xLocationSlider->setSingleStep(1);
-  ui->xLocationSlider->setValue(0);
-  ui->xLocationSpinbox->setSingleStep(spinbox_step);
-  ui->xLocationSpinbox->setMinimum(-spinbox_limit);
-  ui->xLocationSpinbox->setMaximum(+spinbox_limit);
-  //  ui->xLocationSpinbox->setDecimals(2);
+void MainWindow::paintButton(QPushButton *b,
+                             QColor (OpenGLWidget::*getColor)() const) {
+  QColor c = (ui->viewport->*getColor)();
+  /* Update the button's QT stylesheet */
+  QString qss = formColoredButtonStyleSheet(c);
+  b->setStyleSheet(qss);
+}
 
-  connect(ui->yLocationSlider, &DoubleSlider::doubleValueChanged,
-          ui->yLocationSpinbox, &QDoubleSpinBox::setValue);
-  connect(ui->yLocationSpinbox, &QDoubleSpinBox::valueChanged,
-          ui->yLocationSlider, &DoubleSlider::setDoubleValue);
-  ui->yLocationSlider->divisor = Limits::LOCATION_SLIDER;
-  ui->yLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
-  ui->yLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
-  ui->yLocationSlider->setSingleStep(1);
-  ui->yLocationSlider->setValue(0);
-  ui->yLocationSpinbox->setSingleStep(spinbox_step);
-  ui->yLocationSpinbox->setMinimum(-spinbox_limit);
-  ui->yLocationSpinbox->setMaximum(+spinbox_limit);
-
-  connect(ui->zLocationSlider, &DoubleSlider::doubleValueChanged,
-          ui->zLocationSpinbox, &QDoubleSpinBox::setValue);
-  connect(ui->zLocationSpinbox, &QDoubleSpinBox::valueChanged,
-          ui->zLocationSlider, &DoubleSlider::setDoubleValue);
-  ui->zLocationSlider->divisor = Limits::LOCATION_SLIDER;
-  ui->zLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
-  ui->zLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
-  ui->zLocationSlider->setSingleStep(1);
-  ui->zLocationSlider->setValue(0);
-  ui->zLocationSpinbox->setSingleStep(spinbox_step);
-  ui->zLocationSpinbox->setMinimum(-spinbox_limit);
-  ui->zLocationSpinbox->setMaximum(+spinbox_limit);
+void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
+  /* Connect the slider with the corresponding spinbox and vice versa*/
+  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
+  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  /* Set up the slider */
+  s->setMinimum(-Limits::LOCATION_SLIDER);
+  s->setMaximum(+Limits::LOCATION_SLIDER);
+  s->divisor = Limits::LOCATION_SLIDER;
+  s->setValue(0);
+  /* Set up the spinbox */
+  const float sb_step = 1.0f / s->divisor;
+  const float sb_limit = 1;
+  sb->setSingleStep(sb_step);
+  sb->setMinimum(-sb_limit);
+  sb->setMaximum(+sb_limit);
 }
 
 /*!
  *  refactor to remove the code repetition
  *
  */
-void MainWindow::on_backgroundColorPushButton_clicked() {
+void MainWindow::on_backgroundColorPicker_clicked() {
   QColor prev_color = ui->viewport->getBackgroundColor();
   QColor color = QColorDialog::getColor(prev_color, this);
   ui->viewport->setBackgroundColor(color);
   ui->viewport->update();
-  PaintBackgroundColorButton();
+  paintButton(ui->backgroundColorPicker, &OpenGLWidget::getBackgroundColor);
 }
-void MainWindow::on_lineColorPushButton_clicked() {
+void MainWindow::on_lineColorPicker_clicked() {
   QColor prev_color = ui->viewport->getLineColor();
   QColor color = QColorDialog::getColor(prev_color, this);
   ui->viewport->setLineColor(color);
   ui->viewport->update();
-  PaintLineColorButton();
+  paintButton(ui->lineColorPicker, &OpenGLWidget::getLineColor);
 }
-void MainWindow::on_pointColorPushButton_clicked() {
+void MainWindow::on_pointColorPicker_clicked() {
   QColor prev_color = ui->viewport->getPointColor();
   QColor color = QColorDialog::getColor(prev_color, this);
   ui->viewport->setPointColor(color);
   ui->viewport->update();
-  PaintPointColorButton();
+  paintButton(ui->pointColorPicker, &OpenGLWidget::getPointColor);
 }
 
 void setLayoutWidgetsVisibility(const QLayout *layout, bool visibility) {
@@ -122,14 +105,6 @@ void setLayoutWidgetsState(const QLayout *layout, bool state) {
       setLayoutWidgetsState(inner, state);
     }
   }
-}
-
-QString formColoredButtonStyleSheet(const QColor &c) {
-  QString qss = QString(
-                    "background-color: %1; border-width: 2px;"
-                    "border-style: solid; border-radius: 5px;")
-                    .arg(c.name());
-  return qss;
 }
 
 ::QColor convertColorToGreyscale(const QColor &c) {
@@ -167,7 +142,7 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
     result = ::convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
-  ui->lineColorPushButton->setStyleSheet(qss);
+  ui->lineColorPicker->setStyleSheet(qss);
 }
 
 void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
@@ -187,34 +162,8 @@ void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
     result = ::convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
-  ui->pointColorPushButton->setStyleSheet(qss);
+  ui->pointColorPicker->setStyleSheet(qss);
 }
-
-/*!
- *  refactor to remove the code repetition
- *
- */
-void MainWindow::PaintLineColorButton() {
-  QColor c = ui->viewport->getLineColor();
-  QString qss = formColoredButtonStyleSheet(c);
-  ui->lineColorPushButton->setStyleSheet(qss);
-}
-void MainWindow::PaintBackgroundColorButton() {
-  QColor c = ui->viewport->getBackgroundColor();
-  QString qss = formColoredButtonStyleSheet(c);
-  ui->backgroundColorPushButton->setStyleSheet(qss);
-}
-void MainWindow::PaintPointColorButton() {
-  QColor c = ui->viewport->getPointColor();
-  QString qss = formColoredButtonStyleSheet(c);
-  ui->pointColorPushButton->setStyleSheet(qss);
-}
-// void MainWindow::paintButton(QPushButton *b,
-//                              QColor (OpenGLWidget::*getColor)()) {
-//   QColor c = ui->viewport->getColor();
-//   QString qss = formColoredButtonStyleSheet(c);
-//   b->setStyleSheet(qss);
-// }
 
 void MainWindow::on_pointSizeSlider_valueChanged(int value) {
   ui->viewport->setPointSize(value);
@@ -239,11 +188,6 @@ void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
     ui->viewport->setLineStyle(LineStyle::SOLID);
   ui->viewport->update();
 }
-
-// void MainWindow::on_xLocationSlider_valueChanged(int value) {
-//   ui->viewport->setTranslationX((float)value / Limits::LOCATION_SLIDER);
-//   ui->viewport->update();
-//}
 
 void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
   ui->viewport->setTranslationX(value);

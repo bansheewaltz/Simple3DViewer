@@ -174,7 +174,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="backgroundColorPushButton">
+          <widget class="QPushButton" name="backgroundColorPicker">
            <property name="text">
             <string/>
            </property>
@@ -237,7 +237,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QPushButton" name="lineColorPushButton">
+            <widget class="QPushButton" name="lineColorPicker">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -403,7 +403,7 @@
             </layout>
            </item>
            <item row="0" column="1">
-            <widget class="QPushButton" name="pointColorPushButton">
+            <widget class="QPushButton" name="pointColorPicker">
              <property name="text">
               <string/>
              </property>

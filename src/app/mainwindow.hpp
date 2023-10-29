@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QPushButton>
 
+#include "QtWidgets/qspinbox.h"
+#include "doubleslider.hpp"
 #include "openglwidget.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -21,17 +23,14 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
-  void paintButton(QPushButton *b, QColor (OpenGLWidget::*getColor)());
-  void PaintBackgroundColorButton();
-  void PaintLineColorButton();
-  void PaintPointColorButton();
-  void setupLocationSliders();
+  void paintButton(QPushButton *b, QColor (OpenGLWidget::*getColor)() const);
+  void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
 
  private slots:
   /* style */
-  void on_backgroundColorPushButton_clicked();
-  void on_lineColorPushButton_clicked();
-  void on_pointColorPushButton_clicked();
+  void on_backgroundColorPicker_clicked();
+  void on_lineColorPicker_clicked();
+  void on_pointColorPicker_clicked();
   void on_displayLinesCheckBox_toggled(bool checked);
   void on_displayPointsCheckBox_toggled(bool checked);
   void on_pointSizeSlider_valueChanged(int value);
