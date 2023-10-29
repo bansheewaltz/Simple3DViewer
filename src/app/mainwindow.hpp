@@ -28,7 +28,7 @@ class MainWindow : public QMainWindow {
   void setupScaleControls(DoubleSlider *, QDoubleSpinBox *);
 
  private slots:
-  /* style */
+  /* Display */
   void on_backgroundColorPicker_clicked();
   void on_lineColorPicker_clicked();
   void on_pointColorPicker_clicked();
@@ -49,10 +49,10 @@ class MainWindow : public QMainWindow {
   void on_zRotationSlider_doubleValueChanged(double angle);
   void on_rotationResetPushButton_clicked();
   /* Scale */
-  //  void on_xScaleSlider_doubleValueChanged(double factor);
-  //  void on_yScaleSlider_doubleValueChanged(double factor);
-  //  void on_zScaleSlider_doubleValueChanged(double factor);
-  //  void on_scaleResetPushButton_clicked();
+  void on_xScaleSlider_doubleValueChanged(double factor);
+  void on_yScaleSlider_doubleValueChanged(double factor);
+  void on_zScaleSlider_doubleValueChanged(double factor);
+  void on_scaleResetPushButton_clicked();
 };
 
 #endif  // MAINWINDOW_HPP

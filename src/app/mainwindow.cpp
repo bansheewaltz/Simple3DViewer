@@ -8,7 +8,7 @@
 enum ControlSteps {
   LOCATION = 1000,
   ROTATION = 1800,
-  SCALE = 100,
+  SCALE = 1000,
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -29,6 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
   setupRotationControls(ui->xRotationSlider, ui->xRotationSpinbox);
   setupRotationControls(ui->yRotationSlider, ui->yRotationSpinbox);
   setupRotationControls(ui->zRotationSlider, ui->zRotationSpinbox);
+  /* Set up scale controls */
+  setupScaleControls(ui->xScaleSlider, ui->xScaleSpinbox);
+  setupScaleControls(ui->yScaleSlider, ui->yScaleSpinbox);
+  setupScaleControls(ui->zScaleSlider, ui->zScaleSpinbox);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -227,4 +231,43 @@ void MainWindow::on_rotationResetPushButton_clicked() {
   ui->xRotationSlider->setValue(0);
   ui->yRotationSlider->setValue(0);
   ui->zRotationSlider->setValue(0);
+}
+
+/* Scale related functions */
+
+void MainWindow::setupScaleControls(DoubleSlider *s, QDoubleSpinBox *sb) {
+  /* Connect the slider with the corresponding spinbox and vice versa*/
+  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
+  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  /* Set up the spinbox */
+  const float sb_limit = 10.0f;
+  const unsigned int steps_count = ControlSteps::SCALE;
+  const float sb_step = sb_limit / steps_count;
+  sb->setSingleStep(sb_step);
+  sb->setDecimals(2);
+  sb->setMinimum(0.01f);
+  sb->setMaximum(10.00f);
+  /* Set up the slider */
+  s->setMinimum(1);
+  s->setMaximum(steps_count);
+  // internally the slider is of int type but emits the signal of type double
+  s->divisor = steps_count / sb_limit;
+  s->setDoubleValue(1.0f);
+}
+void MainWindow::on_xScaleSlider_doubleValueChanged(double value) {
+  ui->viewport->setScaleX(value);
+  ui->viewport->update();
+}
+void MainWindow::on_yScaleSlider_doubleValueChanged(double value) {
+  ui->viewport->setScaleY(value);
+  ui->viewport->update();
+}
+void MainWindow::on_zScaleSlider_doubleValueChanged(double value) {
+  ui->viewport->setScaleZ(value);
+  ui->viewport->update();
+}
+void MainWindow::on_scaleResetPushButton_clicked() {
+  ui->xScaleSpinbox->setValue(1);
+  ui->yScaleSpinbox->setValue(1);
+  ui->zScaleSpinbox->setValue(1);
 }

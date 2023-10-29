@@ -52,6 +52,7 @@ void OpenGLWidget::paintGL() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-1 * this->ar, 1 * this->ar, -1, 1, -1, 1);
+
   /* Draw the world axes */
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -73,6 +74,8 @@ void OpenGLWidget::paintGL() {
   glRotatef(getRotationY(), 0, 1, 0);
   glRotatef(getRotationZ(), 0, 0, 1);
   // model scale
+  glScalef(getScaleX(), getScaleY(), getScaleZ());
+  // normalisation scale
   glScalef(0.5, 0.5, 0.5);
 
   /* Draw the objects */
