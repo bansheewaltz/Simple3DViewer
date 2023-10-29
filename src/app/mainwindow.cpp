@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
+/* GUI related functions */
+
 QString formColoredButtonStyleSheet(const QColor &c) {
   QString qss = QString(
                     "background-color: %1; border-width: 2px;"
@@ -36,6 +38,7 @@ QString formColoredButtonStyleSheet(const QColor &c) {
                     .arg(c.name());
   return qss;
 }
+
 void MainWindow::paintButton(QPushButton *b,
                              QColor (OpenGLWidget::*getColor)() const) {
   QColor c = (ui->viewport->*getColor)();
@@ -44,22 +47,34 @@ void MainWindow::paintButton(QPushButton *b,
   b->setStyleSheet(qss);
 }
 
-void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  /* Connect the slider with the corresponding spinbox and vice versa*/
-  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
-  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
-  /* Set up the slider */
-  s->setMinimum(-ControlSteps::LOCATION);
-  s->setMaximum(+ControlSteps::LOCATION);
-  // internally the slider is of int type but emits the signal of type double
-  s->divisor = ControlSteps::LOCATION;
-  s->setValue(0);
-  /* Set up the spinbox */
-  const float sb_limit = 1.0f;
-  const float sb_step = sb_limit / ControlSteps::LOCATION;
-  sb->setSingleStep(sb_step);
-  sb->setMinimum(-sb_limit);
-  sb->setMaximum(+sb_limit);
+QColor convertColorToGreyscale(const QColor &c) {
+  // Formula from the documentaiton:
+  // https://doc.qt.io/archives/qt-4.8/qcolor.html#qGray
+  int greyv = (c.red() * 11 + c.green() * 16 + c.blue() * 5) / 32;
+  // Set the bounds
+  static const int lbound = 43 * (float)255 / 100;  // lower
+  static const int ubound = 81 * (float)255 / 100;  // upper
+  if (greyv < lbound) {
+    greyv = lbound;
+  }
+  if (greyv > ubound) {
+    greyv = ubound;
+  }
+
+  QColor result = QColor(greyv, greyv, greyv);
+  return result;
+}
+
+void setLayoutWidgetsState(const QLayout *layout, bool state) {
+  for (int i = 0; i < layout->count(); ++i) {
+    QWidget *widget = layout->itemAt(i)->widget();
+    if (widget != NULL) {
+      widget->setEnabled(state);
+    } else {
+      QLayout *inner = layout->itemAt(i)->layout();
+      setLayoutWidgetsState(inner, state);
+    }
+  }
 }
 
 /*!
@@ -86,36 +101,6 @@ void MainWindow::on_pointColorPicker_clicked() {
   ui->viewport->setPointColor(color);
   ui->viewport->update();
   paintButton(ui->pointColorPicker, &OpenGLWidget::getPointColor);
-}
-
-void setLayoutWidgetsState(const QLayout *layout, bool state) {
-  for (int i = 0; i < layout->count(); ++i) {
-    QWidget *widget = layout->itemAt(i)->widget();
-    if (widget != NULL) {
-      widget->setEnabled(state);
-    } else {
-      QLayout *inner = layout->itemAt(i)->layout();
-      setLayoutWidgetsState(inner, state);
-    }
-  }
-}
-
-::QColor convertColorToGreyscale(const QColor &c) {
-  // Formula from the documentaiton:
-  // https://doc.qt.io/archives/qt-4.8/qcolor.html#qGray
-  int greyv = (c.red() * 11 + c.green() * 16 + c.blue() * 5) / 32;
-  // Set the bounds
-  static const int lbound = 43 * (float)255 / 100;  // lower
-  static const int ubound = 81 * (float)255 / 100;  // upper
-  if (greyv < lbound) {
-    greyv = lbound;
-  }
-  if (greyv > ubound) {
-    greyv = ubound;
-  }
-
-  QColor result = QColor(greyv, greyv, greyv);
-  return result;
 }
 
 void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
@@ -158,6 +143,8 @@ void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
   ui->pointColorPicker->setStyleSheet(qss);
 }
 
+/* Primitives' display control related functions */
+
 void MainWindow::on_pointSizeSlider_valueChanged(int value) {
   ui->viewport->setPointSize(value);
   ui->viewport->update();
@@ -166,6 +153,8 @@ void MainWindow::on_lineWidthSlider_valueChanged(int value) {
   ui->viewport->setLineWidth(value);
   ui->viewport->update();
 }
+
+/* Primitives' style related functions */
 
 void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
   if (checked == true)
@@ -182,6 +171,25 @@ void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
   ui->viewport->update();
 }
 
+/* Location related functions */
+
+void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
+  /* Connect the slider with the corresponding spinbox and vice versa*/
+  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
+  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  /* Set up the slider */
+  s->setMinimum(-ControlSteps::LOCATION);
+  s->setMaximum(+ControlSteps::LOCATION);
+  // internally the slider is of int type but emits the signal of type double
+  s->divisor = ControlSteps::LOCATION;
+  s->setValue(0);
+  /* Set up the spinbox */
+  const float sb_limit = 1.0f;
+  const float sb_step = sb_limit / ControlSteps::LOCATION;
+  sb->setSingleStep(sb_step);
+  sb->setMinimum(-sb_limit);
+  sb->setMaximum(+sb_limit);
+}
 void MainWindow::updateLocation(double value, bool x, bool y, bool z) {
   if (x) ui->viewport->setTranslationX(value);
   if (y) ui->viewport->setTranslationY(value);
