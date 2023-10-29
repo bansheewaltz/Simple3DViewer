@@ -14,7 +14,6 @@ enum ControlSteps {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-
   /* Paint the color picker buttons */
   paintButton(ui->backgroundColorPicker, &OpenGLWidget::getBackgroundColor);
   paintButton(ui->lineColorPicker, &OpenGLWidget::getLineColor);
@@ -37,7 +36,6 @@ QString formColoredButtonStyleSheet(const QColor &c) {
                     .arg(c.name());
   return qss;
 }
-
 void MainWindow::paintButton(QPushButton *b,
                              QColor (OpenGLWidget::*getColor)() const) {
   QColor c = (ui->viewport->*getColor)();
@@ -190,33 +188,30 @@ void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
   ui->viewport->update();
 }
 
-void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
-  ui->viewport->setTranslationX(value);
+void MainWindow::updateLocation(double value, bool x, bool y, bool z) {
+  if (x) ui->viewport->setTranslationX(value);
+  if (y) ui->viewport->setTranslationY(value);
+  if (z) ui->viewport->setTranslationZ(value);
   ui->viewport->update();
+}
+void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
+  updateLocation(value, 1, 0, 0);
 }
 void MainWindow::on_xLocationSpinbox_valueChanged(double value) {
-  ui->viewport->setTranslationX(value);
-  ui->viewport->update();
+  updateLocation(value, 1, 0, 0);
 }
 void MainWindow::on_yLocationSlider_doubleValueChanged(double value) {
-  ui->viewport->setTranslationY(value);
-  ui->viewport->update();
+  updateLocation(value, 0, 1, 0);
 }
 void MainWindow::on_yLocationSpinbox_valueChanged(double value) {
-  ui->viewport->setTranslationY(value);
-  ui->viewport->update();
+  updateLocation(value, 0, 1, 0);
 }
 void MainWindow::on_zLocationSlider_doubleValueChanged(double value) {
-  ui->viewport->setTranslationZ(value);
-  ui->viewport->update();
+  updateLocation(value, 0, 0, 1);
 }
 void MainWindow::on_zLocationSpinbox_valueChanged(double value) {
-  ui->viewport->setTranslationZ(value);
-  ui->viewport->update();
+  updateLocation(value, 0, 0, 1);
 }
 void MainWindow::on_locationResetPushButton_clicked() {
-  ui->xLocationSlider->setValue(0);
-  ui->yLocationSlider->setValue(0);
-  ui->zLocationSlider->setValue(0);
-  ui->viewport->update();
+  updateLocation(0, 1, 1, 1);
 }
