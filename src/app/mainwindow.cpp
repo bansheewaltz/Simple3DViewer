@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
   setupLocationControls(ui->xLocationSlider, ui->xLocationSpinbox);
   setupLocationControls(ui->yLocationSlider, ui->yLocationSpinbox);
   setupLocationControls(ui->zLocationSlider, ui->zLocationSpinbox);
+  /* Set up rotation controls */
+  setupRotationControls(ui->xRotationSlider, ui->xRotationSpinbox);
+  setupRotationControls(ui->yRotationSlider, ui->yRotationSpinbox);
+  setupRotationControls(ui->zRotationSlider, ui->zRotationSpinbox);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -185,4 +189,42 @@ void MainWindow::on_locationResetPushButton_clicked() {
   ui->xLocationSlider->setValue(0);
   ui->yLocationSlider->setValue(0);
   ui->zLocationSlider->setValue(0);
+}
+
+/* Rotation related functions */
+
+void MainWindow::setupRotationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
+  /* Connect the slider with the corresponding spinbox and vice versa*/
+  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
+  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  /* Set up the spinbox */
+  const float sb_limit = 180.0f;
+  const unsigned int steps_count = ControlSteps::ROTATION;
+  const float sb_step = sb_limit / steps_count;
+  sb->setSingleStep(sb_step);
+  sb->setDecimals(1);
+  sb->setMinimum(-sb_limit);
+  sb->setMaximum(+sb_limit);
+  /* Set up the slider */
+  s->setMinimum(-steps_count);
+  s->setMaximum(+steps_count);
+  // internally the slider is of int type but emits the signal of type double
+  s->divisor = steps_count / sb_limit;
+}
+void MainWindow::on_xRotationSlider_doubleValueChanged(double value) {
+  ui->viewport->setRotationX(value);
+  ui->viewport->update();
+}
+void MainWindow::on_yRotationSlider_doubleValueChanged(double value) {
+  ui->viewport->setRotationY(value);
+  ui->viewport->update();
+}
+void MainWindow::on_zRotationSlider_doubleValueChanged(double value) {
+  ui->viewport->setRotationZ(value);
+  ui->viewport->update();
+}
+void MainWindow::on_rotationResetPushButton_clicked() {
+  ui->xRotationSlider->setValue(0);
+  ui->yRotationSlider->setValue(0);
+  ui->zRotationSlider->setValue(0);
 }

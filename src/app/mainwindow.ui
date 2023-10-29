@@ -736,7 +736,7 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="xRotationSetterLayout">
            <item>
-            <widget class="QSlider" name="xRotationSlider">
+            <widget class="DoubleSlider" name="xRotationSlider">
              <property name="sliderPosition">
               <number>50</number>
              </property>
@@ -777,7 +777,7 @@
          <item row="1" column="1">
           <layout class="QHBoxLayout" name="yRotationSetterLayout">
            <item>
-            <widget class="QSlider" name="yRotationSlider">
+            <widget class="DoubleSlider" name="yRotationSlider">
              <property name="sliderPosition">
               <number>50</number>
              </property>
@@ -818,7 +818,7 @@
          <item row="2" column="1">
           <layout class="QHBoxLayout" name="zRotationSetterLayout">
            <item>
-            <widget class="QSlider" name="zRotationSlider">
+            <widget class="DoubleSlider" name="zRotationSlider">
              <property name="sliderPosition">
               <number>50</number>
              </property>

@@ -20,9 +20,9 @@ void OpenGLWidget::resetSettings() {
   setPointStyle(PointStyle::CIRCLE);
   // Camera
   setCameraSpeed(0.2f);
-  setCameraRotX(-30);
-  setCameraRotY(-30);
-  setCameraRotZ(0);
+  setCameraRotationX(-30);
+  setCameraRotationY(-30);
+  setCameraRotationZ(0);
 }
 
 void OpenGLWidget::initializeGL() {
@@ -43,39 +43,49 @@ void OpenGLWidget::resizeGL(int w, int h) {
 void OpenGLWidget::paintGL() {
   // Draw the scene
 
-  // Set the background color
+  /* Set the background color */
   QColor bc = getBackgroundColor();
   glClearColor(bc.redF(), bc.greenF(), bc.blueF(), bc.alphaF());
-  // Clear the viewport by setting all the pixels to the background color
+  /* Clear the buffers */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // Set the projection matrix
+  /* Set the projection matrix */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-1 * this->ar, 1 * this->ar, -1, 1, -1, 1);
-  // Draw the world axes
+  /* Draw the world axes */
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glRotatef(getCameraRotX(), 1, 0, 0);
-  glRotatef(getCameraRotY(), 0, 1, 0);
+  // view rotation
+  glRotatef(getCameraRotationX(), 1, 0, 0);
+  glRotatef(getCameraRotationY(), 0, 1, 0);
   drawAxes();
 
-  // Set the model-view matrix
+  /* Set the model-view matrix */
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glRotatef(camera_rotx, 1, 0, 0);
-  glRotatef(camera_roty, 0, 1, 0);
+  // view rotation
+  glRotatef(getCameraRotationX(), 1, 0, 0);
+  glRotatef(getCameraRotationY(), 0, 1, 0);
+  // model translation
   glTranslatef(getTranslationX(), getTranslationY(), getTranslationZ());
-  //  glRotatef(camera_rotz, 0, 0, 1);
+  // model rotation
+  glRotatef(getRotationX(), 1, 0, 0);
+  glRotatef(getRotationY(), 0, 1, 0);
+  glRotatef(getRotationZ(), 0, 0, 1);
+  // model scale
   glScalef(0.5, 0.5, 0.5);
 
-  // Draw the objects
+  /* Draw the objects */
+  //  drawObject(m);
+  drawCubeScene();
+}
+
+void OpenGLWidget::drawCubeScene() {
   drawAxes();
   drawCube(0, 0, 0, 1);
-  float vspacing = 1.5;
+  const static float vspacing = 1.5;
   drawCube(0, +vspacing, 0, 0.33);
   drawCube(0, -vspacing, 0, 0.33);
-
-  //  paintObject(this->mesh);
 }
 
 void OpenGLWidget::drawObject(const ObjViewerMesh &m) {

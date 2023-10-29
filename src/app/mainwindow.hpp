@@ -24,6 +24,8 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
   void paintButton(QPushButton *b, const QColor &c);
   void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
+  void setupRotationControls(DoubleSlider *, QDoubleSpinBox *);
+  void setupScaleControls(DoubleSlider *, QDoubleSpinBox *);
 
  private slots:
   /* style */
@@ -41,6 +43,16 @@ class MainWindow : public QMainWindow {
   void on_yLocationSlider_doubleValueChanged(double value);
   void on_zLocationSlider_doubleValueChanged(double value);
   void on_locationResetPushButton_clicked();
+  /* Rotation */
+  void on_xRotationSlider_doubleValueChanged(double angle);
+  void on_yRotationSlider_doubleValueChanged(double angle);
+  void on_zRotationSlider_doubleValueChanged(double angle);
+  void on_rotationResetPushButton_clicked();
+  /* Scale */
+  //  void on_xScaleSlider_doubleValueChanged(double factor);
+  //  void on_yScaleSlider_doubleValueChanged(double factor);
+  //  void on_zScaleSlider_doubleValueChanged(double factor);
+  //  void on_scaleResetPushButton_clicked();
 };
 
 #endif  // MAINWINDOW_HPP

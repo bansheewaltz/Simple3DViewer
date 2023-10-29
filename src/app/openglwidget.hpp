@@ -58,6 +58,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   virtual void drawAxes();
   virtual void drawObject(const ObjViewerMesh &);
   virtual void drawCube(float, float, float, float);
+  void drawCubeScene();
   /* Events */
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
@@ -70,12 +71,12 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   float getScaleX() const { return scalex; }
   float getScaleY() const { return scaley; }
   float getScaleZ() const { return scalez; }
-  void setRotX(float angle = 0) { rotx = angle; }
-  void setRotY(float angle = 0) { roty = angle; }
-  void setRotZ(float angle = 0) { rotz = angle; }
-  float getRotX() const { return rotx; }
-  float getRotY() const { return roty; }
-  float getRotZ() const { return rotz; }
+  void setRotationX(float angle = 0) { rotx = angle; }
+  void setRotationY(float angle = 0) { roty = angle; }
+  void setRotationZ(float angle = 0) { rotz = angle; }
+  float getRotationX() const { return rotx; }
+  float getRotationY() const { return roty; }
+  float getRotationZ() const { return rotz; }
   void setTranslationX(float value = 0) { trnsx = value; }
   void setTranslationY(float value = 0) { trnsy = value; }
   void setTranslationZ(float value = 0) { trnsz = value; }
@@ -106,13 +107,13 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   PointStyle getPointStyle() const { return point_style; }
   /* Camera settings */
   void setCameraSpeed(float speed = 0.2) { camera_speed = speed; }
-  void setCameraRotX(float angle = 0) { camera_rotx = angle; }
-  void setCameraRotY(float angle = 0) { camera_roty = angle; }
-  void setCameraRotZ(float angle = 0) { camera_rotz = angle; }
+  void setCameraRotationX(float angle = 0) { camera_rotx = angle; }
+  void setCameraRotationY(float angle = 0) { camera_roty = angle; }
+  void setCameraRotationZ(float angle = 0) { camera_rotz = angle; }
   float getCameraSpeed() const { return camera_speed; }
-  float getCameraRotX() const { return camera_rotx; }
-  float getCameraRotY() const { return camera_roty; }
-  float getCameraRotZ() const { return camera_rotz; }
+  float getCameraRotationX() const { return camera_rotx; }
+  float getCameraRotationY() const { return camera_roty; }
+  float getCameraRotationZ() const { return camera_rotz; }
 };
 
 #endif  // OPENGLWIDGET_H
