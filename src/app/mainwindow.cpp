@@ -6,7 +6,7 @@
 #include "./ui_mainwindow.h"
 
 enum ControlSteps {
-  LOCATION = 100,
+  LOCATION = 1000,
   ROTATION = 1800,
   SCALE = 100,
 };
@@ -179,6 +179,8 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   const float sb_limit = 1.0f;
   const float sb_step = sb_limit / steps_count;
   sb->setSingleStep(sb_step);
+  sb->setDecimals(3);
+  sb->setMinimumWidth(62);
   sb->setMinimum(-sb_limit);
   sb->setMaximum(+sb_limit);
 }

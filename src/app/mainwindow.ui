@@ -563,12 +563,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="minimumSize">
-              <size>
-               <width>55</width>
-               <height>0</height>
-              </size>
-             </property>
             </widget>
            </item>
           </layout>
@@ -617,12 +611,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="minimumSize">
-              <size>
-               <width>55</width>
-               <height>0</height>
-              </size>
-             </property>
             </widget>
            </item>
           </layout>
@@ -670,12 +658,6 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>55</width>
-               <height>0</height>
-              </size>
              </property>
             </widget>
            </item>
