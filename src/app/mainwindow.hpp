@@ -6,7 +6,6 @@
 
 #include "QtWidgets/qspinbox.h"
 #include "doubleslider.hpp"
-#include "openglwidget.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,7 +22,7 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
-  void paintButton(QPushButton *b, QColor (OpenGLWidget::*getColor)() const);
+  void paintButton(QPushButton *b, const QColor &c);
   void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
 
  private slots:
