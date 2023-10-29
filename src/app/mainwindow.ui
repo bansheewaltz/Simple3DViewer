@@ -543,12 +543,12 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="xLocationSetterLayout">
            <item>
-            <widget class="QSlider" name="xLocationSlider">
+            <widget class="DoubleSlider" name="xLocationSlider">
              <property name="value">
-              <number>0</number>
+              <number>50</number>
              </property>
              <property name="sliderPosition">
-              <number>0</number>
+              <number>50</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -556,7 +556,20 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="xLocationSpinbox"/>
+            <widget class="QDoubleSpinBox" name="xLocationSpinbox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>55</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -587,7 +600,7 @@
          <item row="1" column="1">
           <layout class="QHBoxLayout" name="yLocationSetterLayout">
            <item>
-            <widget class="QSlider" name="yLocationSlider">
+            <widget class="DoubleSlider" name="yLocationSlider">
              <property name="sliderPosition">
               <number>50</number>
              </property>
@@ -597,7 +610,20 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="yLocationSpinbox"/>
+            <widget class="QDoubleSpinBox" name="yLocationSpinbox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>55</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -628,7 +654,7 @@
          <item row="2" column="1">
           <layout class="QHBoxLayout" name="zLocationSetterLayout">
            <item>
-            <widget class="QSlider" name="zLocationSlider">
+            <widget class="DoubleSlider" name="zLocationSlider">
              <property name="sliderPosition">
               <number>50</number>
              </property>
@@ -638,7 +664,20 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="zLocationSpinbox"/>
+            <widget class="QDoubleSpinBox" name="zLocationSpinbox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>55</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -994,6 +1033,11 @@
    <class>OpenGLWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>openglwidget.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>DoubleSlider</class>
+   <extends>QSlider</extends>
+   <header>doubleslider.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

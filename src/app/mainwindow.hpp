@@ -25,8 +25,10 @@ class MainWindow : public QMainWindow {
   void PaintBackgroundColorButton();
   void PaintLineColorButton();
   void PaintPointColorButton();
+  void setupLocationSliders();
 
  private slots:
+  /* style */
   void on_backgroundColorPushButton_clicked();
   void on_lineColorPushButton_clicked();
   void on_pointColorPushButton_clicked();
@@ -36,9 +38,15 @@ class MainWindow : public QMainWindow {
   void on_pointStyleSquareCheckBox_toggled(bool checked);
   void on_lineWidthSlider_valueChanged(int value);
   void on_lineStyleDashedCheckBox_toggled(bool checked);
-  void on_xLocationSlider_valueChanged(int value);
-  void on_yLocationSlider_valueChanged(int value);
-  void on_zLocationSlider_valueChanged(int value);
+  /* Location */
+  void on_xLocationSlider_doubleValueChanged(double value);
+  void on_xLocationSpinbox_valueChanged(double value);
+  void on_yLocationSlider_doubleValueChanged(double value);
+  void on_yLocationSpinbox_valueChanged(double value);
+  void on_zLocationSlider_doubleValueChanged(double value);
+  void on_zLocationSpinbox_valueChanged(double value);
+
+  void on_locationResetPushButton_clicked();
 };
 
 #endif  // MAINWINDOW_HPP

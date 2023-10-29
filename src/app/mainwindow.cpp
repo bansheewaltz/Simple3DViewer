@@ -26,18 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
   // Set points display status
   on_displayPointsCheckBox_toggled(false);
   /* Set up location controls */
-  ui->xLocationSlider->setSingleStep(1);
-  ui->xLocationSlider->setValue(0);
-  ui->xLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
-  ui->xLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
-  ui->yLocationSlider->setSingleStep(1);
-  ui->yLocationSlider->setValue(0);
-  ui->yLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
-  ui->yLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
-  ui->zLocationSlider->setSingleStep(1);
-  ui->zLocationSlider->setValue(0);
-  ui->zLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
-  ui->zLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
+  setupLocationSliders();
 
   // An attempt to generalize:
   //  paintButton(ui->backgroundColorPushButton,
@@ -45,6 +34,51 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::setupLocationSliders() {
+  const float spinbox_step = 1.0f / Limits::LOCATION_SLIDER;
+  const float spinbox_limit = 1;
+
+  connect(ui->xLocationSlider, &DoubleSlider::doubleValueChanged,
+          ui->xLocationSpinbox, &QDoubleSpinBox::setValue);
+  connect(ui->xLocationSpinbox, &QDoubleSpinBox::valueChanged,
+          ui->xLocationSlider, &DoubleSlider::setDoubleValue);
+  ui->xLocationSlider->divisor = Limits::LOCATION_SLIDER;
+  ui->xLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
+  ui->xLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
+  ui->xLocationSlider->setSingleStep(1);
+  ui->xLocationSlider->setValue(0);
+  ui->xLocationSpinbox->setSingleStep(spinbox_step);
+  ui->xLocationSpinbox->setMinimum(-spinbox_limit);
+  ui->xLocationSpinbox->setMaximum(+spinbox_limit);
+  //  ui->xLocationSpinbox->setDecimals(2);
+
+  connect(ui->yLocationSlider, &DoubleSlider::doubleValueChanged,
+          ui->yLocationSpinbox, &QDoubleSpinBox::setValue);
+  connect(ui->yLocationSpinbox, &QDoubleSpinBox::valueChanged,
+          ui->yLocationSlider, &DoubleSlider::setDoubleValue);
+  ui->yLocationSlider->divisor = Limits::LOCATION_SLIDER;
+  ui->yLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
+  ui->yLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
+  ui->yLocationSlider->setSingleStep(1);
+  ui->yLocationSlider->setValue(0);
+  ui->yLocationSpinbox->setSingleStep(spinbox_step);
+  ui->yLocationSpinbox->setMinimum(-spinbox_limit);
+  ui->yLocationSpinbox->setMaximum(+spinbox_limit);
+
+  connect(ui->zLocationSlider, &DoubleSlider::doubleValueChanged,
+          ui->zLocationSpinbox, &QDoubleSpinBox::setValue);
+  connect(ui->zLocationSpinbox, &QDoubleSpinBox::valueChanged,
+          ui->zLocationSlider, &DoubleSlider::setDoubleValue);
+  ui->zLocationSlider->divisor = Limits::LOCATION_SLIDER;
+  ui->zLocationSlider->setMinimum(-Limits::LOCATION_SLIDER);
+  ui->zLocationSlider->setMaximum(+Limits::LOCATION_SLIDER);
+  ui->zLocationSlider->setSingleStep(1);
+  ui->zLocationSlider->setValue(0);
+  ui->zLocationSpinbox->setSingleStep(spinbox_step);
+  ui->zLocationSpinbox->setMinimum(-spinbox_limit);
+  ui->zLocationSpinbox->setMaximum(+spinbox_limit);
+}
 
 /*!
  *  refactor to remove the code repetition
@@ -206,15 +240,38 @@ void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
   ui->viewport->update();
 }
 
-void MainWindow::on_xLocationSlider_valueChanged(int value) {
-  ui->viewport->setTranslationX((float)value / Limits::LOCATION_SLIDER);
+// void MainWindow::on_xLocationSlider_valueChanged(int value) {
+//   ui->viewport->setTranslationX((float)value / Limits::LOCATION_SLIDER);
+//   ui->viewport->update();
+//}
+
+void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
+  ui->viewport->setTranslationX(value);
   ui->viewport->update();
 }
-void MainWindow::on_yLocationSlider_valueChanged(int value) {
-  ui->viewport->setTranslationY((float)value / Limits::LOCATION_SLIDER);
+void MainWindow::on_xLocationSpinbox_valueChanged(double value) {
+  ui->viewport->setTranslationX(value);
   ui->viewport->update();
 }
-void MainWindow::on_zLocationSlider_valueChanged(int value) {
-  ui->viewport->setTranslationZ((float)value / Limits::LOCATION_SLIDER);
+void MainWindow::on_yLocationSlider_doubleValueChanged(double value) {
+  ui->viewport->setTranslationY(value);
+  ui->viewport->update();
+}
+void MainWindow::on_yLocationSpinbox_valueChanged(double value) {
+  ui->viewport->setTranslationY(value);
+  ui->viewport->update();
+}
+void MainWindow::on_zLocationSlider_doubleValueChanged(double value) {
+  ui->viewport->setTranslationZ(value);
+  ui->viewport->update();
+}
+void MainWindow::on_zLocationSpinbox_valueChanged(double value) {
+  ui->viewport->setTranslationZ(value);
+  ui->viewport->update();
+}
+void MainWindow::on_locationResetPushButton_clicked() {
+  ui->xLocationSlider->setValue(0);
+  ui->yLocationSlider->setValue(0);
+  ui->zLocationSlider->setValue(0);
   ui->viewport->update();
 }

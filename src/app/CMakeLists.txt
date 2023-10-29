@@ -1,6 +1,7 @@
 qt_add_executable(${APP_NAME}
     main.cpp
     mainwindow.cpp mainwindow.hpp mainwindow.ui
+    doubleslider.cpp doubleslider.hpp
     openglwidget.cpp openglwidget.hpp
 )
 
