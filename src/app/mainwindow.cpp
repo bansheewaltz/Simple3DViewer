@@ -88,12 +88,6 @@ void MainWindow::on_pointColorPicker_clicked() {
   paintButton(ui->pointColorPicker, &OpenGLWidget::getPointColor);
 }
 
-void setLayoutWidgetsVisibility(const QLayout *layout, bool visibility) {
-  for (int i = 0; i < layout->count(); ++i) {
-    QWidget *widget = layout->itemAt(i)->widget();
-    widget->setVisible(visibility);
-  }
-}
 void setLayoutWidgetsState(const QLayout *layout, bool state) {
   for (int i = 0; i < layout->count(); ++i) {
     QWidget *widget = layout->itemAt(i)->widget();
@@ -111,8 +105,8 @@ void setLayoutWidgetsState(const QLayout *layout, bool state) {
   // https://doc.qt.io/archives/qt-4.8/qcolor.html#qGray
   int greyv = (c.red() * 11 + c.green() * 16 + c.blue() * 5) / 32;
   // Set the bounds
-  static const int lbound = 43 * (float)255 / 100;
-  static const int ubound = 81 * (float)255 / 100;
+  static const int lbound = 43 * (float)255 / 100;  // lower
+  static const int ubound = 81 * (float)255 / 100;  // upper
   if (greyv < lbound) {
     greyv = lbound;
   }
