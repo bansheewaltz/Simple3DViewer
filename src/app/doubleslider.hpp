@@ -1,3 +1,6 @@
+#ifndef DOUBLESLIDER_HPP
+#define DOUBLESLIDER_HPP
+
 #include "QtCore/qtmetamacros.h"
 #include "QtWidgets/qslider.h"
 
@@ -17,3 +20,5 @@ class DoubleSlider : public QSlider {
  public slots:
   void notifyValueChanged(int value);
 };
+
+#endif  // DOUBLESLIDER_HPP
