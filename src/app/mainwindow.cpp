@@ -5,10 +5,10 @@
 
 #include "./ui_mainwindow.h"
 
-enum Limits {
-  LOCATION_SLIDER = 100,
-  ROTATION_SLIDER = 1800,
-  SCALE_SLIDER = 100,
+enum ControlSteps {
+  LOCATION = 100,
+  ROTATION = 1800,
+  SCALE = 100,
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -51,13 +51,14 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
   connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
   /* Set up the slider */
-  s->setMinimum(-Limits::LOCATION_SLIDER);
-  s->setMaximum(+Limits::LOCATION_SLIDER);
-  s->divisor = Limits::LOCATION_SLIDER;
+  s->setMinimum(-ControlSteps::LOCATION);
+  s->setMaximum(+ControlSteps::LOCATION);
+  // internally the slider is of int type but emits the signal of type double
+  s->divisor = ControlSteps::LOCATION;
   s->setValue(0);
   /* Set up the spinbox */
-  const float sb_step = 1.0f / s->divisor;
-  const float sb_limit = 1;
+  const float sb_limit = 1.0f;
+  const float sb_step = sb_limit / ControlSteps::LOCATION;
   sb->setSingleStep(sb_step);
   sb->setMinimum(-sb_limit);
   sb->setMaximum(+sb_limit);
