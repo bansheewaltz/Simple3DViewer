@@ -192,20 +192,17 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   sb->setMinimum(-sb_limit);
   sb->setMaximum(+sb_limit);
 }
-void MainWindow::updateLocation(double value, bool x, bool y, bool z) {
-  if (x) ui->viewport->setTranslationX(value);
-  if (y) ui->viewport->setTranslationY(value);
-  if (z) ui->viewport->setTranslationZ(value);
+void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
+  ui->viewport->setTranslationX(value);
   ui->viewport->update();
 }
-void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
-  updateLocation(value, 1, 0, 0);
-}
 void MainWindow::on_yLocationSlider_doubleValueChanged(double value) {
-  updateLocation(value, 0, 1, 0);
+  ui->viewport->setTranslationY(value);
+  ui->viewport->update();
 }
 void MainWindow::on_zLocationSlider_doubleValueChanged(double value) {
-  updateLocation(value, 0, 0, 1);
+  ui->viewport->setTranslationZ(value);
+  ui->viewport->update();
 }
 void MainWindow::on_locationResetPushButton_clicked() {
   ui->xLocationSlider->setValue(0);

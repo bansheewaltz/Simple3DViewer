@@ -25,7 +25,6 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
   void paintButton(QPushButton *b, QColor (OpenGLWidget::*getColor)() const);
   void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
-  void updateLocation(double value, bool x, bool y, bool z);
 
  private slots:
   /* style */
