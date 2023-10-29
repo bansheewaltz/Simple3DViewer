@@ -42,7 +42,6 @@ QString formColoredButtonStyleSheet(const QColor &c) {
 void MainWindow::paintButton(QPushButton *b,
                              QColor (OpenGLWidget::*getColor)() const) {
   QColor c = (ui->viewport->*getColor)();
-  /* Update the button's QT stylesheet */
   QString qss = formColoredButtonStyleSheet(c);
   b->setStyleSheet(qss);
 }
@@ -54,23 +53,17 @@ QColor convertColorToGreyscale(const QColor &c) {
   /* Set the bounds */
   static const int lbound = 43 * (float)255 / 100;  // lower
   static const int ubound = 81 * (float)255 / 100;  // upper
-  if (greyv < lbound) {
-    greyv = lbound;
-  }
-  if (greyv > ubound) {
-    greyv = ubound;
-  }
-
-  QColor result = QColor(greyv, greyv, greyv);
-  return result;
+  if (greyv < lbound) greyv = lbound;
+  if (greyv > ubound) greyv = ubound;
+  return QColor(greyv, greyv, greyv);
 }
 
 void setLayoutWidgetsState(const QLayout *layout, bool state) {
   for (int i = 0; i < layout->count(); ++i) {
     QWidget *widget = layout->itemAt(i)->widget();
-    if (widget != NULL) {
+    if (widget != NULL)
       widget->setEnabled(state);
-    } else {
+    else {
       QLayout *inner = layout->itemAt(i)->layout();
       setLayoutWidgetsState(inner, state);
     }
@@ -139,7 +132,7 @@ void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
   /* Update the color */
   QColor result = color;
   if (checked == false) {
-    result = ::convertColorToGreyscale(color);
+    result = convertColorToGreyscale(color);
   }
   QString qss = formColoredButtonStyleSheet(result);
   ui->pointColorPicker->setStyleSheet(qss);
@@ -159,17 +152,13 @@ void MainWindow::on_lineWidthSlider_valueChanged(int value) {
 /* Primitives' style related functions */
 
 void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
-  if (checked == true)
-    ui->viewport->setPointStyle(PointStyle::SQUARE);
-  else
-    ui->viewport->setPointStyle(PointStyle::CIRCLE);
+  ui->viewport->setPointStyle(checked == true ? PointStyle::SQUARE
+                                              : PointStyle::CIRCLE);
   ui->viewport->update();
 }
 void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
-  if (checked == true)
-    ui->viewport->setLineStyle(LineStyle::DASHED);
-  else
-    ui->viewport->setLineStyle(LineStyle::SOLID);
+  ui->viewport->setLineStyle(checked == true ? LineStyle::DASHED
+                                             : LineStyle::SOLID);
   ui->viewport->update();
 }
 
@@ -179,15 +168,16 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   /* Connect the slider with the corresponding spinbox and vice versa*/
   connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
   connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  const unsigned int steps_count = ControlSteps::LOCATION;
   /* Set up the slider */
-  s->setMinimum(-ControlSteps::LOCATION);
-  s->setMaximum(+ControlSteps::LOCATION);
+  s->setMinimum(-steps_count);
+  s->setMaximum(+steps_count);
   // internally the slider is of int type but emits the signal of type double
-  s->divisor = ControlSteps::LOCATION;
+  s->divisor = steps_count;
   s->setValue(0);
   /* Set up the spinbox */
   const float sb_limit = 1.0f;
-  const float sb_step = sb_limit / ControlSteps::LOCATION;
+  const float sb_step = sb_limit / steps_count;
   sb->setSingleStep(sb_step);
   sb->setMinimum(-sb_limit);
   sb->setMaximum(+sb_limit);
