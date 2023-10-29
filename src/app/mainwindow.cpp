@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
-/* GUI related functions */
+/* GUI behaviour related helper functions */
 
 QString formColoredButtonStyleSheet(const QColor &c) {
   QString qss = QString(
@@ -77,13 +77,12 @@ void setLayoutWidgetsState(const QLayout *layout, bool state) {
   }
 }
 
-/*!
- *  refactor to remove the code repetition
- *
- */
+/* GUI behaviour related signal functions */
+
 void MainWindow::on_backgroundColorPicker_clicked() {
   QColor prev_color = ui->viewport->getBackgroundColor();
   QColor color = QColorDialog::getColor(prev_color, this);
+  if (!color.isValid()) return;
   ui->viewport->setBackgroundColor(color);
   ui->viewport->update();
   paintButton(ui->backgroundColorPicker, &OpenGLWidget::getBackgroundColor);
@@ -91,6 +90,7 @@ void MainWindow::on_backgroundColorPicker_clicked() {
 void MainWindow::on_lineColorPicker_clicked() {
   QColor prev_color = ui->viewport->getLineColor();
   QColor color = QColorDialog::getColor(prev_color, this);
+  if (!color.isValid()) return;
   ui->viewport->setLineColor(color);
   ui->viewport->update();
   paintButton(ui->lineColorPicker, &OpenGLWidget::getLineColor);
@@ -98,6 +98,7 @@ void MainWindow::on_lineColorPicker_clicked() {
 void MainWindow::on_pointColorPicker_clicked() {
   QColor prev_color = ui->viewport->getPointColor();
   QColor color = QColorDialog::getColor(prev_color, this);
+  if (!color.isValid()) return;
   ui->viewport->setPointColor(color);
   ui->viewport->update();
   paintButton(ui->pointColorPicker, &OpenGLWidget::getPointColor);
@@ -123,7 +124,6 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
   QString qss = formColoredButtonStyleSheet(result);
   ui->lineColorPicker->setStyleSheet(qss);
 }
-
 void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
   /* Set the state in the viewport */
   ui->viewport->setPointDisplayEnabled(checked);
