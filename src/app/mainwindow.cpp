@@ -217,5 +217,8 @@ void MainWindow::on_zLocationSpinbox_valueChanged(double value) {
   updateLocation(value, 0, 0, 1);
 }
 void MainWindow::on_locationResetPushButton_clicked() {
-  updateLocation(0, 1, 1, 1);
+  ui->xLocationSlider->setValue(0);
+  ui->yLocationSlider->setValue(0);
+  ui->zLocationSlider->setValue(0);
+  ui->viewport->update();
 }
