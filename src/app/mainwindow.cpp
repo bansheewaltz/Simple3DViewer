@@ -2,6 +2,8 @@
 
 #include <QColor>
 #include <QColorDialog>
+#include <QFileDialog>
+#include <QShortcut>
 
 #include "./ui_mainwindow.h"
 
@@ -33,6 +35,11 @@ MainWindow::MainWindow(QWidget *parent)
   setupScaleControls(ui->xScaleSlider, ui->xScaleSpinbox);
   setupScaleControls(ui->yScaleSlider, ui->yScaleSpinbox);
   setupScaleControls(ui->zScaleSlider, ui->zScaleSpinbox);
+  /* Set up shortcuts */
+  new QShortcut(QKeySequence(tr("Ctrl+O")), this, SLOT(openFile()));
+  new QShortcut(QKeySequence(tr("e")), this, SLOT(close()));
+  //  new QShortcut(QKeySequence(tr("L")), ui->xLocationSpinbox,
+  //  SLOT(setFocus()));
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -268,4 +275,14 @@ void MainWindow::on_scaleResetPushButton_clicked() {
   ui->xScaleSpinbox->setValue(1);
   ui->yScaleSpinbox->setValue(1);
   ui->zScaleSpinbox->setValue(1);
+}
+
+void MainWindow::openFile() {
+  QString dir = QDir::homePath() + "/Downloads";
+  std::string file_name =
+      QFileDialog::getOpenFileName(this, "Open 3d model", dir,
+                                   "geometry definition file (*.obj)")
+          .toStdString();
+  ui->viewport->setFileName(file_name);
+  ui->viewport->LoadModel();
 }

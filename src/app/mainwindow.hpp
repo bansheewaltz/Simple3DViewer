@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow {
   void setupScaleControls(DoubleSlider *, QDoubleSpinBox *);
 
  private slots:
+  void openFile();
   /* Display */
   void on_backgroundColorPicker_clicked();
   void on_lineColorPicker_clicked();

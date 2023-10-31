@@ -17,7 +17,8 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
  private:
-  ObjViewerMesh mesh;
+  std::string file_name;
+  ObjViewerMesh *mesh;
   /* Affine transformations */
   // translates to the world origin and scales to 1x1x1 cube
   ObjViewerMatrix4x4 norm_matrix;
@@ -56,7 +57,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   /* Helpers */
   void resetSettings();
   virtual void drawAxes();
-  virtual void drawObject(const ObjViewerMesh &);
+  virtual void drawObject(const ObjViewerMesh *);
   virtual void drawCube(float, float, float, float);
   void drawCubeScene();
   /* Events */
@@ -64,6 +65,10 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void mouseMoveEvent(QMouseEvent *) override;
 
  public:
+  void setFileName(std::string f) { file_name = f; }
+  std::string getFileName(void) const { return file_name; }
+  void LoadModel();
+  void setModel(ObjViewerMesh *m) { mesh = m; }
   /* Object transformation */
   void setScaleX(float factor = 1) { scalex = factor; }
   void setScaleY(float factor = 1) { scaley = factor; }

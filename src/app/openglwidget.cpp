@@ -4,6 +4,8 @@
 #include <QOpenGLWidget>
 #include <QWidget>
 
+#include "obj_viewer.h"
+
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
   resetSettings();
 }
@@ -25,24 +27,22 @@ void OpenGLWidget::resetSettings() {
   setCameraRotationZ(0);
 }
 
+/* Set up the rendering context, load shaders and other resources, etc. */
 void OpenGLWidget::initializeGL() {
-  // Set up the rendering context, load shaders and other resources, etc.
-
   // Retrieve OpenGL functions from graphics card's drivers
   initializeOpenGLFunctions();
-  // Set proper rendering of overlappint elements
+  // Set proper rendering of overlapping elements
   glEnable(GL_DEPTH_TEST);
 }
 
+/* Update the viewport size */
 void OpenGLWidget::resizeGL(int w, int h) {
-  // Update projection matrix and other size related settings
   glViewport(0, 0, w, h);
   this->ar = (float)w / (float)h;
 }
 
+/* Draw the scene */
 void OpenGLWidget::paintGL() {
-  // Draw the scene
-
   /* Set the background color */
   QColor bc = getBackgroundColor();
   glClearColor(bc.redF(), bc.greenF(), bc.blueF(), bc.alphaF());
@@ -75,12 +75,15 @@ void OpenGLWidget::paintGL() {
   glRotatef(getRotationZ(), 0, 0, 1);
   // model scale
   glScalef(getScaleX(), getScaleY(), getScaleZ());
-  // normalisation scale
+  // normalization scale
   glScalef(0.5, 0.5, 0.5);
 
   /* Draw the objects */
-  //  drawObject(m);
-  drawCubeScene();
+  if (!mesh) {  // use a template model
+    drawCubeScene();
+  }
+
+  drawObject(mesh);
 }
 
 void OpenGLWidget::drawCubeScene() {
@@ -91,10 +94,12 @@ void OpenGLWidget::drawCubeScene() {
   drawCube(0, -vspacing, 0, 0.33);
 }
 
-void OpenGLWidget::drawObject(const ObjViewerMesh &m) {
+void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
+  if (!m) return;
+
   // Set up the buffers
   glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, m.positions);
+  glVertexPointer(3, GL_FLOAT, 0, m->positions);
 
   // Send the line draw calls
   if (this->isLineDisplayEnabled()) {
@@ -107,11 +112,11 @@ void OpenGLWidget::drawObject(const ObjViewerMesh &m) {
       glLineStipple(10, 0x3333);
     }
 
-    const unsigned int *index_offset = &m.indices[0];
-    for (unsigned int i = 0; i < m.face_count; i++) {
-      glDrawElements(GL_LINE_LOOP, m.face_vertex_counts[i], GL_UNSIGNED_INT,
+    const unsigned int *index_offset = &m->indices[0];
+    for (unsigned int i = 0; i < m->face_count; i++) {
+      glDrawElements(GL_LINE_LOOP, m->face_vertex_counts[i], GL_UNSIGNED_INT,
                      index_offset);
-      index_offset += m.face_vertex_counts[i];
+      index_offset += m->face_vertex_counts[i];
     }
 
     glDisable(GL_LINE_STIPPLE);
@@ -127,7 +132,7 @@ void OpenGLWidget::drawObject(const ObjViewerMesh &m) {
       glEnable(GL_POINT_SMOOTH);
     }
 
-    glDrawArrays(GL_POINTS, 0, m.position_count);
+    glDrawArrays(GL_POINTS, 0, m->position_count);
 
     glDisable(GL_POINT_SMOOTH);
   }
@@ -160,7 +165,7 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
                                    1, 3, 7, 5};  // far
   ObjViewerMesh m = {position_count,     positions,   face_count,
                      face_vertex_counts, index_count, indices};
-  drawObject(m);
+  drawObject((&m));
 }
 
 void OpenGLWidget::drawAxes() {
@@ -191,4 +196,9 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
   camera_roty += camera_speed * (m->pos().x() - mouse_pos.x());
   mouse_pos = m->pos();
   update();
+}
+
+void OpenGLWidget::LoadModel() {
+  ObjViewerMesh *m = objviewer_read(getFileName().c_str());
+  setModel(m);
 }
