@@ -16,10 +16,6 @@ void OpenGLWidget::resetSettings() {
   setBackgroundColor(QColor("#EFE5D7"));
   setLineColor(QColor("#974F4C"));
   setPointColor(getLineColor());
-  //
-  setLineWidth(3);
-  // Primitives' style
-  setPointStyle(PointStyle::CIRCLE);
   // Camera
   setCameraSpeed(0.2f);
   setCameraRotationX(-30);
@@ -74,7 +70,7 @@ void OpenGLWidget::paintGL() {
   glRotatef(getRotationY(), 0, 1, 0);
   glRotatef(getRotationZ(), 0, 0, 1);
   // model scale
-  glScalef(getScaleX(), getScaleY(), getScaleZ());
+  glScalef(getScaleUX(), getScaleUY(), getScaleUZ());
   // normalization scale
   glScalef(0.5, 0.5, 0.5);
 

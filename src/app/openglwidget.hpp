@@ -23,7 +23,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // translates to the world origin and scales to 1x1x1 cube
   ObjViewerMatrix4x4 norm_matrix;
   // model matrix transformations
-  float scalex, scaley, scalez;
+  float scalex, scaley, scalez, scaleu;
   float rotx, roty, rotz;
   float trnsx, trnsy, trnsz;
   ObjViewerMatrix4x4 model_matrix;
@@ -73,9 +73,14 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void setScaleX(float factor = 1) { scalex = factor; }
   void setScaleY(float factor = 1) { scaley = factor; }
   void setScaleZ(float factor = 1) { scalez = factor; }
+  void setScaleU(float factor = 1) { scaleu = factor; }
   float getScaleX() const { return scalex; }
   float getScaleY() const { return scaley; }
   float getScaleZ() const { return scalez; }
+  float getScaleU() const { return scaleu; }
+  float getScaleUX() const { return scaleu * scalex; }
+  float getScaleUY() const { return scaleu * scaley; }
+  float getScaleUZ() const { return scaleu * scalez; }
   void setRotationX(float angle = 0) { rotx = angle; }
   void setRotationY(float angle = 0) { roty = angle; }
   void setRotationZ(float angle = 0) { rotz = angle; }

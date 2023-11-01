@@ -22,7 +22,9 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
+  void resetSettings();
   void paintButton(QPushButton *b, const QColor &c);
+  void setupWidthControls(DoubleSlider *, QDoubleSpinBox *);
   void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
   void setupRotationControls(DoubleSlider *, QDoubleSpinBox *);
   void setupScaleControls(DoubleSlider *, QDoubleSpinBox *);
@@ -35,9 +37,9 @@ class MainWindow : public QMainWindow {
   void on_pointColorPicker_clicked();
   void on_displayLinesCheckBox_toggled(bool checked);
   void on_displayPointsCheckBox_toggled(bool checked);
-  void on_pointSizeSlider_valueChanged(int value);
+  void on_pointSizeSlider_doubleValueChanged(double value);
   void on_pointStyleSquareCheckBox_toggled(bool checked);
-  void on_lineWidthSlider_valueChanged(int value);
+  void on_lineWidthSlider_doubleValueChanged(double value);
   void on_lineStyleDashedCheckBox_toggled(bool checked);
   /* Location */
   void on_xLocationSlider_doubleValueChanged(double value);
@@ -53,6 +55,7 @@ class MainWindow : public QMainWindow {
   void on_xScaleSlider_doubleValueChanged(double factor);
   void on_yScaleSlider_doubleValueChanged(double factor);
   void on_zScaleSlider_doubleValueChanged(double factor);
+  void on_uScaleSlider_doubleValueChanged(double factor);
   void on_scaleResetPushButton_clicked();
 };
 

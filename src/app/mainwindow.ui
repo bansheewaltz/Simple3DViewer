@@ -276,7 +276,7 @@
            <item row="1" column="1">
             <layout class="QHBoxLayout" name="lineWidthSetterLayout">
              <item>
-              <widget class="QSlider" name="lineWidthSlider">
+              <widget class="DoubleSlider" name="lineWidthSlider">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -394,7 +394,7 @@
            <item row="1" column="1">
             <layout class="QHBoxLayout" name="pointSizeSetterLayout">
              <item>
-              <widget class="QSlider" name="pointSizeSlider">
+              <widget class="DoubleSlider" name="pointSizeSlider">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                  <horstretch>0</horstretch>
@@ -902,8 +902,8 @@
        </item>
        <item>
         <layout class="QGridLayout" name="scaleGridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="xScaleLabel">
+         <item row="3" column="0">
+          <widget class="QLabel" name="uScaleLabel">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -919,48 +919,7 @@
             </font>
            </property>
            <property name="text">
-            <string>X</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <layout class="QHBoxLayout" name="xScaleSetterLayout">
-           <item>
-            <widget class="DoubleSlider" name="xScaleSlider">
-             <property name="sliderPosition">
-              <number>50</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="xScaleSpinbox"/>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="yScaleLabel">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>13</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Y</string>
+            <string>U</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -981,6 +940,23 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="yScaleSpinbox"/>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="zScaleSetterLayout">
+           <item>
+            <widget class="DoubleSlider" name="zScaleSlider">
+             <property name="sliderPosition">
+              <number>50</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="zScaleSpinbox"/>
            </item>
           </layout>
          </item>
@@ -1008,10 +984,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <layout class="QHBoxLayout" name="zScaleSetterLayout">
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="xScaleSetterLayout">
            <item>
-            <widget class="DoubleSlider" name="zScaleSlider">
+            <widget class="DoubleSlider" name="xScaleSlider">
              <property name="sliderPosition">
               <number>50</number>
              </property>
@@ -1021,7 +997,72 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="zScaleSpinbox"/>
+            <widget class="QDoubleSpinBox" name="xScaleSpinbox"/>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="xScaleLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>X</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="yScaleLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Y</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <layout class="QHBoxLayout" name="uScaleSetterLayout">
+           <item>
+            <widget class="DoubleSlider" name="uScaleSlider">
+             <property name="sliderPosition">
+              <number>50</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="uScaleSpinbox"/>
            </item>
           </layout>
          </item>

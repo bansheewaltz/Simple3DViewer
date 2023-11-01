@@ -8,6 +8,7 @@
 #include "./ui_mainwindow.h"
 
 enum ControlSteps {
+  WIDTH = 1000,
   LOCATION = 1000,
   ROTATION = 1800,
   SCALE = 1000,
@@ -23,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
   /* Set primitives' display status */
   on_displayLinesCheckBox_toggled(true);
   on_displayPointsCheckBox_toggled(false);
+  /* Set up primitives' size controls */
+  setupWidthControls(ui->lineWidthSlider, ui->lineWidthSpinBox);
+  setupWidthControls(ui->pointSizeSlider, ui->pointSizeSpinBox);
   /* Set up location controls */
   setupLocationControls(ui->xLocationSlider, ui->xLocationSpinbox);
   setupLocationControls(ui->yLocationSlider, ui->yLocationSpinbox);
@@ -35,14 +39,23 @@ MainWindow::MainWindow(QWidget *parent)
   setupScaleControls(ui->xScaleSlider, ui->xScaleSpinbox);
   setupScaleControls(ui->yScaleSlider, ui->yScaleSpinbox);
   setupScaleControls(ui->zScaleSlider, ui->zScaleSpinbox);
+  setupScaleControls(ui->uScaleSlider, ui->uScaleSpinbox);
   /* Set up shortcuts */
   new QShortcut(QKeySequence(tr("Ctrl+O")), this, SLOT(openFile()));
   new QShortcut(QKeySequence(tr("e")), this, SLOT(close()));
   //  new QShortcut(QKeySequence(tr("L")), ui->xLocationSpinbox,
   //  SLOT(setFocus()));
+  resetSettings();
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::resetSettings() {
+  on_lineWidthSlider_doubleValueChanged(1.0);
+  ui->lineWidthSpinBox->setValue(1.0);
+  on_pointSizeSlider_doubleValueChanged(1.0);
+  ui->pointSizeSpinBox->setValue(1.0);
+}
 
 /* GUI behaviour related helper functions */
 
@@ -138,17 +151,6 @@ void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
   paintButton(ui->pointColorPicker, res_color);
 }
 
-/* Primitives' display control related functions */
-
-void MainWindow::on_pointSizeSlider_valueChanged(int value) {
-  ui->viewport->setPointSize(value);
-  ui->viewport->update();
-}
-void MainWindow::on_lineWidthSlider_valueChanged(int value) {
-  ui->viewport->setLineWidth(value);
-  ui->viewport->update();
-}
-
 /* Primitives' style related functions */
 
 void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
@@ -159,6 +161,35 @@ void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
 void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
   ui->viewport->setLineStyle(checked == true ? LineStyle::DASHED
                                              : LineStyle::SOLID);
+  ui->viewport->update();
+}
+
+/* Primitives' size related functions */
+
+void MainWindow::setupWidthControls(DoubleSlider *s, QDoubleSpinBox *sb) {
+  /* Connect the slider with the corresponding spinbox and vice versa*/
+  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
+  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  /* Set up the spinbox */
+  const unsigned int steps_count = ControlSteps::WIDTH;
+  const float sb_limit = 10.0f;
+  const float sb_step = sb_limit / steps_count;
+  sb->setSingleStep(sb_step);
+  sb->setDecimals(2);
+  sb->setMinimum(1.00);
+  sb->setMaximum(+sb_limit);
+  /* Set up the slider */
+  s->setMinimum(100);
+  s->setMaximum(+steps_count);
+  // internally the slider is of int type but emits the signal of type double
+  s->divisor = steps_count / sb_limit;
+}
+void MainWindow::on_lineWidthSlider_doubleValueChanged(double value) {
+  ui->viewport->setLineWidth(value);
+  ui->viewport->update();
+}
+void MainWindow::on_pointSizeSlider_doubleValueChanged(double value) {
+  ui->viewport->setPointSize(value);
   ui->viewport->update();
 }
 
@@ -271,10 +302,15 @@ void MainWindow::on_zScaleSlider_doubleValueChanged(double value) {
   ui->viewport->setScaleZ(value);
   ui->viewport->update();
 }
+void MainWindow::on_uScaleSlider_doubleValueChanged(double value) {
+  ui->viewport->setScaleU(value);
+  ui->viewport->update();
+}
 void MainWindow::on_scaleResetPushButton_clicked() {
   ui->xScaleSpinbox->setValue(1);
   ui->yScaleSpinbox->setValue(1);
   ui->zScaleSpinbox->setValue(1);
+  ui->uScaleSpinbox->setValue(1);
 }
 
 void MainWindow::openFile() {
