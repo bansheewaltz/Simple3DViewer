@@ -4,6 +4,8 @@
 #include <QOpenGLWidget>
 #include <QWidget>
 
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include "obj_viewer.h"
 
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
@@ -71,8 +73,6 @@ void OpenGLWidget::paintGL() {
   glRotatef(getRotationZ(), 0, 0, 1);
   // model scale
   glScalef(getScaleUX(), getScaleUY(), getScaleUZ());
-  // normalization scale
-  glScalef(0.5, 0.5, 0.5);
 
   /* Draw the objects */
   if (!mesh) {  // use a template model
@@ -92,6 +92,8 @@ void OpenGLWidget::drawCubeScene() {
 
 void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
   if (!m) return;
+  /* Centre the object */
+  glTranslatef(-geometry_centre.x, -geometry_centre.y, -geometry_centre.z);
 
   // Set up the buffers
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -108,12 +110,20 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
       glLineStipple(10, 0x3333);
     }
 
+    /* draw call in a loop variation */
     const unsigned int *index_offset = &m->indices[0];
     for (unsigned int i = 0; i < m->face_count; i++) {
       glDrawElements(GL_LINE_LOOP, m->face_vertex_counts[i], GL_UNSIGNED_INT,
                      index_offset);
       index_offset += m->face_vertex_counts[i];
     }
+
+    /* multidraw elements variation */
+    //    unsigned int **indices_list = calloc();
+    //    for (int i = 0; i < )
+    //    glMultiDrawElements(GL_LINE_LOOP, m->face_vertex_counts,
+    //    GL_UNSIGNED_INT, ,
+    //                        m->face_count);
 
     glDisable(GL_LINE_STIPPLE);
   }
@@ -195,6 +205,13 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
 }
 
 void OpenGLWidget::LoadModel() {
-  ObjViewerMesh *m = objviewer_read(getFileName().c_str());
-  setModel(m);
+  ObjViewerMesh *m = objviewer_read(this->file_name.c_str());
+  this->mesh = m;
+  this->geometry_centre = objviewer_find_geometry_centre(m);
+  //  ObjViewerVec3 gcentre = objviewer_find_geometry_centre(m);
+  //  glm::mat4 trans = glm::mat4(1.0f);
+  //  glm::vec3 gpos = glm::vec3(gcentre.x, gcentre.y, gcentre.z);
+  //  glm::vec3 world_origin = glm::vec3(0, 0, 0);
+  //  glm::vec3 trans_vector = glm::normalize(world_origin - gpos);
+  //  this->norm_matrix = glm::translate(trans, trans_vector);
 }

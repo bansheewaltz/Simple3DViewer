@@ -27,6 +27,12 @@ extern "C" {
 ObjViewerMesh* objviewer_read(const char* path);
 void objviewer_destroy(ObjViewerMesh* mesh);
 
+typedef struct {
+  float x, y, z;
+} ObjViewerVec3;
+
+ObjViewerVec3 objviewer_find_geometry_centre(ObjViewerMesh* mesh);
+
 void objviewer_rotate(ObjViewerMesh* mesh, float x, float y, float z);
 void objviewer_rotate_x(ObjViewerMesh* mesh, float angle);
 void objviewer_rotate_y(ObjViewerMesh* mesh, float agnle);

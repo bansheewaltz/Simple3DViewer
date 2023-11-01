@@ -23,6 +23,7 @@ find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 qt_standard_project_setup()
 
 add_subdirectory(src/app)
+target_include_directories(${APP_NAME} PRIVATE extern/glm)
 add_subdirectory(src/lib)
 # remove the prefix as it is already set
 set_target_properties(${LIB_NAME} PROPERTIES PREFIX "")

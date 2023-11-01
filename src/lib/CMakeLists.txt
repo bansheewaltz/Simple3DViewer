@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
 
-# set library name if it is not already specified from top-level 
+# set library name if it is not already specified from top-level
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
+
 if(NOT IS_SUBPROJECT)
     set(LIB_NAME libobjviewer)
 endif()
+
 project(${LIB_NAME} LANGUAGES C)
 
 # specify the languages' standards
@@ -19,6 +21,17 @@ add_library(${LIB_NAME} STATIC
     src/affine_transformations/scaling.c
     src/affine_transformations/translation.c
     src/parsing/parsing.c
+    src/utils.c
 )
 
 target_include_directories(${LIB_NAME} PUBLIC include)
+
+add_executable(check src/main.c)
+target_link_libraries(check ${LIB_NAME})
+target_include_directories(check PUBLIC include)
+target_include_directories(check PUBLIC extern)
+#add_custom_command(
+#    TARGET check
+#    POST_BUILD
+#    COMMAND check
+#)

@@ -8,6 +8,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 
+#include "glm/glm.hpp"
 #include "obj_viewer.h"
 
 enum LineStyle { SOLID, DASHED };
@@ -19,9 +20,12 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
  private:
   std::string file_name;
   ObjViewerMesh *mesh;
+  //  ObjViewerMeshInfo *mesh_info;
+  ObjViewerVec3 geometry_centre;
   /* Affine transformations */
   // translates to the world origin and scales to 1x1x1 cube
-  ObjViewerMatrix4x4 norm_matrix;
+  //  ObjViewerMatrix4x4 norm_matrix;
+  glm::mat4 norm_matrix;
   // model matrix transformations
   float scalex, scaley, scalez, scaleu;
   float rotx, roty, rotz;
@@ -59,6 +63,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   virtual void drawAxes();
   virtual void drawObject(const ObjViewerMesh *);
   virtual void drawCube(float, float, float, float);
+
   void drawCubeScene();
   /* Events */
   void mousePressEvent(QMouseEvent *) override;
@@ -66,9 +71,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  public:
   void setFileName(std::string f) { file_name = f; }
-  std::string getFileName(void) const { return file_name; }
   void LoadModel();
-  void setModel(ObjViewerMesh *m) { mesh = m; }
   /* Object transformation */
   void setScaleX(float factor = 1) { scalex = factor; }
   void setScaleY(float factor = 1) { scaley = factor; }
