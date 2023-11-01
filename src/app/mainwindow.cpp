@@ -8,7 +8,7 @@
 #include "./ui_mainwindow.h"
 
 enum ControlSteps {
-  WIDTH = 1000,
+  WIDTH = 200,
   LOCATION = 1000,
   ROTATION = 1800,
   SCALE = 1000,
@@ -91,6 +91,13 @@ void setLayoutWidgetsState(const QLayout *layout, bool state) {
   }
 }
 
+void syncSliderWithSpinbox(DoubleSlider *s, QDoubleSpinBox *sb) {
+  QObject::connect(s, &DoubleSlider::doubleValueChanged,  //
+                   sb, &QDoubleSpinBox::setValue);
+  QObject::connect(sb, &QDoubleSpinBox::valueChanged,  //
+                   s, &DoubleSlider::setDoubleValue);
+}
+
 /* GUI behaviour related signal functions */
 
 void MainWindow::on_backgroundColorPicker_clicked() {
@@ -167,19 +174,17 @@ void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
 /* Primitives' size related functions */
 
 void MainWindow::setupWidthControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  /* Connect the slider with the corresponding spinbox and vice versa*/
-  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
-  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  syncSliderWithSpinbox(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::WIDTH;
-  const float sb_limit = 10.0f;
+  const float sb_limit = 20.0f;
   const float sb_step = sb_limit / steps_count;
   sb->setSingleStep(sb_step);
-  sb->setDecimals(2);
-  sb->setMinimum(1.00);
+  sb->setDecimals(1);
+  sb->setMinimum(1.0);
   sb->setMaximum(+sb_limit);
   /* Set up the slider */
-  s->setMinimum(100);
+  s->setMinimum(10);
   s->setMaximum(+steps_count);
   // internally the slider is of int type but emits the signal of type double
   s->divisor = steps_count / sb_limit;
@@ -196,9 +201,7 @@ void MainWindow::on_pointSizeSlider_doubleValueChanged(double value) {
 /* Location related functions */
 
 void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  /* Connect the slider with the corresponding spinbox and vice versa*/
-  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
-  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  syncSliderWithSpinbox(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::LOCATION;
   const float sb_limit = 1.0f;
@@ -234,9 +237,7 @@ void MainWindow::on_locationResetPushButton_clicked() {
 /* Rotation related functions */
 
 void MainWindow::setupRotationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  /* Connect the slider with the corresponding spinbox and vice versa*/
-  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
-  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  syncSliderWithSpinbox(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::ROTATION;
   const float sb_limit = 180.0f;
@@ -272,9 +273,7 @@ void MainWindow::on_rotationResetPushButton_clicked() {
 /* Scale related functions */
 
 void MainWindow::setupScaleControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  /* Connect the slider with the corresponding spinbox and vice versa*/
-  connect(s, &DoubleSlider::doubleValueChanged, sb, &QDoubleSpinBox::setValue);
-  connect(sb, &QDoubleSpinBox::valueChanged, s, &DoubleSlider::setDoubleValue);
+  syncSliderWithSpinbox(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::SCALE;
   const float sb_limit = 10.0f;
@@ -315,10 +314,8 @@ void MainWindow::on_scaleResetPushButton_clicked() {
 
 void MainWindow::openFile() {
   QString dir = QDir::homePath() + "/Downloads";
-  std::string file_name =
-      QFileDialog::getOpenFileName(this, "Open 3d model", dir,
-                                   "geometry definition file (*.obj)")
-          .toStdString();
-  ui->viewport->setFileName(file_name);
+  QString file_name = QFileDialog::getOpenFileName(
+      this, "Open 3d model", dir, "geometry definition file (*.obj)");
+  ui->viewport->setFileName(file_name.toStdString());
   ui->viewport->LoadModel();
 }
