@@ -1,7 +1,7 @@
 #include "float.h"
 #include "obj_viewer.h"
 
-ObjViewerVec3 objviewer_find_geometry_centre(const ObjViewerMesh* mesh) {
+ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh) {
   float xmax = FLT_MIN, ymax = FLT_MIN, zmax = FLT_MIN;
   float xmin = FLT_MAX, ymin = FLT_MAX, zmin = FLT_MAX;
 
@@ -15,9 +15,23 @@ ObjViewerVec3 objviewer_find_geometry_centre(const ObjViewerMesh* mesh) {
     if (p[i + 2] < zmin) zmin = p[i + 2];
   }
 
-  float xcen = (xmin + xmax) / 2;
-  float ycen = (ymin + ymax) / 2;
-  float zcen = (zmin + zmax) / 2;
+  float xcen = (xmin + xmax) / 2.0f;
+  float ycen = (ymin + ymax) / 2.0f;
+  float zcen = (zmin + zmax) / 2.0f;
 
-  return (ObjViewerVec3){xcen, ycen, zcen};
+  float xlen = (xmax - xmin);
+  float ylen = (ymax - ymin);
+  float zlen = (zmax - zmin);
+
+  float maxlen = xlen;
+  if (maxlen < ylen) maxlen = ylen;
+  if (maxlen < zlen) maxlen = zlen;
+
+  return (ObjViewerMeshBounds){
+      xmin,   ymin, zmin,  //
+      xmax,   ymax, zmax,  //
+      xcen,   ycen, zcen,  //
+      xlen,   ylen, zlen,  //
+      maxlen,
+  };
 }

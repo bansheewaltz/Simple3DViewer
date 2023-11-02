@@ -1,6 +1,10 @@
 #ifndef OBJ_VIEWER_H_
 #define OBJ_VIEWER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
   float arr[16];
 } ObjViewerMatrix4x4;
@@ -20,10 +24,6 @@ typedef struct {
 
 } ObjViewerMesh;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 ObjViewerMesh* objviewer_read(const char* path);
 void objviewer_destroy(ObjViewerMesh* mesh);
 
@@ -31,7 +31,15 @@ typedef struct {
   float x, y, z;
 } ObjViewerVec3;
 
-ObjViewerVec3 objviewer_find_geometry_centre(const ObjViewerMesh* mesh);
+typedef struct {
+  float xmin, ymin, zmin;
+  float xmax, ymax, zmax;
+  float xcen, ycen, zcen;
+  float xlen, ylen, zlen;
+  float maxlen;
+} ObjViewerMeshBounds;
+
+ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh);
 
 void objviewer_rotate(ObjViewerMesh* mesh, float x, float y, float z);
 void objviewer_rotate_x(ObjViewerMesh* mesh, float angle);
