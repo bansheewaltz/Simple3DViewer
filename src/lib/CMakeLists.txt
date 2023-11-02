@@ -26,10 +26,10 @@ add_library(${LIB_NAME} STATIC
 
 target_include_directories(${LIB_NAME} PUBLIC include)
 
-add_executable(check src/main.c)
-target_link_libraries(check ${LIB_NAME})
-target_include_directories(check PUBLIC include)
-target_include_directories(check PUBLIC extern)
+add_executable(time_test src/main.cpp)
+target_link_libraries(time_test ${LIB_NAME})
+#target_include_directories(time_test PUBLIC include)
+target_include_directories(time_test PUBLIC extern)
 #add_custom_command(
 #    TARGET check
 #    POST_BUILD
