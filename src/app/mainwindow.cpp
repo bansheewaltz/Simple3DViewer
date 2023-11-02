@@ -96,10 +96,10 @@ void setLayoutWidgetsState(const QLayout *layout, bool state) {
 }
 
 void syncSliderWithSpinbox(DoubleSlider *s, QDoubleSpinBox *sb) {
-  QObject::connect(s, &DoubleSlider::doubleValueChanged,  //
-                   sb, &QDoubleSpinBox::setValue);
-  QObject::connect(sb, &QDoubleSpinBox::valueChanged,  //
-                   s, &DoubleSlider::setDoubleValue);
+  QObject::connect(s, &DoubleSlider::doubleValueChanged, sb,
+                   &QDoubleSpinBox::setValue);
+  QObject::connect(sb, &QDoubleSpinBox::valueChanged, s,
+                   &DoubleSlider::setDoubleValue);
 }
 
 /* GUI behaviour related signal functions */
@@ -317,7 +317,7 @@ void MainWindow::on_scaleResetPushButton_clicked() {
 }
 
 void MainWindow::openFile() {
-  QString dir = QDir::homePath() + "/Downloads";
+  QString dir = QDir::homePath() + "/Downloads/3Dmodels";
   QString file_name = QFileDialog::getOpenFileName(
       this, "Open 3d model", dir, "geometry definition file (*.obj)");
   ui->viewport->setFileName(file_name.toStdString());
