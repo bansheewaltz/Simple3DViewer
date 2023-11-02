@@ -3,6 +3,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <QWidget>
+#include <iostream>
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -111,19 +112,18 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
     }
 
     /* draw call in a loop variation */
-    const unsigned int *index_offset = &m->indices[0];
-    for (unsigned int i = 0; i < m->face_count; i++) {
-      glDrawElements(GL_LINE_LOOP, m->face_vertex_counts[i], GL_UNSIGNED_INT,
-                     index_offset);
-      index_offset += m->face_vertex_counts[i];
-    }
+    //    const unsigned int *index_offset = &m->indices[0];
+    //    for (unsigned int i = 0; i < m->face_count; i++) {
+    //      glDrawElements(GL_LINE_LOOP, m->face_vertex_counts[i],
+    //      GL_UNSIGNED_INT,
+    //                     index_offset);
+    //      index_offset += m->face_vertex_counts[i];
+    //    }
 
     /* multidraw elements variation */
-    //    unsigned int **indices_list = calloc();
-    //    for (int i = 0; i < )
-    //    glMultiDrawElements(GL_LINE_LOOP, m->face_vertex_counts,
-    //    GL_UNSIGNED_INT, ,
-    //                        m->face_count);
+    glMultiDrawElements(GL_LINE_LOOP, (GLsizei *)m->face_vertex_counts,
+                        GL_UNSIGNED_INT, (GLvoid **)face_index_list,
+                        m->face_count);
 
     glDisable(GL_LINE_STIPPLE);
   }
@@ -144,6 +144,17 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
   }
 
   //  glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+static void GLClearError() {
+  while (glGetError() != GL_NO_ERROR)
+    ;
+}
+
+static void GLCheckError() {
+  while (GLenum error = glGetError()) {
+    std::cout << "OpenGL error: " << error << std::endl;
+  }
 }
 
 void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
@@ -171,7 +182,13 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
                                    1, 3, 7, 5};  // far
   ObjViewerMesh m = {position_count,     positions,   face_count,
                      face_vertex_counts, index_count, indices};
-  drawObject((&m));
+  //  drawObject(&m);
+  unsigned int *face_index_list[m.face_count];
+  unsigned int *index_offset = &m.indices[0];
+  for (int i = 0; i < m.face_count; i++) {
+    face_index_list[i] = index_offset;
+    index_offset += m.face_vertex_counts[i];
+  }
 }
 
 void OpenGLWidget::drawAxes() {
@@ -208,6 +225,13 @@ void OpenGLWidget::LoadModel() {
   ObjViewerMesh *m = objviewer_read(this->file_name.c_str());
   this->mesh = m;
   this->geometry_centre = objviewer_find_geometry_centre(m);
+  this->face_index_list = new unsigned int *[m->face_count];
+  //  unsigned int *face_index_list[m->face_count];
+  unsigned int *index_offset = &m->indices[0];
+  for (int i = 0; i < m->face_count; i++) {
+    this->face_index_list[i] = index_offset;
+    index_offset += m->face_vertex_counts[i];
+  }
   //  ObjViewerVec3 gcentre = objviewer_find_geometry_centre(m);
   //  glm::mat4 trans = glm::mat4(1.0f);
   //  glm::vec3 gpos = glm::vec3(gcentre.x, gcentre.y, gcentre.z);

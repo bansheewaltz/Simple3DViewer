@@ -20,6 +20,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
  private:
   std::string file_name;
   ObjViewerMesh *mesh;
+  unsigned int **face_index_list;
   //  ObjViewerMeshInfo *mesh_info;
   ObjViewerVec3 geometry_centre;
   /* Affine transformations */
