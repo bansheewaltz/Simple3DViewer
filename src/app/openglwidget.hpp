@@ -19,7 +19,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  private:
   std::string file_name;
-  ObjViewerMesh *mesh;
+  const ObjViewerMesh *mesh;
   unsigned int **face_index_list;
   //  ObjViewerMeshInfo *mesh_info;
   ObjViewerVec3 geometry_centre;
@@ -72,7 +72,8 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  public:
   void setFileName(std::string f) { file_name = f; }
-  void LoadModel();
+  void loadModel();
+  void formFaceIndexArray(const ObjViewerMesh *m);
   /* Object transformation */
   void setScaleX(float factor = 1) { scalex = factor; }
   void setScaleY(float factor = 1) { scaley = factor; }

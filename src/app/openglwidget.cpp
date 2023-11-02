@@ -15,6 +15,8 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 OpenGLWidget::~OpenGLWidget() { ; }
 
 void OpenGLWidget::resetSettings() {
+  this->mesh = nullptr;
+  this->face_index_list = nullptr;
   // Colors
   setBackgroundColor(QColor("#EFE5D7"));
   setLineColor(QColor("#974F4C"));
@@ -150,7 +152,6 @@ static void GLClearError() {
   while (glGetError() != GL_NO_ERROR)
     ;
 }
-
 static void GLCheckError() {
   while (GLenum error = glGetError()) {
     std::cout << "OpenGL error: " << error << std::endl;
@@ -182,13 +183,9 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
                                    1, 3, 7, 5};  // far
   ObjViewerMesh m = {position_count,     positions,   face_count,
                      face_vertex_counts, index_count, indices};
-  //  drawObject(&m);
-  unsigned int *face_index_list[m.face_count];
-  unsigned int *index_offset = &m.indices[0];
-  for (int i = 0; i < m.face_count; i++) {
-    face_index_list[i] = index_offset;
-    index_offset += m.face_vertex_counts[i];
-  }
+  formFaceIndexArray(&m);
+  this->geometry_centre = {.x = 0, .y = 0, .z = 0};
+  drawObject(&m);
 }
 
 void OpenGLWidget::drawAxes() {
@@ -221,21 +218,24 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
   update();
 }
 
-void OpenGLWidget::LoadModel() {
+void OpenGLWidget::loadModel() {
   ObjViewerMesh *m = objviewer_read(this->file_name.c_str());
+  if (this->mesh) {
+    objviewer_destroy((ObjViewerMesh *)this->mesh);
+  }
   this->mesh = m;
+  if (this->face_index_list) {
+    delete this->face_index_list;
+  }
+  formFaceIndexArray(m);
+}
+
+void OpenGLWidget::formFaceIndexArray(const ObjViewerMesh *m) {
   this->geometry_centre = objviewer_find_geometry_centre(m);
   this->face_index_list = new unsigned int *[m->face_count];
-  //  unsigned int *face_index_list[m->face_count];
   unsigned int *index_offset = &m->indices[0];
   for (int i = 0; i < m->face_count; i++) {
     this->face_index_list[i] = index_offset;
     index_offset += m->face_vertex_counts[i];
   }
-  //  ObjViewerVec3 gcentre = objviewer_find_geometry_centre(m);
-  //  glm::mat4 trans = glm::mat4(1.0f);
-  //  glm::vec3 gpos = glm::vec3(gcentre.x, gcentre.y, gcentre.z);
-  //  glm::vec3 world_origin = glm::vec3(0, 0, 0);
-  //  glm::vec3 trans_vector = glm::normalize(world_origin - gpos);
-  //  this->norm_matrix = glm::translate(trans, trans_vector);
 }

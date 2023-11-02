@@ -317,5 +317,5 @@ void MainWindow::openFile() {
   QString file_name = QFileDialog::getOpenFileName(
       this, "Open 3d model", dir, "geometry definition file (*.obj)");
   ui->viewport->setFileName(file_name.toStdString());
-  ui->viewport->LoadModel();
+  ui->viewport->loadModel();
 }

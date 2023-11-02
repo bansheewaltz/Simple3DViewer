@@ -1,7 +1,7 @@
 #include "float.h"
 #include "obj_viewer.h"
 
-ObjViewerVec3 objviewer_find_geometry_centre(ObjViewerMesh* mesh) {
+ObjViewerVec3 objviewer_find_geometry_centre(const ObjViewerMesh* mesh) {
   float xmax = FLT_MIN, ymax = FLT_MIN, zmax = FLT_MIN;
   float xmin = FLT_MAX, ymin = FLT_MAX, zmin = FLT_MAX;
 

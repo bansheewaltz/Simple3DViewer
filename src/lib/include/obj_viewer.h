@@ -31,7 +31,7 @@ typedef struct {
   float x, y, z;
 } ObjViewerVec3;
 
-ObjViewerVec3 objviewer_find_geometry_centre(ObjViewerMesh* mesh);
+ObjViewerVec3 objviewer_find_geometry_centre(const ObjViewerMesh* mesh);
 
 void objviewer_rotate(ObjViewerMesh* mesh, float x, float y, float z);
 void objviewer_rotate_x(ObjViewerMesh* mesh, float angle);
