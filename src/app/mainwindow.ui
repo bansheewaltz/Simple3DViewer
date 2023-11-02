@@ -1090,6 +1090,44 @@
    <header>doubleslider.hpp</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>backgroundColorPicker</tabstop>
+  <tabstop>displayLinesCheckBox</tabstop>
+  <tabstop>lineStyleDashedCheckBox</tabstop>
+  <tabstop>lineColorPicker</tabstop>
+  <tabstop>lineWidthSlider</tabstop>
+  <tabstop>lineWidthSpinBox</tabstop>
+  <tabstop>displayPointsCheckBox</tabstop>
+  <tabstop>pointStyleSquareCheckBox</tabstop>
+  <tabstop>pointSizeSlider</tabstop>
+  <tabstop>pointSizeSpinBox</tabstop>
+  <tabstop>pointColorPicker</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>locationResetPushButton</tabstop>
+  <tabstop>xLocationSlider</tabstop>
+  <tabstop>xLocationSpinbox</tabstop>
+  <tabstop>yLocationSlider</tabstop>
+  <tabstop>yLocationSpinbox</tabstop>
+  <tabstop>zLocationSlider</tabstop>
+  <tabstop>zLocationSpinbox</tabstop>
+  <tabstop>rotationResetPushButton</tabstop>
+  <tabstop>xRotationSlider</tabstop>
+  <tabstop>xRotationSpinbox</tabstop>
+  <tabstop>yRotationSlider</tabstop>
+  <tabstop>yRotationSpinbox</tabstop>
+  <tabstop>zRotationSlider</tabstop>
+  <tabstop>zRotationSpinbox</tabstop>
+  <tabstop>scaleResetPushButton</tabstop>
+  <tabstop>xScaleSlider</tabstop>
+  <tabstop>xScaleSpinbox</tabstop>
+  <tabstop>yScaleSlider</tabstop>
+  <tabstop>yScaleSpinbox</tabstop>
+  <tabstop>zScaleSlider</tabstop>
+  <tabstop>zScaleSpinbox</tabstop>
+  <tabstop>uScaleSlider</tabstop>
+  <tabstop>uScaleSpinbox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

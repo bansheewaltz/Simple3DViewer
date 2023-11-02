@@ -42,9 +42,13 @@ MainWindow::MainWindow(QWidget *parent)
   setupScaleControls(ui->uScaleSlider, ui->uScaleSpinbox);
   /* Set up shortcuts */
   new QShortcut(QKeySequence(tr("Ctrl+O")), this, SLOT(openFile()));
-  new QShortcut(QKeySequence(tr("e")), this, SLOT(close()));
-  //  new QShortcut(QKeySequence(tr("L")), ui->xLocationSpinbox,
-  //  SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("L")), ui->xLocationSpinbox, SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("R")), ui->xRotationSpinbox, SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("S")), ui->xScaleSpinbox, SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("E")), ui->displayLinesCheckBox,
+                SLOT(toggle()));
+  new QShortcut(QKeySequence(tr("V")), ui->displayPointsCheckBox,
+                SLOT(toggle()));
   resetSettings();
 }
 
