@@ -9,6 +9,8 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "obj_viewer.h"
 
+#define VIEWCUBE_SIDE 2.0f
+
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
   resetSettings();
 }
@@ -68,6 +70,8 @@ void OpenGLWidget::paintGL() {
   // view rotation
   glRotatef(getCameraRotationX(), 1, 0, 0);
   glRotatef(getCameraRotationY(), 0, 1, 0);
+  // view scale
+  glScalef(0.7f, 0.7f, 0.7f);
   // model translation
   glTranslatef(getTranslationX(), getTranslationY(), getTranslationZ());
   // model rotation
@@ -88,15 +92,19 @@ void OpenGLWidget::paintGL() {
 void OpenGLWidget::drawCubeScene() {
   drawAxes();
   drawCube(0, 0, 0, 1);
-  const static float vspacing = 1.5;
-  drawCube(0, +vspacing, 0, 0.33);
-  drawCube(0, -vspacing, 0, 0.33);
+  //  const static float vspacing = 1.5;
+  //  drawCube(0, +vspacing, 0, 0.33);
+  //  drawCube(0, -vspacing, 0, 0.33);
 }
 
 void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
   if (!m) return;
   /* Centre the object */
-  glTranslatef(-geometry_centre.x, -geometry_centre.y, -geometry_centre.z);
+  //! make the norm matrix out of this set of transformations
+  const float maxlen = mesh_bounds.maxlen;
+  const float vcs = VIEWCUBE_SIDE;
+  glScalef(vcs / maxlen, vcs / maxlen, vcs / maxlen);
+  glTranslatef(-mesh_bounds.xcen, -mesh_bounds.ycen, -mesh_bounds.zcen);
 
   // Set up the buffers
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -184,7 +192,7 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
   ObjViewerMesh m = {position_count,     positions,   face_count,
                      face_vertex_counts, index_count, indices};
   formFaceIndexArray(&m);
-  this->geometry_centre = {.x = 0, .y = 0, .z = 0};
+  this->mesh_bounds = {.xcen = 0, .ycen = 0, .zcen = 0, .maxlen = side_len * 2};
   drawObject(&m);
 }
 
@@ -231,7 +239,7 @@ void OpenGLWidget::loadModel() {
 }
 
 void OpenGLWidget::formFaceIndexArray(const ObjViewerMesh *m) {
-  this->geometry_centre = objviewer_find_geometry_centre(m);
+  this->mesh_bounds = objviewer_find_bounds(m);
   this->face_index_list = new unsigned int *[m->face_count];
   unsigned int *index_offset = &m->indices[0];
   for (int i = 0; i < m->face_count; i++) {

@@ -21,8 +21,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   std::string file_name;
   const ObjViewerMesh *mesh;
   unsigned int **face_index_list;
-  //  ObjViewerMeshInfo *mesh_info;
-  ObjViewerVec3 geometry_centre;
+  ObjViewerMeshBounds mesh_bounds;
   /* Affine transformations */
   // translates to the world origin and scales to 1x1x1 cube
   //  ObjViewerMatrix4x4 norm_matrix;
