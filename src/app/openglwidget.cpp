@@ -30,6 +30,16 @@ void OpenGLWidget::resetSettings() {
   setCameraRotationZ(0);
 }
 
+static void GLClearError() {
+  while (glGetError() != GL_NO_ERROR)
+    ;
+}
+static void GLCheckError() {
+  while (GLenum error = glGetError()) {
+    std::cout << "OpenGL error: " << error << std::endl;
+  }
+}
+
 /* Set up the rendering context, load shaders and other resources, etc. */
 void OpenGLWidget::initializeGL() {
   // Retrieve OpenGL functions from graphics card's drivers
@@ -83,7 +93,7 @@ void OpenGLWidget::paintGL() {
 
   /* Draw the objects */
   if (!mesh) {  // use a template model
-    drawCubeScene();
+                //    drawCubeScene();
   }
 
   drawObject(mesh);
@@ -131,10 +141,11 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
     //    }
 
     /* multidraw elements variation */
-    glMultiDrawElements(GL_LINE_LOOP, (GLsizei *)m->face_vertex_counts,
-                        GL_UNSIGNED_INT, (GLvoid **)face_index_list,
-                        m->face_count);
-
+    //    glMultiDrawElements(GL_LINE_LOOP, (GLsizei *)m->face_vertex_counts,
+    //                        GL_UNSIGNED_INT, (GLvoid **)face_index_list,
+    //                        m->face_count);
+    glDrawElements(GL_LINES, m->index_count * 2, GL_UNSIGNED_INT,
+                   this->lines_index_array);
     glDisable(GL_LINE_STIPPLE);
   }
 
@@ -154,16 +165,6 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
   }
 
   //  glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-static void GLClearError() {
-  while (glGetError() != GL_NO_ERROR)
-    ;
-}
-static void GLCheckError() {
-  while (GLenum error = glGetError()) {
-    std::cout << "OpenGL error: " << error << std::endl;
-  }
 }
 
 void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
@@ -235,11 +236,13 @@ void OpenGLWidget::loadModel() {
   if (this->face_index_list) {
     delete this->face_index_list;
   }
-  formFaceIndexArray(m);
+  this->mesh_bounds = objviewer_find_bounds(m);
+  this->lines_index_array = objviewer_faces_to_lines(m);
+  //  formFaceIndexArray(m);
+  update();
 }
 
 void OpenGLWidget::formFaceIndexArray(const ObjViewerMesh *m) {
-  this->mesh_bounds = objviewer_find_bounds(m);
   this->face_index_list = new unsigned int *[m->face_count];
   unsigned int *index_offset = &m->indices[0];
   for (int i = 0; i < m->face_count; i++) {
