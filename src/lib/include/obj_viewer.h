@@ -27,6 +27,9 @@ typedef struct {
 ObjViewerMesh* objviewer_read(const char* path);
 void objviewer_destroy(ObjViewerMesh* mesh);
 
+ObjViewerMesh* objviewer_create_cube(float x, float y, float z, float side_len);
+unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m);
+
 typedef struct {
   float x, y, z;
 } ObjViewerVec3;

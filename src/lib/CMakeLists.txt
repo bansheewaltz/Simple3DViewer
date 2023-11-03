@@ -26,12 +26,12 @@ add_library(${LIB_NAME} STATIC
 
 target_include_directories(${LIB_NAME} PUBLIC include)
 
+
+# Tests
+
 add_executable(time_test src/main.cpp)
 target_link_libraries(time_test ${LIB_NAME})
-#target_include_directories(time_test PUBLIC include)
 target_include_directories(time_test PUBLIC extern)
-#add_custom_command(
-#    TARGET check
-#    POST_BUILD
-#    COMMAND check
-#)
+
+add_executable(conversion_test test/faces_to_lines.cpp)
+target_link_libraries(conversion_test ${LIB_NAME})

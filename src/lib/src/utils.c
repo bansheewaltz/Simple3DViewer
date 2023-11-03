@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "float.h"
 #include "obj_viewer.h"
 
@@ -34,4 +36,59 @@ ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh) {
       xlen,   ylen, zlen,  //
       maxlen,
   };
+}
+
+ObjViewerMesh* objviewer_create_cube(float x, float y, float z,
+                                     float side_len) {
+  const float hside = side_len / 2;
+  static unsigned int position_count = 8;
+  float positions[] = {
+      x + hside, y - hside, z + hside,  // right bottom front
+      x + hside, y - hside, z - hside,  // right bottom back
+      x - hside, y - hside, z + hside,  // left bottom front
+      x - hside, y - hside, z - hside,  // left bottom back
+
+      x + hside, y + hside, z + hside,  // right top front
+      x + hside, y + hside, z - hside,  // right top back
+      x - hside, y + hside, z + hside,  // left top front
+      x - hside, y + hside, z - hside,  // left top back
+  };
+  static unsigned int face_count = 6;
+  static unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
+  static unsigned int index_count = 8;
+  static unsigned int indices[] = {3, 2, 0, 1,   // bottom
+                                   4, 5, 7, 6,   // top
+                                   2, 3, 7, 6,   // left
+                                   0, 1, 5, 4,   // right
+                                   0, 4, 6, 2,   // near
+                                   1, 3, 7, 5};  // far
+
+  ObjViewerMesh* m = malloc(sizeof(ObjViewerMesh));
+  *m = (ObjViewerMesh){position_count,     positions,   face_count,
+                       face_vertex_counts, index_count, indices};
+  return m;
+}
+
+unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m) {
+  unsigned int* farr = m->indices;
+  unsigned int* larr = malloc(2 * sizeof(unsigned int) * m->index_count);
+
+  unsigned int* face_indices = farr;
+  size_t i = 0;
+  for (int j = 0; j < m->face_count; j++) {
+    size_t face_vertex_count = m->face_vertex_counts[j];
+    for (int k = 0; k < face_vertex_count; k++) {
+      larr[i++] = face_indices[k];
+      if (k == 0) continue;
+      if (k == face_vertex_count - 1) {
+        larr[i++] = face_indices[k];
+        larr[i++] = face_indices[0];
+      } else {
+        larr[i++] = face_indices[k];
+      }
+    }
+    face_indices += face_vertex_count;
+  }
+
+  return larr;
 }
