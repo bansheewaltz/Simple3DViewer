@@ -31,7 +31,8 @@ static void* array_realloc(void* arr, unsigned int n, size_t elem_size) {
   unsigned int size = array_size(arr);
   unsigned int nsize = size + n;
   unsigned int cap = array_capacity(arr);
-  unsigned int ncap = cap + cap / 2;
+  //  unsigned int ncap = cap + cap / 2;
+  unsigned int ncap = cap * 2;
 
   if (ncap < nsize) {
     ncap = nsize;
@@ -74,11 +75,7 @@ ObjViewerMesh* objviewer_read(const char* path) {
   array_push(m->positions, 0.0f);
 
   /* Create buffer for reading the file */
-  char* buffer = (calloc(1, BUFFER_SIZE * sizeof(char)));
-  if (!buffer) {
-    free(m);
-    return 0;
-  }
+  char buffer[BUFFER_SIZE];
 
   unsigned int to_read = BUFFER_SIZE;
   unsigned int read = 0;
@@ -115,7 +112,6 @@ ObjViewerMesh* objviewer_read(const char* path) {
   m->face_count = array_size(m->face_vertex_counts);
   m->index_count = array_size(m->indices);
 
-  free(buffer);
   fclose(file);
 
   return m;
