@@ -1,13 +1,13 @@
 #ifndef OBJ_VIEWER_H_
 #define OBJ_VIEWER_H_
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct {
-  float arr[16];
-} ObjViewerMatrix4x4;
+/* Parsing of .obj file */
 
 typedef struct {
   /* Vertex data */
@@ -27,12 +27,7 @@ typedef struct {
 ObjViewerMesh* objviewer_read(const char* path);
 void objviewer_destroy(ObjViewerMesh* mesh);
 
-ObjViewerMesh* objviewer_create_cube(float x, float y, float z, float side_len);
-unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m);
-
-typedef struct {
-  float x, y, z;
-} ObjViewerVec3;
+/* Working with the geometry data */
 
 typedef struct {
   float xmin, ymin, zmin;
@@ -43,34 +38,24 @@ typedef struct {
 } ObjViewerMeshBounds;
 
 ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh);
+unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m);
+// helper
+ObjViewerMesh* objviewer_create_cube(float x, float y, float z, float side_len);
 
-void objviewer_rotate(ObjViewerMesh* mesh, float x, float y, float z);
-void objviewer_rotate_x(ObjViewerMesh* mesh, float angle);
-void objviewer_rotate_y(ObjViewerMesh* mesh, float agnle);
-void objviewer_rotate_z(ObjViewerMesh* mesh, float angle);
-void objviewer_rotate_reset(ObjViewerMesh* mesh);
-void objviewer_rotate_reset_x(ObjViewerMesh* mesh);
-void objviewer_rotate_reset_y(ObjViewerMesh* mesh);
-void objviewer_rotate_reset_z(ObjViewerMesh* mesh);
+/* Affine transformations */
 
-void objviewer_scale(ObjViewerMesh* mesh, float x, float y, float z);
-void objviewer_scale_uniformly(ObjViewerMesh* mesh, float factor);
-void objviewer_scale_x(ObjViewerMesh* mesh, float factor);
-void objviewer_scale_y(ObjViewerMesh* mesh, float factor);
-void objviewer_scale_z(ObjViewerMesh* mesh, float factor);
-void objviewer_scale_reset(ObjViewerMesh* mesh);
-void objviewer_scale_reset_x(ObjViewerMesh* mesh);
-void objviewer_scale_reset_y(ObjViewerMesh* mesh);
-void objviewer_scale_reset_z(ObjViewerMesh* mesh);
+typedef struct {
+  float arr[16];
+} ObjViewerMatrix4x4;
 
-void objviewer_translate(ObjViewerMesh* mesh, float x, float y, float z);
-void objviewer_translate_x(ObjViewerMesh* mesh, float x);
-void objviewer_translate_y(ObjViewerMesh* mesh, float y);
-void objviewer_translate_z(ObjViewerMesh* mesh, float z);
-void objviewer_translate_reset(ObjViewerMesh* mesh);
-void objviewer_translate_reset_x(ObjViewerMesh* mesh);
-void objviewer_translate_reset_y(ObjViewerMesh* mesh);
-void objviewer_translate_reset_z(ObjViewerMesh* mesh);
+typedef struct {
+  float x, y, z;
+} ObjViewerVec3;
+
+void objviewer_rotate(ObjViewerMatrix4x4* mat, float angle, ObjViewerVec3 axis,
+                      bool normalize);
+void objviewer_scale(ObjViewerMatrix4x4* mat, float x, float y, float z);
+void objviewer_translate(ObjViewerMatrix4x4* mat, float x, float y, float z);
 
 #ifdef __cplusplus
 }
