@@ -259,9 +259,12 @@ static const char* parse_face(ObjViewerMesh* mesh, const char* ptr) {
     array_push(mesh->indices, v);
     count++;
 
+    // skip vertex- texture and normal indices
     while (!is_whitespace(*ptr) && !is_newline(*ptr)) {
       ptr++;
     }
+    // in a case if there is a whitespace before the newline char
+    ptr = skip_whitespace(ptr);
   }
 
   array_push(mesh->face_vertex_counts, count);
