@@ -17,11 +17,13 @@ set(CMAKE_C_EXTENSIONS OFF)
 add_library(${LIB_NAME} STATIC
     include/obj_viewer.h
 
-    src/affine_transformations/rotation.c
-    src/affine_transformations/scaling.c
-    src/affine_transformations/translation.c
-    src/parsing/parsing.c
-    src/utils.c
+    src/parsing.c
+    src/processing.c
+
+    src/rotation.c
+    src/scale.c
+    src/translation.c
+    src/projection.c
 )
 
 target_include_directories(${LIB_NAME} PUBLIC include)
@@ -29,9 +31,6 @@ target_include_directories(${LIB_NAME} PUBLIC include)
 
 # Tests
 
-add_executable(time_test src/main.cpp)
-target_link_libraries(time_test ${LIB_NAME})
-target_include_directories(time_test PUBLIC extern)
-
-add_executable(conversion_test test/faces_to_lines.cpp)
-target_link_libraries(conversion_test ${LIB_NAME})
+add_executable(test_time test/time_test.cpp)
+target_link_libraries(test_time ${LIB_NAME})
+target_include_directories(test_time PUBLIC extern)
