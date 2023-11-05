@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "details.h"
-#include "obj_viewer.h"
+#include "owviewer.h"
 
 OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh) {
   float xmax = FLT_MIN, ymax = FLT_MIN, zmax = FLT_MIN;

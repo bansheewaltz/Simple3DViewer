@@ -17,7 +17,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_BINARY_DIR}/lib)
 # specify the output binaries' names
 set(APP_NAME ${PROJECT_NAME})
-set(LIB_NAME libobjviewer)
+set(LIB_NAME libowviewer)
 
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 qt_standard_project_setup()

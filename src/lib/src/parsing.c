@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "obj_viewer.h"
+#include "owviewer.h"
 
 #define BUFFER_SIZE (1 << 16)
 

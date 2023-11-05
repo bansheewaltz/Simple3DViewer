@@ -9,7 +9,7 @@
 #include <QOpenGLWidget>
 
 #include "glm/glm.hpp"
-#include "obj_viewer.h"
+#include "owviewer.h"
 
 enum LineStyle { SOLID, DASHED };
 enum PointStyle { CIRCLE, SQUARE };

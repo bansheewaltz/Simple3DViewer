@@ -11,7 +11,7 @@ namespace fs = std::filesystem;
 #define FAST_OBJ_IMPLEMENTATION
 #include "fast_obj/fast_obj.h"
 /* Custom parser */
-#include "obj_viewer.h"
+#include "owviewer.h"
 #include "obj_viewer/details.h"
 
 using namespace std::chrono;

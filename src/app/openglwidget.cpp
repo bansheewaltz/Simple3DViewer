@@ -7,7 +7,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "obj_viewer.h"
+#include "owviewer.h"
 
 #define VIEWCUBE_SIDE 2.0f
 

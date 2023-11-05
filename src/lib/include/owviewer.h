@@ -1,5 +1,5 @@
-#ifndef OBJ_VIEWER_H_
-#define OBJ_VIEWER_H_
+#ifndef OWVIEWER_H_
+#define OWVIEWER_H_
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -63,4 +63,4 @@ void owv_mat_translate(OWV_Mat4x4* mat, float x, float y, float z);
 }
 #endif
 
-#endif  // OBJ_VIEWER_H_
+#endif  // OWVIEWER_H_

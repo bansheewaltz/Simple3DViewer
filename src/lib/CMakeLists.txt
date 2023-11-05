@@ -15,7 +15,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 add_library(${LIB_NAME} STATIC
-    include/obj_viewer.h
+    include/owviewer.h
     include/obj_viewer/details.h
 
     src/parsing.c
