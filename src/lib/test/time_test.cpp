@@ -60,12 +60,12 @@ int main() {
   ObjViewerMesh *m2 = nullptr;
   {
     Timer t;
-    m2 = objviewer_read(path.c_str());
+    m2 = objviewer_mesh_read_obj(path.c_str());
   }
   time_total += Timer::last_time;
   assert(m2);
   std::cout << "model statistics: ";
-  std::cout << "vertices:" << m2->position_count << " | ";
+  std::cout << "vertices:" << m2->vertex_count << " | ";
   std::cout << "faces:" << m2->face_count << " | ";
   std::cout << "polygon edges:" << m2->index_count << std::endl;
 
@@ -73,7 +73,7 @@ int main() {
   ObjViewerMeshBounds mb;
   {
     Timer t;
-    mb = objviewer_find_bounds(m2);
+    mb = objviewer_mesh_find_bounds(m2);
     (void)mb;
   }
   time_total += Timer::last_time;
@@ -82,7 +82,7 @@ int main() {
   unsigned int *iarr = nullptr;
   {
     Timer t;
-    iarr = objviewer_to_lines_index_arr(m2);
+    iarr = objviewer_iarr_to_lines(m2);
   }
   assert(iarr);
   time_total += Timer::last_time;
@@ -92,7 +92,7 @@ int main() {
   std::cout << "\tflipping lines in the index array: ";
   {
     Timer t;
-    objviewer_flip_line_indices(iarr, m2->index_count * 2);
+    objviewer_iarr_lines_flip(iarr, m2->index_count * 2);
   }
   time_duplicates += Timer::last_time;
 
@@ -112,7 +112,7 @@ int main() {
     //    }
     //    std::cout << umap.size() << " ";
     /* qsort */
-    objviewer_sort_lines_index_arr(iarr, m2->index_count);
+    objviewer_iarr_lines_sort(iarr, m2->index_count);
   }
   time_duplicates += Timer::last_time;
 
@@ -120,11 +120,11 @@ int main() {
   size_t newlen = 0;
   {
     Timer t;
-    objviewer_delete_index_duplicates(iarr, m2->index_count, &newlen);
+    objviewer_iarr_lines_clean(iarr, m2->index_count, &newlen);
   }
   time_duplicates += Timer::last_time;
   std::cout << "\tunique edges count: " << newlen << std::endl;
-  objviewer_destroy(m2);
+  objviewer_mesh_destroy(m2);
 
   std::cout << "} " << time_duplicates << "ms\n";
   time_total += time_duplicates;

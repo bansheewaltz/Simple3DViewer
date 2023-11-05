@@ -7,10 +7,10 @@ extern "C" {
 
 #include <stddef.h>
 
-void objviewer_sort_lines_index_arr(unsigned int* arr, size_t len);
-unsigned int* objviewer_delete_index_duplicates(unsigned int* arr, size_t len,
-                                                size_t* newlen);
-void objviewer_flip_line_indices(unsigned int* arr, size_t len);
+void objviewer_iarr_lines_sort(unsigned int* arr, size_t len);
+unsigned int* objviewer_iarr_lines_clean(unsigned int* arr, size_t len,
+                                         size_t* newlen);
+void objviewer_iarr_lines_flip(unsigned int* arr, size_t len);
 
 #ifdef __cplusplus
 }

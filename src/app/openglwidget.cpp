@@ -162,7 +162,7 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
       glEnable(GL_POINT_SMOOTH);
     }
 
-    glDrawArrays(GL_POINTS, 0, m->position_count);
+    glDrawArrays(GL_POINTS, 0, m->vertex_count);
 
     glDisable(GL_POINT_SMOOTH);
   }
@@ -231,9 +231,9 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
 }
 
 void OpenGLWidget::loadModel() {
-  ObjViewerMesh *m = objviewer_read(this->file_name.c_str());
+  ObjViewerMesh *m = objviewer_mesh_read_obj(this->file_name.c_str());
   if (this->mesh) {
-    objviewer_destroy((ObjViewerMesh *)this->mesh);
+    objviewer_mesh_destroy((ObjViewerMesh *)this->mesh);
   }
   this->mesh = m;
   if (this->index_array) {
@@ -242,14 +242,14 @@ void OpenGLWidget::loadModel() {
   //  if (this->face_index_list) {
   //    delete this->face_index_list;
   //  }
-  this->mesh_bounds = objviewer_find_bounds(m);
+  this->mesh_bounds = objviewer_mesh_find_bounds(m);
   /* Break the index array of faces into the array of index arrays by faces */
   //  objviewer_index_arr_to_2d_arr(m);
   /* Break the index array of faces into the index array of lines */
   //  this->index_array = objviewer_to_lines_index_arr(m);
   //  this->index_count = m->index_count * 2;
   /* Break the index array of faces into the index array of UNIQUE lines */
-  this->index_array = objviewer_to_unique_lines(m, &this->index_count);
+  this->index_array = objviewer_iarr_to_unique_lines(m, &this->index_count);
   update();
 }
 

@@ -4,12 +4,12 @@
 #include "details.h"
 #include "obj_viewer.h"
 
-ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh) {
+ObjViewerMeshBounds objviewer_mesh_find_bounds(const ObjViewerMesh* mesh) {
   float xmax = FLT_MIN, ymax = FLT_MIN, zmax = FLT_MIN;
   float xmin = FLT_MAX, ymin = FLT_MAX, zmin = FLT_MAX;
 
   float* p = mesh->positions;
-  for (int i = 3; i < mesh->position_count * 3; i += 3) {
+  for (int i = 3; i < mesh->vertex_count * 3; i += 3) {
     if (p[i + 0] > xmax) xmax = p[i + 0];
     if (p[i + 0] < xmin) xmin = p[i + 0];
     if (p[i + 1] > ymax) ymax = p[i + 1];
@@ -39,7 +39,7 @@ ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh) {
   };
 }
 
-ObjViewerMesh* objviewer_create_cube(float x, float y, float z,
+ObjViewerMesh* objviewer_mesh_create_cube(float x, float y, float z,
                                      float side_len) {
   const float hside = side_len / 2;
   static unsigned int position_count = 8;
@@ -70,7 +70,7 @@ ObjViewerMesh* objviewer_create_cube(float x, float y, float z,
   return m;
 }
 
-unsigned int* objviewer_to_lines_index_arr(const ObjViewerMesh* m) {
+unsigned int* objviewer_iarr_to_lines(const ObjViewerMesh* m) {
   unsigned int* farr = m->indices;
   unsigned int* larr = malloc(2 * sizeof(unsigned int) * m->index_count);
 
@@ -111,7 +111,7 @@ static int cmpfunc(const void* a, const void* b) {
   return diff;
 }
 
-void objviewer_sort_lines_index_arr(unsigned int* arr, size_t len) {
+void objviewer_iarr_lines_sort(unsigned int* arr, size_t len) {
   qsort(arr, len / 2, sizeof(unsigned int) * 2, &cmpfunc);
 }
 
@@ -119,7 +119,7 @@ static bool is_pair_eq(unsigned int* a, unsigned int* b) {
   return *a == *b && *(a + 1) == *(b + 1);
 }
 
-unsigned int* objviewer_delete_index_duplicates(unsigned int* arr, size_t len,
+unsigned int* objviewer_iarr_lines_clean(unsigned int* arr, size_t len,
                                                 size_t* newlen) {
   if (len <= 4) return arr;
   // We will work with ptr to start index of each line
@@ -150,7 +150,7 @@ unsigned int* objviewer_delete_index_duplicates(unsigned int* arr, size_t len,
   return arr;
 }
 
-void objviewer_flip_line_indices(unsigned int* arr, size_t len) {
+void objviewer_iarr_lines_flip(unsigned int* arr, size_t len) {
   if (!arr) return;
   for (int i = 0; i < len; i += 2) {
     if (arr[i] > arr[i + 1]) {
@@ -161,10 +161,10 @@ void objviewer_flip_line_indices(unsigned int* arr, size_t len) {
   }
 }
 
-unsigned int* objviewer_to_unique_lines(ObjViewerMesh* m, size_t* newlen) {
-  unsigned int* arr = objviewer_to_lines_index_arr(m);
-  objviewer_flip_line_indices(arr, m->index_count * 2);
-  objviewer_sort_lines_index_arr(arr, m->index_count * 2);
-  arr = objviewer_delete_index_duplicates(arr, m->index_count * 2, newlen);
+unsigned int* objviewer_iarr_to_unique_lines(ObjViewerMesh* m, size_t* newlen) {
+  unsigned int* arr = objviewer_iarr_to_lines(m);
+  objviewer_iarr_lines_flip(arr, m->index_count * 2);
+  objviewer_iarr_lines_sort(arr, m->index_count * 2);
+  arr = objviewer_iarr_lines_clean(arr, m->index_count * 2, newlen);
   return arr;
 }

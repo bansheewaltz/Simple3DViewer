@@ -54,7 +54,7 @@ static void* array_realloc(void* arr, unsigned int n, size_t elem_size) {
 
 void parse_buffer(ObjViewerMesh* m, const char* buffer, const char* last_nl);
 
-ObjViewerMesh* objviewer_read(const char* path) {
+ObjViewerMesh* objviewer_mesh_read_obj(const char* path) {
   if (!path) {
     return 0;
   }
@@ -108,7 +108,7 @@ ObjViewerMesh* objviewer_read(const char* path) {
     to_read = BUFFER_SIZE - bytes_overflow;
   }
 
-  m->position_count = array_size(m->positions) / 3;
+  m->vertex_count = array_size(m->positions) / 3;
   m->face_count = array_size(m->face_vertex_counts);
   m->index_count = array_size(m->indices);
 
@@ -289,7 +289,7 @@ void parse_buffer(ObjViewerMesh* m, const char* buffer, const char* last_nl) {
   }
 }
 
-void objviewer_destroy(ObjViewerMesh* m) {
+void objviewer_mesh_destroy(ObjViewerMesh* m) {
   if (!m) return;
   array_clean(m->positions);
   array_clean(m->face_vertex_counts);
