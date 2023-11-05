@@ -55,8 +55,8 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::resetSettings() {
-  on_lineWidthSlider_doubleValueChanged(1.5);
-  ui->lineWidthSpinBox->setValue(1.5);
+  on_lineWidthSlider_doubleValueChanged(1.0);
+  ui->lineWidthSpinBox->setValue(1.0);
   on_pointSizeSlider_doubleValueChanged(1.0);
   ui->pointSizeSpinBox->setValue(1.0);
 }
