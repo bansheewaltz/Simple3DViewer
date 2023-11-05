@@ -18,12 +18,13 @@ OpenGLWidget::~OpenGLWidget() { ; }
 
 void OpenGLWidget::resetSettings() {
   this->mesh = nullptr;
-  this->face_index_list = nullptr;
-  // Colors
+  this->index_array = nullptr;
+  //  this->face_index_list = nullptr;
+  /* Colors */
   setBackgroundColor(QColor("#EFE5D7"));
   setLineColor(QColor("#974F4C"));
   setPointColor(getLineColor());
-  // Camera
+  /* Camera */
   setCameraSpeed(0.2f);
   setCameraRotationX(-30);
   setCameraRotationY(-30);
@@ -42,9 +43,9 @@ static void GLCheckError() {
 
 /* Set up the rendering context, load shaders and other resources, etc. */
 void OpenGLWidget::initializeGL() {
-  // Retrieve OpenGL functions from graphics card's drivers
+  /* Retrieve OpenGL functions from graphics card's drivers */
   initializeOpenGLFunctions();
-  // Set proper rendering of overlapping elements
+  /* Set proper rendering of overlapping elements */
   glEnable(GL_DEPTH_TEST);
 }
 
@@ -116,11 +117,11 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
   glScalef(vcs / maxlen, vcs / maxlen, vcs / maxlen);
   glTranslatef(-mesh_bounds.xcen, -mesh_bounds.ycen, -mesh_bounds.zcen);
 
-  // Set up the buffers
+  /* Set up the buffers */
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, m->positions);
 
-  // Send the line draw calls
+  /* Send the line draw calls */
   if (this->isLineDisplayEnabled()) {
     QColor lc = getLineColor();
     glColor3d(lc.redF(), lc.greenF(), lc.blueF());
@@ -131,7 +132,7 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
       glLineStipple(10, 0x3333);
     }
 
-    /* draw call in a loop variation */
+    /* GL_LINE_LOOP glDrawElements in a loop variation */
     //    const unsigned int *index_offset = &m->indices[0];
     //    for (unsigned int i = 0; i < m->face_count; i++) {
     //      glDrawElements(GL_LINE_LOOP, m->face_vertex_counts[i],
@@ -140,12 +141,14 @@ void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
     //      index_offset += m->face_vertex_counts[i];
     //    }
 
-    /* multidraw elements variation */
+    /* GL_LINE_LOOP glMultiDrawElements variation */
     //    glMultiDrawElements(GL_LINE_LOOP, (GLsizei *)m->face_vertex_counts,
     //                        GL_UNSIGNED_INT, (GLvoid **)face_index_list,
     //                        m->face_count);
-    glDrawElements(GL_LINES, m->index_count * 2, GL_UNSIGNED_INT,
-                   this->lines_index_array);
+
+    /* GL_LINES glDrawElements variation */
+    glDrawElements(GL_LINES, this->index_count, GL_UNSIGNED_INT,
+                   this->index_array);
     glDisable(GL_LINE_STIPPLE);
   }
 
@@ -192,7 +195,7 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
                                    1, 3, 7, 5};  // far
   ObjViewerMesh m = {position_count,     positions,   face_count,
                      face_vertex_counts, index_count, indices};
-  formFaceIndexArray(&m);
+  //  formFaceIndexArray(&m);
   this->mesh_bounds = {.xcen = 0, .ycen = 0, .zcen = 0, .maxlen = side_len * 2};
   drawObject(&m);
 }
@@ -218,7 +221,7 @@ void OpenGLWidget::drawAxes() {
   glDrawArrays(GL_LINES, 0, position_count);
 }
 
-// Set interactive rotation in the viewport with a mouse
+/* Set interactive rotation in the viewport with a mouse */
 void OpenGLWidget::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
   camera_rotx += camera_speed * (m->pos().y() - mouse_pos.y());
@@ -233,20 +236,28 @@ void OpenGLWidget::loadModel() {
     objviewer_destroy((ObjViewerMesh *)this->mesh);
   }
   this->mesh = m;
-  if (this->face_index_list) {
-    delete this->face_index_list;
+  if (this->index_array) {
+    free(this->index_array);
   }
+  //  if (this->face_index_list) {
+  //    delete this->face_index_list;
+  //  }
   this->mesh_bounds = objviewer_find_bounds(m);
-  this->lines_index_array = objviewer_faces_to_lines(m);
-  //  formFaceIndexArray(m);
+  /* Break the index array of faces into the array of index arrays by faces */
+  //  objviewer_index_arr_to_2d_arr(m);
+  /* Break the index array of faces into the index array of lines */
+  //  this->index_array = objviewer_to_lines_index_arr(m);
+  //  this->index_count = m->index_count * 2;
+  /* Break the index array of faces into the index array of UNIQUE lines */
+  this->index_array = objviewer_to_unique_lines(m, &this->index_count);
   update();
 }
 
-void OpenGLWidget::formFaceIndexArray(const ObjViewerMesh *m) {
-  this->face_index_list = new unsigned int *[m->face_count];
-  unsigned int *index_offset = &m->indices[0];
-  for (int i = 0; i < m->face_count; i++) {
-    this->face_index_list[i] = index_offset;
-    index_offset += m->face_vertex_counts[i];
-  }
-}
+// void OpenGLWidget::formFaceIndexArray(const ObjViewerMesh *m) {
+//   this->face_index_list = new unsigned int *[m->face_count];
+//   unsigned int *index_offset = &m->indices[0];
+//   for (int i = 0; i < m->face_count; i++) {
+//     this->face_index_list[i] = index_offset;
+//     index_offset += m->face_vertex_counts[i];
+//   }
+// }
