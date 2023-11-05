@@ -16,6 +16,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 add_library(${LIB_NAME} STATIC
     include/obj_viewer.h
+    include/obj_viewer/details.h
 
     src/parsing.c
     src/processing.c
@@ -27,10 +28,9 @@ add_library(${LIB_NAME} STATIC
 )
 
 target_include_directories(${LIB_NAME} PUBLIC include)
-
+target_include_directories(${LIB_NAME} PUBLIC include/obj_viewer)
 
 # Tests
-
 add_executable(test_time test/time_test.cpp)
 target_link_libraries(test_time ${LIB_NAME})
-target_include_directories(test_time PUBLIC extern)
+target_include_directories(test_time PRIVATE extern)

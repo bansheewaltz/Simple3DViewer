@@ -1,6 +1,7 @@
+#include <float.h>
 #include <stdlib.h>
 
-#include "float.h"
+#include "details.h"
 #include "obj_viewer.h"
 
 ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh) {

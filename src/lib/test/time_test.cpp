@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 #include "fast_obj/fast_obj.h"
 /* Custom parser */
 #include "obj_viewer.h"
+#include "obj_viewer/details.h"
 
 using namespace std::chrono;
 struct Timer {
@@ -29,25 +30,27 @@ struct Timer {
   }
 };
 
-#define folder
-#define lion "/Users/mark/Downloads/3Dmodels/Lion.obj"  // 2.5m + 5m
-#define cube "/Users/mark/Downloads/3Dmodels/cube_not_centered.obj"   // 3m + 6m
-#define romanesco "/Users/mark/Downloads/3Dmodels/Romanesco Top.obj"  // 3.5m
-#define bethoven \
-  "/Users/mark/Downloads/3Dmodels/Beethoven_Denkmal_C.obj"     // 567k + 1.1m
-#define car911 "/Users/mark/Downloads/3Dmodels/911_scene.obj"  // 150k + 120k
+#define dir "/Users/mark/Downloads/3Dmodels/"
+/* models */
+#define lion "Lion.obj"                     // 2.5m + 5m
+#define cube "cube_not_centered.obj"        // 3m + 6m
+#define romanesco "Romanesco Top.obj"       // 3.5m
+#define bethoven "Beethoven_Denkmal_C.obj"  // 567k + 1.1m
+#define car911 "911_scene.obj"              // 150k + 120k
+#define scull "SKULLlow.obj"                // 150k + 120k
 
 size_t Timer::last_time = 0;
+std::string path = dir;
 
 int main() {
-  const char *model = lion;
-  std::cout << "file: " << fs::path(model).filename() << '\n';
+  path += scull;
+  std::cout << "file: " << fs::path(path.c_str()).filename() << '\n';
 
   std::cout << "fast_obj parsing: ";
   fastObjMesh *m = nullptr;
   {
     Timer t;
-    m = fast_obj_read(model);
+    m = fast_obj_read(path.c_str());
   }
   assert(m);
   fast_obj_destroy(m);
@@ -57,7 +60,7 @@ int main() {
   ObjViewerMesh *m2 = nullptr;
   {
     Timer t;
-    m2 = objviewer_read(model);
+    m2 = objviewer_read(path.c_str());
   }
   time_total += Timer::last_time;
   assert(m2);
