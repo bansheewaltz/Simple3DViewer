@@ -2,6 +2,7 @@
 #define OBJ_VIEWER_H_
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,8 +39,13 @@ typedef struct {
 } ObjViewerMeshBounds;
 
 ObjViewerMeshBounds objviewer_find_bounds(const ObjViewerMesh* mesh);
-unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m);
-// helper
+unsigned int* objviewer_to_lines_index_arr(const ObjViewerMesh* m);
+void objviewer_sort_lines_index_arr(unsigned int* arr, size_t len);
+unsigned int* objviewer_delete_index_duplicates(unsigned int* arr, size_t len,
+                                                size_t* newlen);
+unsigned int* objviewer_to_unique_lines(ObjViewerMesh* m, size_t* newlen);
+void objviewer_flip_line_indices(unsigned int* arr, size_t len);
+//   helper
 ObjViewerMesh* objviewer_create_cube(float x, float y, float z, float side_len);
 
 /* Affine transformations */

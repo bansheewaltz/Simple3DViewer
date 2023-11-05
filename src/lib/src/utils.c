@@ -69,7 +69,7 @@ ObjViewerMesh* objviewer_create_cube(float x, float y, float z,
   return m;
 }
 
-unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m) {
+unsigned int* objviewer_to_lines_index_arr(const ObjViewerMesh* m) {
   unsigned int* farr = m->indices;
   unsigned int* larr = malloc(2 * sizeof(unsigned int) * m->index_count);
 
@@ -91,4 +91,79 @@ unsigned int* objviewer_faces_to_lines(const ObjViewerMesh* m) {
   }
 
   return larr;
+}
+
+typedef struct {
+  unsigned int s;
+  unsigned int e;
+} LineStartEnd;
+
+static int cmpfunc(const void* a, const void* b) {
+  const LineStartEnd* l1 = (LineStartEnd*)a;
+  const LineStartEnd* l2 = (LineStartEnd*)b;
+  int diff;
+  diff = l1->s - l2->s;
+  if (l1->s - l2->s != 0) {
+    return diff;
+  }
+  diff = l1->e - l2->e;
+  return diff;
+}
+
+void objviewer_sort_lines_index_arr(unsigned int* arr, size_t len) {
+  qsort(arr, len / 2, sizeof(unsigned int) * 2, &cmpfunc);
+}
+
+static bool is_pair_eq(unsigned int* a, unsigned int* b) {
+  return *a == *b && *(a + 1) == *(b + 1);
+}
+
+unsigned int* objviewer_delete_index_duplicates(unsigned int* arr, size_t len,
+                                                size_t* newlen) {
+  if (len <= 4) return arr;
+  // We will work with ptr to start index of each line
+  unsigned int* ref = &arr[0];  // reference line start index
+  unsigned int* cur = ref + 2;  // current line start index
+  unsigned int* gap = NULL;     // gap start index
+
+  while (cur != &arr[len - 1 - 1]) {
+    if (is_pair_eq(ref, cur)) {
+      if (!gap) gap = cur;
+    } else {
+      if (gap) {
+        *gap = *cur, *(gap + 1) = *(cur + 1);
+        ref = gap;
+        gap += 2;
+      } else {
+        ref = cur;
+      }
+    }
+    cur += 2;
+  }
+
+  *newlen = gap - arr;
+  size_t alloc_size = *newlen * sizeof(unsigned int);
+  arr = (unsigned int*)realloc(arr, alloc_size);
+  if (!arr) return 0;
+
+  return arr;
+}
+
+void objviewer_flip_line_indices(unsigned int* arr, size_t len) {
+  if (!arr) return;
+  for (int i = 0; i < len; i += 2) {
+    if (arr[i] > arr[i + 1]) {
+      unsigned int t = arr[i];
+      arr[i] = arr[i + 1];
+      arr[i + 1] = t;
+    }
+  }
+}
+
+unsigned int* objviewer_to_unique_lines(ObjViewerMesh* m, size_t* newlen) {
+  unsigned int* arr = objviewer_to_lines_index_arr(m);
+  objviewer_flip_line_indices(arr, m->index_count * 2);
+  objviewer_sort_lines_index_arr(arr, m->index_count * 2);
+  arr = objviewer_delete_index_duplicates(arr, m->index_count * 2, newlen);
+  return arr;
 }
