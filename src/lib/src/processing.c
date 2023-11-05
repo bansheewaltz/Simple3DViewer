@@ -161,10 +161,21 @@ void owv_iarr_lines_flip(unsigned int* arr, size_t len) {
   }
 }
 
-unsigned int* owv_iarr_to_unique_lines(OWV_Mesh* m, size_t* newlen) {
+unsigned int* owv_iarr_to_unique_lines(const OWV_Mesh* m, size_t* newlen) {
   unsigned int* arr = owv_iarr_to_lines(m);
   owv_iarr_lines_flip(arr, m->index_count * 2);
   owv_iarr_lines_sort(arr, m->index_count * 2);
   arr = owv_iarr_lines_clean(arr, m->index_count * 2, newlen);
+  return arr;
+}
+
+unsigned int** owv_iarr_to_2d_iarr(const OWV_Mesh* m) {
+  unsigned int** arr = (unsigned int**)(m->face_count * sizeof(unsigned int*));
+  if (!arr) return 0;
+  unsigned int* index_offset = &m->indices[0];
+  for (int i = 0; i < m->face_count; i++) {
+    arr[i] = index_offset;
+    index_offset += m->face_vertex_counts[i];
+  }
   return arr;
 }

@@ -41,8 +41,10 @@ typedef struct {
 } OWV_MeshBounds;
 
 OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh);
+
 unsigned int* owv_iarr_to_lines(const OWV_Mesh* m);
-unsigned int* owv_iarr_to_unique_lines(OWV_Mesh* m, size_t* newlen);
+unsigned int* owv_iarr_to_unique_lines(const OWV_Mesh* m, size_t* newlen);
+unsigned int** owv_iarr_to_2d_iarr(const OWV_Mesh* m);
 
 /* Affine transformations */
 

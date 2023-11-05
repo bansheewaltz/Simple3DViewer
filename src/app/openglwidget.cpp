@@ -252,12 +252,3 @@ void OpenGLWidget::loadModel() {
   this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
   update();
 }
-
-// void OpenGLWidget::formFaceIndexArray(const ObjViewerMesh *m) {
-//   this->face_index_list = new unsigned int *[m->face_count];
-//   unsigned int *index_offset = &m->indices[0];
-//   for (int i = 0; i < m->face_count; i++) {
-//     this->face_index_list[i] = index_offset;
-//     index_offset += m->face_vertex_counts[i];
-//   }
-// }
