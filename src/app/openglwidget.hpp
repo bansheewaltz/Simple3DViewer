@@ -19,12 +19,12 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  private:
   std::string file_name;
-  const ObjViewerMesh *mesh;
+  const OWV_Mesh *mesh;
   unsigned int *index_array;
   size_t index_count;
   //  unsigned int **face_index_list;
   //  unsigned int *lines_index_array;
-  ObjViewerMeshBounds mesh_bounds;
+  OWV_MeshBounds mesh_bounds;
   /* Affine transformations */
   // translates to the world origin and scales to 1x1x1 cube
   //  ObjViewerMatrix4x4 norm_matrix;
@@ -33,8 +33,8 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   float scalex, scaley, scalez, scaleu;
   float rotx, roty, rotz;
   float trnsx, trnsy, trnsz;
-  ObjViewerMatrix4x4 model_matrix;
-  ObjViewerMatrix4x4 view_matrix;
+  OWV_Mat4x4 model_matrix;
+  OWV_Mat4x4 view_matrix;
   /* Display settings */
   QColor background_color;
   QColor line_color;
@@ -64,7 +64,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   /* Helpers */
   void resetSettings();
   virtual void drawAxes();
-  virtual void drawObject(const ObjViewerMesh *);
+  virtual void drawObject(const OWV_Mesh *);
   virtual void drawCube(float, float, float, float);
 
   void drawCubeScene();
@@ -75,7 +75,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
  public:
   void setFileName(std::string f) { file_name = f; }
   void loadModel();
-  void formFaceIndexArray(const ObjViewerMesh *m);
+  void formFaceIndexArray(const OWV_Mesh *m);
   /* Object transformation */
   void setScaleX(float factor = 1) { scalex = factor; }
   void setScaleY(float factor = 1) { scaley = factor; }

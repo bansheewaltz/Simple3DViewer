@@ -23,13 +23,12 @@ typedef struct {
   unsigned int index_count;
   unsigned int* indices;
 
-} ObjViewerMesh;
+} OWV_Mesh;
 
-ObjViewerMesh* objviewer_mesh_read_obj(const char* path);
-void objviewer_mesh_destroy(ObjViewerMesh* mesh);
+OWV_Mesh* owv_mesh_read_obj(const char* path);
+void owv_mesh_destroy(OWV_Mesh* mesh);
 // Mesh example
-ObjViewerMesh* objviewer_mesh_create_cube(float x, float y, float z,
-                                          float side_len);
+OWV_Mesh* owv_mesh_create_cube(float x, float y, float z, float side_len);
 
 /* Processing of geometry data */
 
@@ -39,27 +38,26 @@ typedef struct {
   float xcen, ycen, zcen;
   float xlen, ylen, zlen;
   float maxlen;
-} ObjViewerMeshBounds;
+} OWV_MeshBounds;
 
-ObjViewerMeshBounds objviewer_mesh_find_bounds(const ObjViewerMesh* mesh);
-unsigned int* objviewer_iarr_to_lines(const ObjViewerMesh* m);
-unsigned int* objviewer_iarr_to_unique_lines(ObjViewerMesh* m, size_t* newlen);
+OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh);
+unsigned int* owv_iarr_to_lines(const OWV_Mesh* m);
+unsigned int* owv_iarr_to_unique_lines(OWV_Mesh* m, size_t* newlen);
 
 /* Affine transformations */
 
 typedef struct {
   float arr[16];
-} ObjViewerMatrix4x4;
+} OWV_Mat4x4;
 
 typedef struct {
   float x, y, z;
-} ObjViewerVec3;
+} OWV_Vec3;
 
-void objviewer_mat_rotate(ObjViewerMatrix4x4* mat, float angle,
-                          ObjViewerVec3 axis, bool normalize);
-void objviewer_mat_scale(ObjViewerMatrix4x4* mat, float x, float y, float z);
-void objviewer_mat_translate(ObjViewerMatrix4x4* mat, float x, float y,
-                             float z);
+void owv_mat_rotate(OWV_Mat4x4* mat, float angle, OWV_Vec3 axis,
+                          bool normalize);
+void owv_mat_scale(OWV_Mat4x4* mat, float x, float y, float z);
+void owv_mat_translate(OWV_Mat4x4* mat, float x, float y, float z);
 
 #ifdef __cplusplus
 }

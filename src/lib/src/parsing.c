@@ -52,9 +52,9 @@ static void* array_realloc(void* arr, unsigned int n, size_t elem_size) {
   return (narr + 2);
 }
 
-void parse_buffer(ObjViewerMesh* m, const char* buffer, const char* last_nl);
+void parse_buffer(OWV_Mesh* m, const char* buffer, const char* last_nl);
 
-ObjViewerMesh* objviewer_mesh_read_obj(const char* path) {
+OWV_Mesh* owv_mesh_read_obj(const char* path) {
   if (!path) {
     return 0;
   }
@@ -64,7 +64,7 @@ ObjViewerMesh* objviewer_mesh_read_obj(const char* path) {
     return 0;
   }
 
-  ObjViewerMesh* m = (calloc(1, sizeof(ObjViewerMesh)));
+  OWV_Mesh* m = (calloc(1, sizeof(OWV_Mesh)));
   if (!m) {
     return 0;
   }
@@ -214,7 +214,7 @@ static const char* parse_float(const char* ptr, float* val) {
   return ptr;
 }
 
-static const char* parse_vertex(ObjViewerMesh* mesh, const char* ptr) {
+static const char* parse_vertex(OWV_Mesh* mesh, const char* ptr) {
   float val;
   for (int i = 0; i < 3; i++) {
     ptr = parse_float(ptr, &val);
@@ -244,7 +244,7 @@ static const char* parse_int(const char* ptr, int* val) {
   return ptr;
 }
 
-static const char* parse_face(ObjViewerMesh* mesh, const char* ptr) {
+static const char* parse_face(OWV_Mesh* mesh, const char* ptr) {
   unsigned int count = 0;
 
   int v;
@@ -272,7 +272,7 @@ static const char* parse_face(ObjViewerMesh* mesh, const char* ptr) {
   return ptr;
 }
 
-void parse_buffer(ObjViewerMesh* m, const char* buffer, const char* last_nl) {
+void parse_buffer(OWV_Mesh* m, const char* buffer, const char* last_nl) {
   const char* it = buffer;
   while (it != last_nl) {
     switch (*it) {
@@ -289,7 +289,7 @@ void parse_buffer(ObjViewerMesh* m, const char* buffer, const char* last_nl) {
   }
 }
 
-void objviewer_mesh_destroy(ObjViewerMesh* m) {
+void owv_mesh_destroy(OWV_Mesh* m) {
   if (!m) return;
   array_clean(m->positions);
   array_clean(m->face_vertex_counts);

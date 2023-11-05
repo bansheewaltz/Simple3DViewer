@@ -4,7 +4,7 @@
 #include "details.h"
 #include "obj_viewer.h"
 
-ObjViewerMeshBounds objviewer_mesh_find_bounds(const ObjViewerMesh* mesh) {
+OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh) {
   float xmax = FLT_MIN, ymax = FLT_MIN, zmax = FLT_MIN;
   float xmin = FLT_MAX, ymin = FLT_MAX, zmin = FLT_MAX;
 
@@ -30,7 +30,7 @@ ObjViewerMeshBounds objviewer_mesh_find_bounds(const ObjViewerMesh* mesh) {
   if (maxlen < ylen) maxlen = ylen;
   if (maxlen < zlen) maxlen = zlen;
 
-  return (ObjViewerMeshBounds){
+  return (OWV_MeshBounds){
       xmin,   ymin, zmin,  //
       xmax,   ymax, zmax,  //
       xcen,   ycen, zcen,  //
@@ -39,7 +39,7 @@ ObjViewerMeshBounds objviewer_mesh_find_bounds(const ObjViewerMesh* mesh) {
   };
 }
 
-ObjViewerMesh* objviewer_mesh_create_cube(float x, float y, float z,
+OWV_Mesh* owv_mesh_create_cube(float x, float y, float z,
                                      float side_len) {
   const float hside = side_len / 2;
   static unsigned int position_count = 8;
@@ -64,13 +64,13 @@ ObjViewerMesh* objviewer_mesh_create_cube(float x, float y, float z,
                                    0, 4, 6, 2,   // near
                                    1, 3, 7, 5};  // far
 
-  ObjViewerMesh* m = malloc(sizeof(ObjViewerMesh));
-  *m = (ObjViewerMesh){position_count,     positions,   face_count,
-                       face_vertex_counts, index_count, indices};
+  OWV_Mesh* m = malloc(sizeof(OWV_Mesh));
+  *m = (OWV_Mesh){position_count,     positions,   face_count,
+                  face_vertex_counts, index_count, indices};
   return m;
 }
 
-unsigned int* objviewer_iarr_to_lines(const ObjViewerMesh* m) {
+unsigned int* owv_iarr_to_lines(const OWV_Mesh* m) {
   unsigned int* farr = m->indices;
   unsigned int* larr = malloc(2 * sizeof(unsigned int) * m->index_count);
 
@@ -111,7 +111,7 @@ static int cmpfunc(const void* a, const void* b) {
   return diff;
 }
 
-void objviewer_iarr_lines_sort(unsigned int* arr, size_t len) {
+void owv_iarr_lines_sort(unsigned int* arr, size_t len) {
   qsort(arr, len / 2, sizeof(unsigned int) * 2, &cmpfunc);
 }
 
@@ -119,7 +119,7 @@ static bool is_pair_eq(unsigned int* a, unsigned int* b) {
   return *a == *b && *(a + 1) == *(b + 1);
 }
 
-unsigned int* objviewer_iarr_lines_clean(unsigned int* arr, size_t len,
+unsigned int* owv_iarr_lines_clean(unsigned int* arr, size_t len,
                                                 size_t* newlen) {
   if (len <= 4) return arr;
   // We will work with ptr to start index of each line
@@ -150,7 +150,7 @@ unsigned int* objviewer_iarr_lines_clean(unsigned int* arr, size_t len,
   return arr;
 }
 
-void objviewer_iarr_lines_flip(unsigned int* arr, size_t len) {
+void owv_iarr_lines_flip(unsigned int* arr, size_t len) {
   if (!arr) return;
   for (int i = 0; i < len; i += 2) {
     if (arr[i] > arr[i + 1]) {
@@ -161,10 +161,10 @@ void objviewer_iarr_lines_flip(unsigned int* arr, size_t len) {
   }
 }
 
-unsigned int* objviewer_iarr_to_unique_lines(ObjViewerMesh* m, size_t* newlen) {
-  unsigned int* arr = objviewer_iarr_to_lines(m);
-  objviewer_iarr_lines_flip(arr, m->index_count * 2);
-  objviewer_iarr_lines_sort(arr, m->index_count * 2);
-  arr = objviewer_iarr_lines_clean(arr, m->index_count * 2, newlen);
+unsigned int* owv_iarr_to_unique_lines(OWV_Mesh* m, size_t* newlen) {
+  unsigned int* arr = owv_iarr_to_lines(m);
+  owv_iarr_lines_flip(arr, m->index_count * 2);
+  owv_iarr_lines_sort(arr, m->index_count * 2);
+  arr = owv_iarr_lines_clean(arr, m->index_count * 2, newlen);
   return arr;
 }

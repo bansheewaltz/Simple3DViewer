@@ -108,7 +108,7 @@ void OpenGLWidget::drawCubeScene() {
   //  drawCube(0, -vspacing, 0, 0.33);
 }
 
-void OpenGLWidget::drawObject(const ObjViewerMesh *m) {
+void OpenGLWidget::drawObject(const OWV_Mesh *m) {
   if (!m) return;
   /* Centre the object */
   //! make the norm matrix out of this set of transformations
@@ -193,8 +193,8 @@ void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
                                    0, 1, 5, 4,   // right
                                    0, 4, 6, 2,   // near
                                    1, 3, 7, 5};  // far
-  ObjViewerMesh m = {position_count,     positions,   face_count,
-                     face_vertex_counts, index_count, indices};
+  OWV_Mesh m = {position_count,     positions,   face_count,
+                face_vertex_counts, index_count, indices};
   //  formFaceIndexArray(&m);
   this->mesh_bounds = {.xcen = 0, .ycen = 0, .zcen = 0, .maxlen = side_len * 2};
   drawObject(&m);
@@ -231,9 +231,9 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
 }
 
 void OpenGLWidget::loadModel() {
-  ObjViewerMesh *m = objviewer_mesh_read_obj(this->file_name.c_str());
+  OWV_Mesh *m = owv_mesh_read_obj(this->file_name.c_str());
   if (this->mesh) {
-    objviewer_mesh_destroy((ObjViewerMesh *)this->mesh);
+    owv_mesh_destroy((OWV_Mesh *)this->mesh);
   }
   this->mesh = m;
   if (this->index_array) {
@@ -242,14 +242,14 @@ void OpenGLWidget::loadModel() {
   //  if (this->face_index_list) {
   //    delete this->face_index_list;
   //  }
-  this->mesh_bounds = objviewer_mesh_find_bounds(m);
+  this->mesh_bounds = owv_mesh_find_bounds(m);
   /* Break the index array of faces into the array of index arrays by faces */
-  //  objviewer_index_arr_to_2d_arr(m);
+  //  owv_index_arr_to_2d_arr(m);
   /* Break the index array of faces into the index array of lines */
-  //  this->index_array = objviewer_to_lines_index_arr(m);
+  //  this->index_array = owv_to_lines_index_arr(m);
   //  this->index_count = m->index_count * 2;
   /* Break the index array of faces into the index array of UNIQUE lines */
-  this->index_array = objviewer_iarr_to_unique_lines(m, &this->index_count);
+  this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
   update();
 }
 

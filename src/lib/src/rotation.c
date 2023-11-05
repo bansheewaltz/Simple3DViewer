@@ -1,7 +1,7 @@
 #include "obj_viewer.h"
 
-void objviewer_mat_rotate(ObjViewerMatrix4x4* mat, float angle, ObjViewerVec3 axis,
-                      bool normalize) {
+void owv_mat_rotate(OWV_Mat4x4* mat, float angle, OWV_Vec3 axis,
+                    bool normalize) {
   ;
   ;
 }
