@@ -43,7 +43,7 @@ size_t Timer::last_time = 0;
 std::string path = dir;
 
 int main() {
-  path += scull;
+  path += romanesco;
   std::cout << "file: " << fs::path(path.c_str()).filename() << '\n';
 
   std::cout << "fast_obj parsing: ";
@@ -112,7 +112,7 @@ int main() {
     //    }
     //    std::cout << umap.size() << " ";
     /* qsort */
-    owv_iarr_lines_sort(iarr, m2->index_count);
+    owv_iarr_lines_sort(iarr, m2->index_count * 2);
   }
   time_duplicates += Timer::last_time;
 
@@ -120,10 +120,10 @@ int main() {
   size_t newlen = 0;
   {
     Timer t;
-    owv_iarr_lines_clean(iarr, m2->index_count, &newlen);
+    iarr = owv_iarr_lines_clean(iarr, m2->index_count * 2, &newlen);
   }
   time_duplicates += Timer::last_time;
-  std::cout << "\tunique edges count: " << newlen << std::endl;
+  std::cout << "\tunique edges count: " << newlen / 2 << std::endl;
   owv_mesh_destroy(m2);
 
   std::cout << "} " << time_duplicates << "ms\n";
