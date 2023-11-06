@@ -93,11 +93,10 @@ void OpenGLWidget::paintGL() {
   glScalef(getScaleUX(), getScaleUY(), getScaleUZ());
 
   /* Draw the objects */
-  if (!mesh) {  // use a template model
-                //    drawCubeScene();
-  }
-
-  drawObject(mesh);
+  if (!mesh)  // use a template model
+    drawCubeScene();
+  else
+    drawObject(mesh);
 }
 
 void OpenGLWidget::drawCubeScene() {
@@ -171,33 +170,10 @@ void OpenGLWidget::drawObject(const OWV_Mesh *m) {
 }
 
 void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
-  const float hside = side_len / 2;
-  static unsigned int position_count = 8;
-  float positions[] = {
-      x + hside, y - hside, z + hside,  // right bottom front
-      x + hside, y - hside, z - hside,  // right bottom back
-      x - hside, y - hside, z + hside,  // left bottom front
-      x - hside, y - hside, z - hside,  // left bottom back
-
-      x + hside, y + hside, z + hside,  // right top front
-      x + hside, y + hside, z - hside,  // right top back
-      x - hside, y + hside, z + hside,  // left top front
-      x - hside, y + hside, z - hside,  // left top back
-  };
-  static unsigned int face_count = 6;
-  static unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
-  static unsigned int index_count = 8;
-  static unsigned int indices[] = {3, 2, 0, 1,   // bottom
-                                   4, 5, 7, 6,   // top
-                                   2, 3, 7, 6,   // left
-                                   0, 1, 5, 4,   // right
-                                   0, 4, 6, 2,   // near
-                                   1, 3, 7, 5};  // far
-  OWV_Mesh m = {position_count,     positions,   face_count,
-                face_vertex_counts, index_count, indices};
-  //  formFaceIndexArray(&m);
+  const OWV_Mesh *m = owv_mesh_create_cube(x, y, z, side_len);
   this->mesh_bounds = {.xcen = 0, .ycen = 0, .zcen = 0, .maxlen = side_len * 2};
-  drawObject(&m);
+  this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
+  drawObject(m);
 }
 
 void OpenGLWidget::drawAxes() {

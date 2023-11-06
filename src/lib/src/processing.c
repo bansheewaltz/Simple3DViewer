@@ -39,37 +39,6 @@ OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh) {
   };
 }
 
-OWV_Mesh* owv_mesh_create_cube(float x, float y, float z,
-                                     float side_len) {
-  const float hside = side_len / 2;
-  static unsigned int position_count = 8;
-  float positions[] = {
-      x + hside, y - hside, z + hside,  // right bottom front
-      x + hside, y - hside, z - hside,  // right bottom back
-      x - hside, y - hside, z + hside,  // left bottom front
-      x - hside, y - hside, z - hside,  // left bottom back
-
-      x + hside, y + hside, z + hside,  // right top front
-      x + hside, y + hside, z - hside,  // right top back
-      x - hside, y + hside, z + hside,  // left top front
-      x - hside, y + hside, z - hside,  // left top back
-  };
-  static unsigned int face_count = 6;
-  static unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
-  static unsigned int index_count = 8;
-  static unsigned int indices[] = {3, 2, 0, 1,   // bottom
-                                   4, 5, 7, 6,   // top
-                                   2, 3, 7, 6,   // left
-                                   0, 1, 5, 4,   // right
-                                   0, 4, 6, 2,   // near
-                                   1, 3, 7, 5};  // far
-
-  OWV_Mesh* m = malloc(sizeof(OWV_Mesh));
-  *m = (OWV_Mesh){position_count,     positions,   face_count,
-                  face_vertex_counts, index_count, indices};
-  return m;
-}
-
 unsigned int* owv_iarr_to_lines(const OWV_Mesh* m) {
   unsigned int* farr = m->indices;
   unsigned int* larr = malloc(2 * sizeof(unsigned int) * m->index_count);

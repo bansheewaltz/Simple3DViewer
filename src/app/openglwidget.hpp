@@ -20,11 +20,10 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
  private:
   std::string file_name;
   const OWV_Mesh *mesh;
-  unsigned int *index_array;
-  size_t index_count;
-  //  unsigned int **face_index_list;
-  //  unsigned int *lines_index_array;
   OWV_MeshBounds mesh_bounds;
+  /* Transformed index data */
+  size_t index_count;
+  unsigned int *index_array;
   /* Affine transformations */
   // translates to the world origin and scales to 1x1x1 cube
   //  ObjViewerMatrix4x4 norm_matrix;
