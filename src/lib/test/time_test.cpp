@@ -16,7 +16,7 @@ namespace fs = std::filesystem;
 
 using namespace std::chrono;
 struct Timer {
-  time_point<steady_clock> start, stop;
+  high_resolution_clock::time_point start, stop;
   static size_t last_time;
 
   Timer() { start = high_resolution_clock::now(); }
