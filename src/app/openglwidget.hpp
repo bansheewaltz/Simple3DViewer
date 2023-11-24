@@ -8,7 +8,6 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 
-#include "glm/glm.hpp"
 #include "owviewer.h"
 
 enum LineStyle { SOLID, DASHED };
@@ -27,7 +26,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   /* Affine transformations */
   // translates to the world origin and scales to 1x1x1 cube
   //  ObjViewerMatrix4x4 norm_matrix;
-  glm::mat4 norm_matrix;
+  // glm::mat4 norm_matrix;
   // model matrix transformations
   float scalex, scaley, scalez, scaleu;
   float rotx, roty, rotz;
