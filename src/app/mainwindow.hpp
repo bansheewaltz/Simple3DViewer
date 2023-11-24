@@ -4,9 +4,11 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QSettings>
+#include <QTimer>
 
 #include "QtWidgets/qspinbox.h"
 #include "doubleslider.hpp"
+#include "gifimage/qgifimage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,6 +18,14 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
+
+ public:
+  QGifImage *gif;
+  int gif_fps = 10;
+  int gif_sec = 5;
+  QSize gif_size = QSize(640, 480);
+  QTimer gif_timer;
+  int gif_frame_counter = 0;
 
  public:
   MainWindow(QWidget *parent = nullptr);
@@ -66,6 +76,8 @@ class MainWindow : public QMainWindow {
   /* Actions */
   void on_openFilePushButton_released();
   void openFile();
+  void on_gifCapturePushButton_released();
+  void RecordGifFrame();
   void on_screenshotPushButton_released();
 };
 

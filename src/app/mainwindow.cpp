@@ -6,6 +6,7 @@
 #include <QShortcut>
 
 #include "./ui_mainwindow.h"
+#include "gifimage/qgifimage.h"
 
 enum ControlSteps {
   WIDTH = 200,
@@ -50,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
                 SLOT(toggle()));
   new QShortcut(QKeySequence(tr("V")), ui->displayPointsCheckBox,
                 SLOT(toggle()));
+  connect(&gif_timer, SIGNAL(timeout()), this, SLOT(RecordGifFrame()));
   resetSettings();
   loadSettings();
 }
@@ -524,4 +526,27 @@ void MainWindow::on_screenshotPushButton_released() {
     file_name = file_name + "." + extension;
   }
   screenshot.save(file_name, extension.toStdString().c_str(), 80);
+}
+
+void MainWindow::on_gifCapturePushButton_released() {
+  gif = new QGifImage();
+  gif_timer.start(1000 / gif_fps);
+}
+void MainWindow::RecordGifFrame() {
+  if (gif_frame_counter < gif_fps * gif_sec) {
+    gif_frame_counter++;
+    gif->setDefaultDelay(1000 / gif_fps);
+    QImage frame = ui->viewport->grabFramebuffer().scaled(gif_size);
+    gif->addFrame(frame);
+  } else {
+    gif_timer.stop();
+    gif_frame_counter = 0;
+    QString dir = QDir::homePath();
+    QString file_name = QFileDialog::getSaveFileName(this, "Save Gif", dir,
+                                                     "Gif files (*.gif)");
+    if (!file_name.isEmpty()) {
+      gif->save(file_name);
+    }
+    delete gif;
+  }
 }
