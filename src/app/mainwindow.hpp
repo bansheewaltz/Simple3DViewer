@@ -63,6 +63,9 @@ class MainWindow : public QMainWindow {
   void on_zScaleSlider_doubleValueChanged(double factor);
   void on_uScaleSlider_doubleValueChanged(double factor);
   void on_scaleResetPushButton_clicked();
+  /* Actions */
+  void on_openFilePushButton_released();
+  void openFile();
 };
 
 #endif  // MAINWINDOW_HPP

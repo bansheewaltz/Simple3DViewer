@@ -495,11 +495,16 @@ void MainWindow::on_scaleResetPushButton_clicked() {
   ui->uScaleSpinbox->setValue(1);
 }
 
+void MainWindow::on_openFilePushButton_released() { MainWindow::openFile(); }
 void MainWindow::openFile() {
   QString dir = QDir::homePath() + "/Downloads/3Dmodels";
   QString file_name = QFileDialog::getOpenFileName(
       this, "Open 3d model", dir, "geometry definition file (*.obj)");
-  if (file_name == "") return;
+  if (file_name.isEmpty()) {
+    return;
+  }
+
+  this->saveSettings(file_name);
   ui->viewport->setFileName(file_name.toStdString());
   ui->viewport->loadModel();
 }
