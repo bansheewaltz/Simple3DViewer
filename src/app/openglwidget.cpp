@@ -27,7 +27,6 @@ void OpenGLWidget::resetSettings() {
   setCameraRotationX(-30);
   setCameraRotationY(-30);
   setCameraRotationZ(0);
-  setProjectionType(ProjectionType::ORTHOGONAL);  // default
 }
 
 static void GLClearError() {

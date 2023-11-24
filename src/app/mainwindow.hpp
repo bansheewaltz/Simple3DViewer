@@ -20,6 +20,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
+  QString file_name;
   QGifImage *gif;
   int gif_fps = 10;
   int gif_sec = 5;

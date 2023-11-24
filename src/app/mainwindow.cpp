@@ -95,10 +95,8 @@ void MainWindow::saveSettings(QString file_name) {
   settings.setValue("PointsSize", ui->pointSizeSB->value());
   settings.endGroup();
   settings.beginGroup("CameraProjection");
-  if (ui->perspectiveProjButton->isChecked())
-    settings.setValue("Perspective", "true");
-  else
-    settings.setValue("Orthographic", "true");
+  settings.setValue("Perspective", ui->perspectiveProjButton->isChecked());
+  settings.setValue("Orthographic", ui->orthographicProjButton->isChecked());
   settings.endGroup();
   settings.beginGroup("Location");
   settings.setValue("xLocationSB", ui->xLocationSB->value());
@@ -155,10 +153,11 @@ void MainWindow::loadSettings() {
     ui->pointSizeSB->setValue(settings.value("PointsSize").toDouble());
   settings.endGroup();
   settings.beginGroup("CameraProjection");
+  if (settings.contains("Orthographic"))
+    ui->orthographicProjButton->toggled(
+        settings.value("Orthographic").toBool());
   if (settings.contains("Perspective"))
-    ui->perspectiveProjButton->setChecked(true);
-  else
-    ui->orthographicProjButton->setChecked(true);
+    ui->perspectiveProjButton->toggled(settings.value("Perspective").toBool());
   settings.endGroup();
   settings.beginGroup("Location");
   if (settings.contains("xLocationSB"))
@@ -263,11 +262,13 @@ void MainWindow::on_pointColorPicker_clicked() {
 }
 
 void MainWindow::on_orthographicProjButton_toggled(bool checked) {
-  ui->viewport->setProjectionType(ProjectionType::ORTHOGONAL);
+  if (checked) ui->viewport->setProjectionType(ProjectionType::ORTHOGONAL);
+  ui->orthographicProjButton->setChecked(checked);
   ui->viewport->update();
 }
 void MainWindow::on_perspectiveProjButton_toggled(bool checked) {
-  ui->viewport->setProjectionType(ProjectionType::PERSPECTIVE);
+  if (checked) ui->viewport->setProjectionType(ProjectionType::PERSPECTIVE);
+  ui->perspectiveProjButton->setChecked(checked);
   ui->viewport->update();
 }
 
@@ -462,9 +463,9 @@ void MainWindow::on_scaleResetPushButton_clicked() {
 void MainWindow::on_openFilePushButton_released() { MainWindow::openFile(); }
 void MainWindow::openFile() {
   QString dir = QDir::homePath() + "/Downloads/3Dmodels";
-  QString file_name = QFileDialog::getOpenFileName(
+  this->file_name = QFileDialog::getOpenFileName(
       this, "Open 3d model", dir, "geometry definition file (*.obj)");
-  if (file_name.isEmpty()) {
+  if (this->file_name.isEmpty()) {
     return;
   }
 
