@@ -325,7 +325,8 @@ OWV_Mesh* owv_mesh_create_cube(float x, float y, float z, float side_len) {
 
   OWV_Mesh* m = (OWV_Mesh*)malloc(sizeof(OWV_Mesh));
   if (!m) return 0;
-  *m = (OWV_Mesh){vertex_count,       positions,   face_count,
-                  face_vertex_counts, index_count, indices};
+  *m = (OWV_Mesh){vertex_count, positions,
+                  face_count,   (unsigned int*)face_vertex_counts,
+                  index_count,  (unsigned int*)indices};
   return m;
 }
