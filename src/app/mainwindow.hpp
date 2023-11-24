@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QSettings>
+#include <QSpinbox>
 #include <QTimer>
 
 #include "QtWidgets/qspinbox.h"
