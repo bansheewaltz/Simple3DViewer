@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QSettings>
 
 #include "QtWidgets/qspinbox.h"
 #include "doubleslider.hpp"
@@ -28,6 +29,9 @@ class MainWindow : public QMainWindow {
   void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
   void setupRotationControls(DoubleSlider *, QDoubleSpinBox *);
   void setupScaleControls(DoubleSlider *, QDoubleSpinBox *);
+  void resetSettings();
+  void saveSettings(QString file_name);
+  void loadSettings();
 
  private slots:
   void openFile();
