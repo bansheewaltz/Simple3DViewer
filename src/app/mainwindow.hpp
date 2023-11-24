@@ -51,9 +51,9 @@ class MainWindow : public QMainWindow {
   void on_displayLinesCB_toggled(bool checked);
   void on_displayPointsCB_toggled(bool checked);
   void on_pointSizeSlider_doubleValueChanged(double value);
-  void on_pointStyleSquareCheckBox_toggled(bool checked);
+  void on_pointStyleSquareCB_toggled(bool checked);
   void on_lineWidthSlider_doubleValueChanged(double value);
-  void on_lineStyleDashedCheckBox_toggled(bool checked);
+  void on_lineStyleDashedCB_toggled(bool checked);
   void on_orthographicProjButton_toggled(bool checked);
   void on_perspectiveProjButton_toggled(bool checked);
   /* Location */

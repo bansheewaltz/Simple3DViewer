@@ -211,7 +211,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="lineStyleDashedCheckBox">
+            <widget class="QCheckBox" name="lineStyleDashedCB">
              <property name="text">
               <string>dashed</string>
              </property>
@@ -304,7 +304,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="lineWidthSpinBox">
+              <widget class="QDoubleSpinBox" name="lineWidthSB">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -339,7 +339,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="pointStyleSquareCheckBox">
+            <widget class="QCheckBox" name="pointStyleSquareCB">
              <property name="text">
               <string>square</string>
              </property>
@@ -422,7 +422,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="pointSizeSpinBox"/>
+              <widget class="QDoubleSpinBox" name="pointSizeSB"/>
              </item>
             </layout>
            </item>
@@ -592,7 +592,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="xLocationSpinbox">
+            <widget class="QDoubleSpinBox" name="xLocationSB">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -640,7 +640,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="yLocationSpinbox">
+            <widget class="QDoubleSpinBox" name="yLocationSB">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -688,7 +688,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="zLocationSpinbox">
+            <widget class="QDoubleSpinBox" name="zLocationSB">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -782,7 +782,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="xRotationSpinbox"/>
+            <widget class="QDoubleSpinBox" name="xRotationSB"/>
            </item>
           </layout>
          </item>
@@ -823,7 +823,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="yRotationSpinbox"/>
+            <widget class="QDoubleSpinBox" name="yRotationSB"/>
            </item>
           </layout>
          </item>
@@ -864,7 +864,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="zRotationSpinbox"/>
+            <widget class="QDoubleSpinBox" name="zRotationSB"/>
            </item>
           </layout>
          </item>
@@ -951,7 +951,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="yScaleSpinbox"/>
+            <widget class="QDoubleSpinBox" name="yScaleSB"/>
            </item>
           </layout>
          </item>
@@ -968,7 +968,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="zScaleSpinbox"/>
+            <widget class="QDoubleSpinBox" name="zScaleSB"/>
            </item>
           </layout>
          </item>
@@ -1009,7 +1009,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="xScaleSpinbox"/>
+            <widget class="QDoubleSpinBox" name="xScaleSB"/>
            </item>
           </layout>
          </item>
@@ -1074,7 +1074,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="uScaleSpinbox"/>
+            <widget class="QDoubleSpinBox" name="uScaleSB"/>
            </item>
           </layout>
          </item>
@@ -1126,40 +1126,40 @@
  <tabstops>
   <tabstop>backgroundColorPicker</tabstop>
   <tabstop>displayLinesCB</tabstop>
-  <tabstop>lineStyleDashedCheckBox</tabstop>
+  <tabstop>lineStyleDashedCB</tabstop>
   <tabstop>lineColorPicker</tabstop>
   <tabstop>lineWidthSlider</tabstop>
-  <tabstop>lineWidthSpinBox</tabstop>
+  <tabstop>lineWidthSB</tabstop>
   <tabstop>displayPointsCB</tabstop>
-  <tabstop>pointStyleSquareCheckBox</tabstop>
+  <tabstop>pointStyleSquareCB</tabstop>
   <tabstop>pointSizeSlider</tabstop>
-  <tabstop>pointSizeSpinBox</tabstop>
+  <tabstop>pointSizeSB</tabstop>
   <tabstop>pointColorPicker</tabstop>
   <tabstop>perspectiveProjButton</tabstop>
   <tabstop>orthographicProjButton</tabstop>
   <tabstop>locationResetPushButton</tabstop>
   <tabstop>xLocationSlider</tabstop>
-  <tabstop>xLocationSpinbox</tabstop>
+  <tabstop>xLocationSB</tabstop>
   <tabstop>yLocationSlider</tabstop>
-  <tabstop>yLocationSpinbox</tabstop>
+  <tabstop>yLocationSB</tabstop>
   <tabstop>zLocationSlider</tabstop>
-  <tabstop>zLocationSpinbox</tabstop>
+  <tabstop>zLocationSB</tabstop>
   <tabstop>rotationResetPushButton</tabstop>
   <tabstop>xRotationSlider</tabstop>
-  <tabstop>xRotationSpinbox</tabstop>
+  <tabstop>xRotationSB</tabstop>
   <tabstop>yRotationSlider</tabstop>
-  <tabstop>yRotationSpinbox</tabstop>
+  <tabstop>yRotationSB</tabstop>
   <tabstop>zRotationSlider</tabstop>
-  <tabstop>zRotationSpinbox</tabstop>
+  <tabstop>zRotationSB</tabstop>
   <tabstop>scaleResetPushButton</tabstop>
   <tabstop>xScaleSlider</tabstop>
-  <tabstop>xScaleSpinbox</tabstop>
+  <tabstop>xScaleSB</tabstop>
   <tabstop>yScaleSlider</tabstop>
-  <tabstop>yScaleSpinbox</tabstop>
+  <tabstop>yScaleSB</tabstop>
   <tabstop>zScaleSlider</tabstop>
-  <tabstop>zScaleSpinbox</tabstop>
+  <tabstop>zScaleSB</tabstop>
   <tabstop>uScaleSlider</tabstop>
-  <tabstop>uScaleSpinbox</tabstop>
+  <tabstop>uScaleSB</tabstop>
  </tabstops>
  <resources/>
  <connections/>

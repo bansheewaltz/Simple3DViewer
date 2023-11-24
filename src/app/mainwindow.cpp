@@ -18,45 +18,66 @@ enum ControlSteps {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  /* Set up primitives' size controls */
+  setupWidthControls(ui->lineWidthSlider, ui->lineWidthSB);
+  setupWidthControls(ui->pointSizeSlider, ui->pointSizeSB);
+  /* Set up location controls */
+  setupLocationControls(ui->xLocationSlider, ui->xLocationSB);
+  setupLocationControls(ui->yLocationSlider, ui->yLocationSB);
+  setupLocationControls(ui->zLocationSlider, ui->zLocationSB);
+  /* Set up rotation controls */
+  setupRotationControls(ui->xRotationSlider, ui->xRotationSB);
+  setupRotationControls(ui->yRotationSlider, ui->yRotationSB);
+  setupRotationControls(ui->zRotationSlider, ui->zRotationSB);
+  /* Set up scale controls */
+  setupScaleControls(ui->xScaleSlider, ui->xScaleSB);
+  setupScaleControls(ui->yScaleSlider, ui->yScaleSB);
+  setupScaleControls(ui->zScaleSlider, ui->zScaleSB);
+  setupScaleControls(ui->uScaleSlider, ui->uScaleSB);
+  /* Load settings */
+  loadSettings();
   /* Paint the color picker buttons */
   paintButton(ui->backgroundColorPicker, ui->viewport->getBackgroundColor());
   paintButton(ui->lineColorPicker, ui->viewport->getLineColor());
   paintButton(ui->pointColorPicker, ui->viewport->getPointColor());
-  /* Set primitives' display status */
-  on_displayLinesCB_toggled(true);
-  on_displayPointsCB_toggled(false);
-  on_perspectiveProjButton_toggled(true);
-  /* Set up primitives' size controls */
-  setupWidthControls(ui->lineWidthSlider, ui->lineWidthSpinBox);
-  setupWidthControls(ui->pointSizeSlider, ui->pointSizeSpinBox);
-  /* Set up location controls */
-  setupLocationControls(ui->xLocationSlider, ui->xLocationSpinbox);
-  setupLocationControls(ui->yLocationSlider, ui->yLocationSpinbox);
-  setupLocationControls(ui->zLocationSlider, ui->zLocationSpinbox);
-  /* Set up rotation controls */
-  setupRotationControls(ui->xRotationSlider, ui->xRotationSpinbox);
-  setupRotationControls(ui->yRotationSlider, ui->yRotationSpinbox);
-  setupRotationControls(ui->zRotationSlider, ui->zRotationSpinbox);
-  /* Set up scale controls */
-  setupScaleControls(ui->xScaleSlider, ui->xScaleSpinbox);
-  setupScaleControls(ui->yScaleSlider, ui->yScaleSpinbox);
-  setupScaleControls(ui->zScaleSlider, ui->zScaleSpinbox);
-  setupScaleControls(ui->uScaleSlider, ui->uScaleSpinbox);
   /* Set up shortcuts */
   new QShortcut(QKeySequence(tr("Ctrl+O")), this, SLOT(openFile()));
-  new QShortcut(QKeySequence(tr("L")), ui->xLocationSpinbox, SLOT(setFocus()));
-  new QShortcut(QKeySequence(tr("R")), ui->xRotationSpinbox, SLOT(setFocus()));
-  new QShortcut(QKeySequence(tr("S")), ui->xScaleSpinbox, SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("L")), ui->xLocationSB, SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("R")), ui->xRotationSB, SLOT(setFocus()));
+  new QShortcut(QKeySequence(tr("S")), ui->xScaleSB, SLOT(setFocus()));
   new QShortcut(QKeySequence(tr("E")), ui->displayLinesCB, SLOT(toggle()));
   new QShortcut(QKeySequence(tr("V")), ui->displayPointsCB, SLOT(toggle()));
   connect(&gif_timer, SIGNAL(timeout()), this, SLOT(RecordGifFrame()));
-  resetSettings();
-  loadSettings();
 }
 
 MainWindow::~MainWindow() {
   this->saveSettings(nullptr);
   delete ui;
+}
+
+void MainWindow::resetSettings() {
+  on_perspectiveProjButton_toggled(true);
+
+  on_displayLinesCB_toggled(true);
+  on_lineWidthSlider_doubleValueChanged(1.0);
+  //  ui->lineWidthSB->setValue(1.0);
+
+  on_displayPointsCB_toggled(false);
+  //  on_pointSizeSlider_doubleValueChanged(1.0);
+  ui->pointSizeSB->setValue(1.0);
+
+  ui->xLocationSlider->setValue(0);
+  ui->yLocationSlider->setValue(0);
+  ui->zLocationSlider->setValue(0);
+
+  ui->xRotationSlider->setValue(0);
+  ui->yRotationSlider->setValue(0);
+  ui->zRotationSlider->setValue(0);
+
+  ui->xScaleSB->setValue(1);
+  ui->yScaleSB->setValue(1);
+  ui->zScaleSB->setValue(1);
+  ui->uScaleSB->setValue(1);
 }
 
 void MainWindow::saveSettings(QString file_name) {
@@ -72,163 +93,112 @@ void MainWindow::saveSettings(QString file_name) {
   settings.beginGroup("DrawSettings");
   settings.setValue("BackgroundColor", ui->viewport->getBackgroundColor());
   settings.setValue("DrawLines", ui->displayLinesCB->checkState());
-  settings.setValue("DashedLines", ui->lineStyleDashedCheckBox->checkState());
+  settings.setValue("DashedLines", ui->lineStyleDashedCB->checkState());
   settings.setValue("LinesColor", ui->viewport->getLineColor());
-  settings.setValue("LinesWidth", ui->lineWidthSpinBox->value());
+  settings.setValue("LinesWidth", ui->lineWidthSB->value());
   settings.setValue("DrawPoints", ui->displayPointsCB->checkState());
-  settings.setValue("PointsType", ui->pointStyleSquareCheckBox->checkState());
+  settings.setValue("PointsType", ui->pointStyleSquareCB->checkState());
   settings.setValue("PointsColor", ui->viewport->getPointColor());
-  settings.setValue("PointsSize", ui->pointSizeSpinBox->value());
+  settings.setValue("PointsSize", ui->pointSizeSB->value());
   settings.endGroup();
   settings.beginGroup("CameraProjection");
-  settings.setValue("Perspective", ui->perspectiveProjButton->isChecked());
-  settings.setValue("Ortho", ui->orthographicProjButton->isChecked());
+  if (ui->perspectiveProjButton->isChecked())
+    settings.setValue("Perspective", "true");
+  else
+    settings.setValue("Orthographic", "true");
   settings.endGroup();
   settings.beginGroup("Location");
-  settings.setValue("xLocationSpinbox", ui->xLocationSpinbox->value());
-  settings.setValue("yLocationSpinbox", ui->yLocationSpinbox->value());
-  settings.setValue("zLocationSpinbox", ui->zLocationSpinbox->value());
+  settings.setValue("xLocationSB", ui->xLocationSB->value());
+  settings.setValue("yLocationSB", ui->yLocationSB->value());
+  settings.setValue("zLocationSB", ui->zLocationSB->value());
   settings.endGroup();
   settings.beginGroup("Rotation");
-  settings.setValue("xRotationSpinbox", ui->xRotationSpinbox->value());
-  settings.setValue("yRotationSpinbox", ui->yRotationSpinbox->value());
-  settings.setValue("zRotationSpinbox", ui->zRotationSpinbox->value());
+  settings.setValue("xRotationSB", ui->xRotationSB->value());
+  settings.setValue("yRotationSB", ui->yRotationSB->value());
+  settings.setValue("zRotationSB", ui->zRotationSB->value());
   settings.endGroup();
   settings.beginGroup("Scale");
-  settings.setValue("xScaleSpinbox", ui->xScaleSpinbox->value());
-  settings.setValue("yScaleSpinbox", ui->yScaleSpinbox->value());
-  settings.setValue("zScaleSpinbox", ui->zScaleSpinbox->value());
-  settings.setValue("uScaleSpinbox", ui->uScaleSpinbox->value());
+  settings.setValue("xScaleSB", ui->xScaleSB->value());
+  settings.setValue("yScaleSB", ui->yScaleSB->value());
+  settings.setValue("zScaleSB", ui->zScaleSB->value());
+  settings.setValue("uScaleSB", ui->uScaleSB->value());
   settings.endGroup();
 }
 
 void MainWindow::loadSettings() {
-  if (QFile("settings.conf").exists()) {
-    QSettings settings("settings.conf", QSettings::IniFormat);
-    settings.beginGroup("MainWindow");
-    if (settings.contains("geometry")) {
-      restoreGeometry(settings.value("geometry").toByteArray());
-    }
-    settings.endGroup();
-    settings.beginGroup("DrawSettings");
-    if (settings.contains("BackgroundColor")) {
-      ui->viewport->setBackgroundColor(
-          settings.value("BackgroundColor").value<QColor>());
-    }
-    if (settings.contains("DrawLines")) {
-      ui->displayLinesCB->setCheckState(
-          settings.value("DrawLines").value<Qt::CheckState>());
-    }
-    if (settings.contains("DashedLines")) {
-      ui->lineStyleDashedCheckBox->setCheckState(
-          settings.value("DashedLines").value<Qt::CheckState>());
-    }
-    if (settings.contains("LinesColor")) {
-      ui->viewport->setLineColor(settings.value("LinesColor").value<QColor>());
-    }
-    if (settings.contains("LinesWidth")) {
-      ui->lineWidthSpinBox->setValue(settings.value("LinesWidth").toDouble());
-    }
-    if (settings.contains("DrawPoints")) {
-      ui->displayPointsCB->setCheckState(
-          settings.value("DrawPoints").value<Qt::CheckState>());
-    }
-    if (settings.contains("PointsType")) {
-      ui->pointStyleSquareCheckBox->setCheckState(
-          settings.value("PointsType").value<Qt::CheckState>());
-    }
-    if (settings.contains("PointsColor")) {
-      ui->viewport->setPointColor(
-          settings.value("PointsColor").value<QColor>());
-    }
-    if (settings.contains("PointsSize")) {
-      ui->pointSizeSpinBox->setValue(settings.value("PointsSize").toDouble());
-    }
-    settings.endGroup();
-    settings.beginGroup("CameraProjection");
-    if (settings.contains("Perspective")) {
-      if (settings.value("Perspective").toBool()) {
-        ui->perspectiveProjButton->setChecked(true);
-      }
-    }
-    if (settings.contains("Ortho")) {
-      if (settings.value("Ortho").toBool()) {
-        ui->orthographicProjButton->setChecked(true);
-      }
-    }
-    settings.endGroup();
-    settings.beginGroup("Location");
-    if (settings.contains("xLocationSpinbox")) {
-      ui->xLocationSpinbox->setValue(
-          settings.value("xLocationSpinbox").toDouble());
-    }
-    if (settings.contains("yLocationSpinbox")) {
-      ui->yLocationSpinbox->setValue(
-          settings.value("yLocationSpinbox").toDouble());
-    }
-    if (settings.contains("zLocationSpinbox")) {
-      ui->zLocationSpinbox->setValue(
-          settings.value("zLocationSpinbox").toDouble());
-    }
-    settings.endGroup();
-    settings.beginGroup("Rotation");
-    if (settings.contains("xRotationSpinbox")) {
-      ui->xRotationSpinbox->setValue(
-          settings.value("xRotationSpinbox").toDouble());
-    }
-    if (settings.contains("yRotationSpinbox")) {
-      ui->yRotationSpinbox->setValue(
-          settings.value("yRotationSpinbox").toDouble());
-    }
-    if (settings.contains("zRotationSpinbox")) {
-      ui->zRotationSpinbox->setValue(
-          settings.value("zRotationSpinbox").toDouble());
-    }
-    settings.endGroup();
-    settings.beginGroup("Scale");
-    if (settings.contains("xScaleSpinbox")) {
-      ui->xScaleSpinbox->setValue(settings.value("xScaleSpinbox").toDouble());
-    }
-    if (settings.contains("yScaleSpinbox")) {
-      ui->yScaleSpinbox->setValue(settings.value("yScaleSpinbox").toDouble());
-    }
-    if (settings.contains("zScaleSpinbox")) {
-      ui->zScaleSpinbox->setValue(settings.value("zScaleSpinbox").toDouble());
-    }
-    if (settings.contains("uScaleSpinbox")) {
-      ui->uScaleSpinbox->setValue(settings.value("uScaleSpinbox").toDouble());
-    }
-    settings.endGroup();
-
-    settings.beginGroup("Filename");
-    if (settings.contains("model")) {
-      ui->viewport->setFileName(
-          settings.value("model").toString().toStdString());
-      ui->viewport->loadModel();
-    }
-    settings.endGroup();
+  if (QFile("settings.conf").exists() == false) {
+    resetSettings();
+    return;
   }
-}
 
-void MainWindow::resetSettings() {
-  on_lineWidthSlider_doubleValueChanged(1.0);
-  ui->lineWidthSpinBox->setValue(1.0);
-
-  on_pointSizeSlider_doubleValueChanged(1.0);
-  ui->pointSizeSpinBox->setValue(1.0);
-
-  ui->xLocationSlider->setValue(0);
-  ui->yLocationSlider->setValue(0);
-  ui->zLocationSlider->setValue(0);
-
-  ui->xRotationSlider->setValue(0);
-  ui->yRotationSlider->setValue(0);
-  ui->zRotationSlider->setValue(0);
-
-  ui->xScaleSpinbox->setValue(1);
-  ui->yScaleSpinbox->setValue(1);
-  ui->zScaleSpinbox->setValue(1);
-  ui->uScaleSpinbox->setValue(1);
+  QSettings settings("settings.conf", QSettings::IniFormat);
+  settings.beginGroup("MainWindow");
+  if (settings.contains("geometry"))
+    restoreGeometry(settings.value("geometry").toByteArray());
+  settings.endGroup();
+  settings.beginGroup("DrawSettings");
+  if (settings.contains("BackgroundColor"))
+    ui->viewport->setBackgroundColor(
+        settings.value("BackgroundColor").value<QColor>());
+  if (settings.contains("DrawLines"))
+    ui->displayLinesCB->setCheckState(
+        settings.value("DrawLines").value<Qt::CheckState>());
+  if (settings.contains("DashedLines"))
+    ui->lineStyleDashedCB->setCheckState(
+        settings.value("DashedLines").value<Qt::CheckState>());
+  if (settings.contains("LinesColor"))
+    ui->viewport->setLineColor(settings.value("LinesColor").value<QColor>());
+  if (settings.contains("LinesWidth"))
+    ui->lineWidthSB->setValue(settings.value("LinesWidth").toDouble());
+  if (settings.contains("DrawPoints"))
+    ui->displayPointsCB->setCheckState(
+        settings.value("DrawPoints").value<Qt::CheckState>());
+  if (settings.contains("PointsType"))
+    ui->pointStyleSquareCB->setCheckState(
+        settings.value("PointsType").value<Qt::CheckState>());
+  if (settings.contains("PointsColor"))
+    ui->viewport->setPointColor(settings.value("PointsColor").value<QColor>());
+  if (settings.contains("PointsSize"))
+    ui->pointSizeSB->setValue(settings.value("PointsSize").toDouble());
+  settings.endGroup();
+  settings.beginGroup("CameraProjection");
+  if (settings.contains("Perspective"))
+    ui->perspectiveProjButton->setChecked(true);
+  else
+    ui->orthographicProjButton->setChecked(true);
+  settings.endGroup();
+  settings.beginGroup("Location");
+  if (settings.contains("xLocationSB"))
+    ui->xLocationSB->setValue(settings.value("xLocationSB").toDouble());
+  if (settings.contains("yLocationSB"))
+    ui->yLocationSB->setValue(settings.value("yLocationSB").toDouble());
+  if (settings.contains("zLocationSB"))
+    ui->zLocationSB->setValue(settings.value("zLocationSB").toDouble());
+  settings.endGroup();
+  settings.beginGroup("Rotation");
+  if (settings.contains("xRotationSB"))
+    ui->xRotationSB->setValue(settings.value("xRotationSB").toDouble());
+  if (settings.contains("yRotationSB"))
+    ui->yRotationSB->setValue(settings.value("yRotationSB").toDouble());
+  if (settings.contains("zRotationSB"))
+    ui->zRotationSB->setValue(settings.value("zRotationSB").toDouble());
+  settings.endGroup();
+  settings.beginGroup("Scale");
+  if (settings.contains("xScaleSB"))
+    ui->xScaleSB->setValue(settings.value("xScaleSB").toDouble());
+  if (settings.contains("yScaleSB"))
+    ui->yScaleSB->setValue(settings.value("yScaleSB").toDouble());
+  if (settings.contains("zScaleSB"))
+    ui->zScaleSB->setValue(settings.value("zScaleSB").toDouble());
+  if (settings.contains("uScaleSB"))
+    ui->uScaleSB->setValue(settings.value("uScaleSB").toDouble());
+  settings.endGroup();
+  settings.beginGroup("Filename");
+  if (settings.contains("model")) {
+    ui->viewport->setFileName(settings.value("model").toString().toStdString());
+    ui->viewport->loadModel();
+  }
+  settings.endGroup();
 }
 
 /* GUI behaviour related helper functions */
@@ -265,7 +235,7 @@ void setLayoutWidgetsState(const QLayout *layout, bool state) {
   }
 }
 
-void syncSliderWithSpinbox(DoubleSlider *s, QDoubleSpinBox *sb) {
+void syncSliderWithSB(DoubleSlider *s, QDoubleSpinBox *sb) {
   QObject::connect(s, &DoubleSlider::doubleValueChanged, sb,
                    &QDoubleSpinBox::setValue);
   QObject::connect(sb, &QDoubleSpinBox::valueChanged, s,
@@ -316,7 +286,7 @@ void MainWindow::on_displayLinesCB_toggled(bool checked) {
   ui->displayLinesCB->setChecked(checked);
   /* Disable the settings' frame */
   setLayoutWidgetsState(ui->lineSettingsLayout, checked);
-  ui->lineStyleDashedCheckBox->setEnabled(checked);
+  ui->lineStyleDashedCB->setEnabled(checked);
   /* Update the button color */
   QColor res_color = ui->viewport->getLineColor();
   if (checked == false) {
@@ -332,7 +302,7 @@ void MainWindow::on_displayPointsCB_toggled(bool checked) {
   ui->displayPointsCB->setChecked(checked);
   /* Disable the settings' frame */
   setLayoutWidgetsState(ui->pointSettingsLayout, checked);
-  ui->pointStyleSquareCheckBox->setEnabled(checked);
+  ui->pointStyleSquareCB->setEnabled(checked);
   /* Update the button color */
   QColor res_color = ui->viewport->getPointColor();
   if (checked == false) {
@@ -343,12 +313,12 @@ void MainWindow::on_displayPointsCB_toggled(bool checked) {
 
 /* Primitives' style related functions */
 
-void MainWindow::on_pointStyleSquareCheckBox_toggled(bool checked) {
+void MainWindow::on_pointStyleSquareCB_toggled(bool checked) {
   ui->viewport->setPointStyle(checked == true ? PointStyle::SQUARE
                                               : PointStyle::CIRCLE);
   ui->viewport->update();
 }
-void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
+void MainWindow::on_lineStyleDashedCB_toggled(bool checked) {
   ui->viewport->setLineStyle(checked == true ? LineStyle::DASHED
                                              : LineStyle::SOLID);
   ui->viewport->update();
@@ -357,7 +327,7 @@ void MainWindow::on_lineStyleDashedCheckBox_toggled(bool checked) {
 /* Primitives' size related functions */
 
 void MainWindow::setupWidthControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  syncSliderWithSpinbox(s, sb);
+  syncSliderWithSB(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::WIDTH;
   const float sb_limit = 20.0f;
@@ -384,7 +354,7 @@ void MainWindow::on_pointSizeSlider_doubleValueChanged(double value) {
 /* Location related functions */
 
 void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  syncSliderWithSpinbox(s, sb);
+  syncSliderWithSB(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::LOCATION;
   const float sb_limit = 1.0f;
@@ -420,7 +390,7 @@ void MainWindow::on_locationResetPushButton_clicked() {
 /* Rotation related functions */
 
 void MainWindow::setupRotationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  syncSliderWithSpinbox(s, sb);
+  syncSliderWithSB(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::ROTATION;
   const float sb_limit = 180.0f;
@@ -456,7 +426,7 @@ void MainWindow::on_rotationResetPushButton_clicked() {
 /* Scale related functions */
 
 void MainWindow::setupScaleControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  syncSliderWithSpinbox(s, sb);
+  syncSliderWithSB(s, sb);
   /* Set up the spinbox */
   const unsigned int steps_count = ControlSteps::SCALE;
   const float sb_limit = 10.0f;
@@ -489,10 +459,10 @@ void MainWindow::on_uScaleSlider_doubleValueChanged(double value) {
   ui->viewport->update();
 }
 void MainWindow::on_scaleResetPushButton_clicked() {
-  ui->xScaleSpinbox->setValue(1);
-  ui->yScaleSpinbox->setValue(1);
-  ui->zScaleSpinbox->setValue(1);
-  ui->uScaleSpinbox->setValue(1);
+  ui->xScaleSB->setValue(1);
+  ui->yScaleSB->setValue(1);
+  ui->zScaleSB->setValue(1);
+  ui->uScaleSB->setValue(1);
 }
 
 void MainWindow::on_openFilePushButton_released() { MainWindow::openFile(); }
