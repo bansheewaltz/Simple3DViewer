@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>850</height>
+    <width>1200</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -38,7 +38,7 @@
      <height>600</height>
     </size>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
     <property name="sizeConstraint">
      <enum>QLayout::SetDefaultConstraint</enum>
     </property>
@@ -71,7 +71,7 @@
     <bool>true</bool>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -79,13 +79,13 @@
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>650</height>
+     <height>800</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>224</width>
-     <height>843</height>
+     <height>982</height>
     </size>
    </property>
    <property name="palette">
@@ -127,8 +127,17 @@
      </size>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>-1</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
      <property name="rightMargin">
       <number>12</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
      </property>
      <item>
       <layout class="QVBoxLayout" name="displayLayout">
@@ -420,7 +429,7 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pointColorPicker">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1072,6 +1081,30 @@
         </layout>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="screenshotPushButton">
+       <property name="text">
+        <string>Take screenshot</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="gifCapturePushButton">
+       <property name="text">
+        <string>Capture Gif</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="openFilePushButton">
+       <property name="text">
+        <string>Open File</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
