@@ -7,7 +7,6 @@
 #include <QSpinbox>
 #include <QTimer>
 
-#include "QtWidgets/qspinbox.h"
 #include "doubleslider.hpp"
 #include "gifimage/qgifimage.h"
 
