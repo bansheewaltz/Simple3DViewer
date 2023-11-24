@@ -1,22 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 
-# set library name if it is not already specified from top-level
+project(libowviewer LANGUAGES C)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
-if(NOT IS_SUBPROJECT)
-    set(LIB_NAME libobjviewer)
-endif()
-
-project(${LIB_NAME} LANGUAGES C)
-
-# specify the languages' standards
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_STATIC_LIBRARY_PREFIX "")
 
-add_library(${LIB_NAME} STATIC
+add_library(${PROJECT_NAME} STATIC
     include/owviewer.h
-    include/obj_viewer/details.h
+    include/owviewer/details.h
 
     src/parsing.c
     src/processing.c
@@ -27,10 +21,8 @@ add_library(${LIB_NAME} STATIC
     src/projection.c
 )
 
-target_include_directories(${LIB_NAME} PUBLIC include)
-target_include_directories(${LIB_NAME} PUBLIC include/obj_viewer)
+target_include_directories(${PROJECT_NAME} PUBLIC include include/owviewer)
 
-# Tests
-add_executable(test_time test/time_test.cpp)
-target_link_libraries(test_time ${LIB_NAME})
-target_include_directories(test_time PRIVATE extern)
+add_executable(test_time test/tests/time_test.cpp)
+target_link_libraries(test_time ${PROJECT_NAME})
+target_include_directories(test_time PRIVATE test/3rdparty)
