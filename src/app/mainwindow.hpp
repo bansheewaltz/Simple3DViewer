@@ -66,6 +66,7 @@ class MainWindow : public QMainWindow {
   /* Actions */
   void on_openFilePushButton_released();
   void openFile();
+  void on_screenshotPushButton_released();
 };
 
 #endif  // MAINWINDOW_HPP

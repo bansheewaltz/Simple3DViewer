@@ -508,3 +508,20 @@ void MainWindow::openFile() {
   ui->viewport->setFileName(file_name.toStdString());
   ui->viewport->loadModel();
 }
+
+void MainWindow::on_screenshotPushButton_released() {
+  QImage screenshot = ui->viewport->grabFramebuffer();
+  QString dir = QDir::homePath();
+  QString extension = "*.jpeg;;*.bmp";
+  QString file_name = QFileDialog::getSaveFileName(this, tr("Save screenshot"),
+                                                   dir, extension, &extension);
+  if (file_name.isEmpty()) {
+    return;
+  }
+
+  extension.remove(0, 2);
+  if (file_name.right(extension.length() + 1) != ("." + extension)) {
+    file_name = file_name + "." + extension;
+  }
+  screenshot.save(file_name, extension.toStdString().c_str(), 80);
+}
