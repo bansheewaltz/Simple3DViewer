@@ -34,18 +34,17 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
-  void resetSettings();
-  void paintButton(QPushButton *b, const QColor &c);
+
   void setupWidthControls(DoubleSlider *, QDoubleSpinBox *);
   void setupLocationControls(DoubleSlider *, QDoubleSpinBox *);
   void setupRotationControls(DoubleSlider *, QDoubleSpinBox *);
   void setupScaleControls(DoubleSlider *, QDoubleSpinBox *);
+  void paintButton(QPushButton *b, const QColor &c);
   void resetSettings();
   void saveSettings(QString file_name);
   void loadSettings();
 
  private slots:
-  void openFile();
   /* Display */
   void on_backgroundColorPicker_clicked();
   void on_lineColorPicker_clicked();
