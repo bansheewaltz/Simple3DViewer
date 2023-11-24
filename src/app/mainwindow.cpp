@@ -23,9 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
   paintButton(ui->lineColorPicker, ui->viewport->getLineColor());
   paintButton(ui->pointColorPicker, ui->viewport->getPointColor());
   /* Set primitives' display status */
-  on_displayLinesCheckBox_toggled(true);
-  on_displayPointsCheckBox_toggled(false);
-  on_perspectiveProjectionButton_toggled(true);
+  on_displayLinesCB_toggled(true);
+  on_displayPointsCB_toggled(false);
+  on_perspectiveProjButton_toggled(true);
   /* Set up primitives' size controls */
   setupWidthControls(ui->lineWidthSlider, ui->lineWidthSpinBox);
   setupWidthControls(ui->pointSizeSlider, ui->pointSizeSpinBox);
@@ -47,10 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
   new QShortcut(QKeySequence(tr("L")), ui->xLocationSpinbox, SLOT(setFocus()));
   new QShortcut(QKeySequence(tr("R")), ui->xRotationSpinbox, SLOT(setFocus()));
   new QShortcut(QKeySequence(tr("S")), ui->xScaleSpinbox, SLOT(setFocus()));
-  new QShortcut(QKeySequence(tr("E")), ui->displayLinesCheckBox,
-                SLOT(toggle()));
-  new QShortcut(QKeySequence(tr("V")), ui->displayPointsCheckBox,
-                SLOT(toggle()));
+  new QShortcut(QKeySequence(tr("E")), ui->displayLinesCB, SLOT(toggle()));
+  new QShortcut(QKeySequence(tr("V")), ui->displayPointsCB, SLOT(toggle()));
   connect(&gif_timer, SIGNAL(timeout()), this, SLOT(RecordGifFrame()));
   resetSettings();
   loadSettings();
@@ -73,18 +71,18 @@ void MainWindow::saveSettings(QString file_name) {
   settings.endGroup();
   settings.beginGroup("DrawSettings");
   settings.setValue("BackgroundColor", ui->viewport->getBackgroundColor());
-  settings.setValue("DrawLines", ui->displayLinesCheckBox->checkState());
+  settings.setValue("DrawLines", ui->displayLinesCB->checkState());
   settings.setValue("DashedLines", ui->lineStyleDashedCheckBox->checkState());
   settings.setValue("LinesColor", ui->viewport->getLineColor());
   settings.setValue("LinesWidth", ui->lineWidthSpinBox->value());
-  settings.setValue("DrawPoints", ui->displayPointsCheckBox->checkState());
+  settings.setValue("DrawPoints", ui->displayPointsCB->checkState());
   settings.setValue("PointsType", ui->pointStyleSquareCheckBox->checkState());
   settings.setValue("PointsColor", ui->viewport->getPointColor());
   settings.setValue("PointsSize", ui->pointSizeSpinBox->value());
   settings.endGroup();
   settings.beginGroup("CameraProjection");
-  settings.setValue("Perspective", ui->orthographicProjButton->isChecked());
-  settings.setValue("Ortho", ui->perspectiveProjectionButton->isChecked());
+  settings.setValue("Perspective", ui->perspectiveProjButton->isChecked());
+  settings.setValue("Ortho", ui->orthographicProjButton->isChecked());
   settings.endGroup();
   settings.beginGroup("Location");
   settings.setValue("xLocationSpinbox", ui->xLocationSpinbox->value());
@@ -118,7 +116,7 @@ void MainWindow::loadSettings() {
           settings.value("BackgroundColor").value<QColor>());
     }
     if (settings.contains("DrawLines")) {
-      ui->displayLinesCheckBox->setCheckState(
+      ui->displayLinesCB->setCheckState(
           settings.value("DrawLines").value<Qt::CheckState>());
     }
     if (settings.contains("DashedLines")) {
@@ -132,7 +130,7 @@ void MainWindow::loadSettings() {
       ui->lineWidthSpinBox->setValue(settings.value("LinesWidth").toDouble());
     }
     if (settings.contains("DrawPoints")) {
-      ui->displayPointsCheckBox->setCheckState(
+      ui->displayPointsCB->setCheckState(
           settings.value("DrawPoints").value<Qt::CheckState>());
     }
     if (settings.contains("PointsType")) {
@@ -301,21 +299,21 @@ void MainWindow::on_pointColorPicker_clicked() {
   paintButton(ui->pointColorPicker, color);
 }
 
-void MainWindow::on_orthographicProjectionButton_toggled(bool checked) {
+void MainWindow::on_orthographicProjButton_toggled(bool checked) {
   ui->viewport->setProjectionType(ProjectionType::ORTHOGONAL);
   ui->viewport->update();
 }
-void MainWindow::on_perspectiveProjectionButton_toggled(bool checked) {
+void MainWindow::on_perspectiveProjButton_toggled(bool checked) {
   ui->viewport->setProjectionType(ProjectionType::PERSPECTIVE);
   ui->viewport->update();
 }
 
-void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
+void MainWindow::on_displayLinesCB_toggled(bool checked) {
   /* Set the state in the viewport */
   ui->viewport->setLineDisplayEnabled(checked);
   ui->viewport->update();
   /* Set the checkbox check state */
-  ui->displayLinesCheckBox->setChecked(checked);
+  ui->displayLinesCB->setChecked(checked);
   /* Disable the settings' frame */
   setLayoutWidgetsState(ui->lineSettingsLayout, checked);
   ui->lineStyleDashedCheckBox->setEnabled(checked);
@@ -326,12 +324,12 @@ void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {
   }
   paintButton(ui->lineColorPicker, res_color);
 }
-void MainWindow::on_displayPointsCheckBox_toggled(bool checked) {
+void MainWindow::on_displayPointsCB_toggled(bool checked) {
   /* Set the state in the viewport */
   ui->viewport->setPointDisplayEnabled(checked);
   ui->viewport->update();
   /* Set the checkbox check state */
-  ui->displayPointsCheckBox->setChecked(checked);
+  ui->displayPointsCB->setChecked(checked);
   /* Disable the settings' frame */
   setLayoutWidgetsState(ui->pointSettingsLayout, checked);
   ui->pointStyleSquareCheckBox->setEnabled(checked);

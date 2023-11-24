@@ -48,14 +48,14 @@ class MainWindow : public QMainWindow {
   void on_backgroundColorPicker_clicked();
   void on_lineColorPicker_clicked();
   void on_pointColorPicker_clicked();
-  void on_displayLinesCheckBox_toggled(bool checked);
-  void on_displayPointsCheckBox_toggled(bool checked);
+  void on_displayLinesCB_toggled(bool checked);
+  void on_displayPointsCB_toggled(bool checked);
   void on_pointSizeSlider_doubleValueChanged(double value);
   void on_pointStyleSquareCheckBox_toggled(bool checked);
   void on_lineWidthSlider_doubleValueChanged(double value);
   void on_lineStyleDashedCheckBox_toggled(bool checked);
-  void on_orthographicProjectionButton_toggled(bool checked);
-  void on_perspectiveProjectionButton_toggled(bool checked);
+  void on_orthographicProjButton_toggled(bool checked);
+  void on_perspectiveProjButton_toggled(bool checked);
   /* Location */
   void on_xLocationSlider_doubleValueChanged(double value);
   void on_yLocationSlider_doubleValueChanged(double value);

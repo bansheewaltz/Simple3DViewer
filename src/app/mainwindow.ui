@@ -199,7 +199,7 @@
          <item>
           <layout class="QHBoxLayout" name="linesEnableLayout">
            <item>
-            <widget class="QCheckBox" name="displayLinesCheckBox">
+            <widget class="QCheckBox" name="displayLinesCB">
              <property name="font">
               <font>
                <pointsize>13</pointsize>
@@ -327,7 +327,7 @@
          <item>
           <layout class="QHBoxLayout" name="pointsEnableLayout">
            <item>
-            <widget class="QCheckBox" name="displayPointsCheckBox">
+            <widget class="QCheckBox" name="displayPointsCB">
              <property name="font">
               <font>
                <pointsize>13</pointsize>
@@ -490,7 +490,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QRadioButton" name="perspectiveProjectionButton">
+          <widget class="QRadioButton" name="perspectiveProjButton">
            <property name="text">
             <string>perspective</string>
            </property>
@@ -500,7 +500,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="orthographicProjectionButton">
+          <widget class="QRadioButton" name="orthographicProjButton">
            <property name="text">
             <string>ortho</string>
            </property>
@@ -1125,18 +1125,18 @@
  </customwidgets>
  <tabstops>
   <tabstop>backgroundColorPicker</tabstop>
-  <tabstop>displayLinesCheckBox</tabstop>
+  <tabstop>displayLinesCB</tabstop>
   <tabstop>lineStyleDashedCheckBox</tabstop>
   <tabstop>lineColorPicker</tabstop>
   <tabstop>lineWidthSlider</tabstop>
   <tabstop>lineWidthSpinBox</tabstop>
-  <tabstop>displayPointsCheckBox</tabstop>
+  <tabstop>displayPointsCB</tabstop>
   <tabstop>pointStyleSquareCheckBox</tabstop>
   <tabstop>pointSizeSlider</tabstop>
   <tabstop>pointSizeSpinBox</tabstop>
   <tabstop>pointColorPicker</tabstop>
-  <tabstop>perspectiveProjectionButton</tabstop>
-  <tabstop>orthographicProjectionButton</tabstop>
+  <tabstop>perspectiveProjButton</tabstop>
+  <tabstop>orthographicProjButton</tabstop>
   <tabstop>locationResetPushButton</tabstop>
   <tabstop>xLocationSlider</tabstop>
   <tabstop>xLocationSpinbox</tabstop>
