@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 #include "fast_obj/fast_obj.h"
 /* Custom parser */
 #include "owviewer.h"
-#include "obj_viewer/details.h"
+#include "owviewer/details.h"
 
 using namespace std::chrono;
 struct Timer {
