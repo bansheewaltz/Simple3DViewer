@@ -148,12 +148,12 @@ void MainWindow::loadSettings() {
     settings.beginGroup("CameraProjection");
     if (settings.contains("Perspective")) {
       if (settings.value("Perspective").toBool()) {
-        ui->orthographicProjectionButton->setChecked(1);
+        ui->perspectiveProjButton->setChecked(true);
       }
     }
     if (settings.contains("Ortho")) {
       if (settings.value("Ortho").toBool()) {
-        ui->perspectiveProjectionButton->setChecked(1);
+        ui->orthographicProjButton->setChecked(true);
       }
     }
     settings.endGroup();
