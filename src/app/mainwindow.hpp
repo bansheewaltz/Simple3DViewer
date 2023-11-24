@@ -41,6 +41,8 @@ class MainWindow : public QMainWindow {
   void on_pointStyleSquareCheckBox_toggled(bool checked);
   void on_lineWidthSlider_doubleValueChanged(double value);
   void on_lineStyleDashedCheckBox_toggled(bool checked);
+  void on_orthographicProjectionButton_toggled(bool checked);
+  void on_perspectiveProjectionButton_toggled(bool checked);
   /* Location */
   void on_xLocationSlider_doubleValueChanged(double value);
   void on_yLocationSlider_doubleValueChanged(double value);

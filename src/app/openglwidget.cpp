@@ -27,6 +27,7 @@ void OpenGLWidget::resetSettings() {
   setCameraRotationX(-30);
   setCameraRotationY(-30);
   setCameraRotationZ(0);
+  setProjectionType(ProjectionType::ORTHOGONAL);  // default
 }
 
 static void GLClearError() {
@@ -63,7 +64,12 @@ void OpenGLWidget::paintGL() {
   /* Set the projection matrix */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-1 * this->ar, 1 * this->ar, -1, 1, -1, 1);
+  if (projection_type == ProjectionType::PERSPECTIVE) {
+    glFrustum(-0.5 * this->ar, 0.5 * this->ar, -0.5, 0.5, 1, 1000);
+    glTranslatef(0, 0, -2 * this->ar);
+  } else {
+    glOrtho(-1 * this->ar, 1 * this->ar, -1, 1, -1, 1);
+  }
 
   /* Draw the world axes */
   glMatrixMode(GL_MODELVIEW);

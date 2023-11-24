@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
   /* Set primitives' display status */
   on_displayLinesCheckBox_toggled(true);
   on_displayPointsCheckBox_toggled(false);
+  on_perspectiveProjectionButton_toggled(true);
   /* Set up primitives' size controls */
   setupWidthControls(ui->lineWidthSlider, ui->lineWidthSpinBox);
   setupWidthControls(ui->pointSizeSlider, ui->pointSizeSpinBox);
@@ -127,6 +128,15 @@ void MainWindow::on_pointColorPicker_clicked() {
   ui->viewport->setPointColor(color);
   ui->viewport->update();
   paintButton(ui->pointColorPicker, color);
+}
+
+void MainWindow::on_orthographicProjectionButton_toggled(bool checked) {
+  ui->viewport->setProjectionType(ProjectionType::ORTHOGONAL);
+  ui->viewport->update();
+}
+void MainWindow::on_perspectiveProjectionButton_toggled(bool checked) {
+  ui->viewport->setProjectionType(ProjectionType::PERSPECTIVE);
+  ui->viewport->update();
 }
 
 void MainWindow::on_displayLinesCheckBox_toggled(bool checked) {

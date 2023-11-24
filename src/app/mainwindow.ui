@@ -481,7 +481,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="perspectiveProjectionButton">
            <property name="text">
             <string>perspective</string>
            </property>
@@ -491,7 +491,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="orthographicProjectionButton">
            <property name="text">
             <string>ortho</string>
            </property>
@@ -1102,8 +1102,8 @@
   <tabstop>pointSizeSlider</tabstop>
   <tabstop>pointSizeSpinBox</tabstop>
   <tabstop>pointColorPicker</tabstop>
-  <tabstop>radioButton_2</tabstop>
-  <tabstop>radioButton</tabstop>
+  <tabstop>perspectiveProjectionButton</tabstop>
+  <tabstop>orthographicProjectionButton</tabstop>
   <tabstop>locationResetPushButton</tabstop>
   <tabstop>xLocationSlider</tabstop>
   <tabstop>xLocationSpinbox</tabstop>

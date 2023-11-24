@@ -12,6 +12,7 @@
 
 enum LineStyle { SOLID, DASHED };
 enum PointStyle { CIRCLE, SQUARE };
+enum ProjectionType { ORTHOGONAL, PERSPECTIVE };
 
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
@@ -49,6 +50,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   float camera_rotx, camera_roty, camera_rotz;
   /* Viewport settings */
   float ar;  // aspect raio
+  ProjectionType projection_type;
 
  public:
   OpenGLWidget(QWidget *parent = nullptr);
@@ -121,6 +123,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   LineStyle getLineStyle() const { return line_style; }
   PointStyle getPointStyle() const { return point_style; }
   /* Camera settings */
+  void setProjectionType(ProjectionType type) { projection_type = type; }
   void setCameraSpeed(float speed = 0.2) { camera_speed = speed; }
   void setCameraRotationX(float angle = 0) { camera_rotx = angle; }
   void setCameraRotationY(float angle = 0) { camera_roty = angle; }
