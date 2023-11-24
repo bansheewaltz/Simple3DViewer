@@ -9,10 +9,10 @@
 #include "gifimage/qgifimage.h"
 
 enum ControlSteps {
-  WIDTH = 200,
   LOCATION = 1000,
   ROTATION = 1800,
   SCALE = 1000,
+  WIDTH = 200,
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -57,23 +57,16 @@ MainWindow::~MainWindow() {
 
 void MainWindow::resetSettings() {
   on_perspectiveProjButton_toggled(true);
-
   on_displayLinesCB_toggled(true);
-  on_lineWidthSlider_doubleValueChanged(1.0);
-  //  ui->lineWidthSB->setValue(1.0);
-
+  ui->lineWidthSB->setValue(1.0);
   on_displayPointsCB_toggled(false);
-  //  on_pointSizeSlider_doubleValueChanged(1.0);
   ui->pointSizeSB->setValue(1.0);
-
   ui->xLocationSlider->setValue(0);
   ui->yLocationSlider->setValue(0);
   ui->zLocationSlider->setValue(0);
-
   ui->xRotationSlider->setValue(0);
   ui->yRotationSlider->setValue(0);
   ui->zRotationSlider->setValue(0);
-
   ui->xScaleSB->setValue(1);
   ui->yScaleSB->setValue(1);
   ui->zScaleSB->setValue(1);
@@ -341,6 +334,7 @@ void MainWindow::setupWidthControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   s->setMaximum(+steps_count);
   // internally the slider is of int type but emits the signal of type double
   s->divisor = steps_count / sb_limit;
+  s->setDoubleValue(9.9);  // placeholder value to fix not emitted valueChanged
 }
 void MainWindow::on_lineWidthSlider_doubleValueChanged(double value) {
   ui->viewport->setLineWidth(value);
