@@ -103,11 +103,8 @@ void OpenGLWidget::paintGL() {
 }
 
 void OpenGLWidget::drawCubeScene() {
-  drawAxes();
+  //  drawAxes();
   drawCube(0, 0, 0, 1);
-  //  const static float vspacing = 1.5;
-  //  drawCube(0, +vspacing, 0, 0.33);
-  //  drawCube(0, -vspacing, 0, 0.33);
 }
 
 void OpenGLWidget::drawObject(const OWV_Mesh *m) {
@@ -154,7 +151,7 @@ void OpenGLWidget::drawObject(const OWV_Mesh *m) {
     glDisable(GL_LINE_STIPPLE);
   }
 
-  // Send the point draw calls
+  /* Send the point draw calls */
   if (this->isPointDisplayEnabled()) {
     QColor pc = getPointColor();
     glColor3d(pc.redF(), pc.greenF(), pc.blueF());
