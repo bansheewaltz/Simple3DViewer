@@ -121,9 +121,7 @@ void OpenGLWidget::paintGL() {
     drawObject(mesh);
 }
 
-void OpenGLWidget::drawCubeScene() {
-  drawCube(0, 0, 0, 1);
-}
+void OpenGLWidget::drawCubeScene() { drawCube(0, 0, 0, 1); }
 
 void OpenGLWidget::drawObject(const OWV_Mesh *m) {
   if (!m) return;

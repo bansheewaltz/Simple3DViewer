@@ -89,7 +89,7 @@ static bool is_pair_eq(unsigned int* a, unsigned int* b) {
 }
 
 unsigned int* owv_iarr_lines_clean(unsigned int* arr, size_t len,
-                                                size_t* newlen) {
+                                   size_t* newlen) {
   if (len <= 4) return arr;
   // We will work with ptr to start index of each line
   unsigned int* ref = &arr[0];  // reference line start index

@@ -19,9 +19,10 @@ LINTFLAGS := --style=google
 lint:     LINTFLAGS += -n
 lint_fix: LINTFLAGS += -i
 lint lint_fix:
-	clang-format ${LINTFLAGS} $(shell find src -type f \
-                                             -name '*.h'   -or -name '*.c' \
-                                             -name '*.hpp' -or -name '*.cpp')
+	clang-format ${LINTFLAGS} $(shell find src/app src/lib/src\
+	                                      -type f \
+																				-name '*.h'   -or -name '*.c' -or \
+                                        -name '*.hpp' -or -name '*.cpp')
 .PHONY: lint lint_fix
 
 install: build
