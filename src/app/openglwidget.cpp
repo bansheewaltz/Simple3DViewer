@@ -197,6 +197,8 @@ void OpenGLWidget::drawAxes() {
 
   glVertexPointer(3, GL_FLOAT, 0, positions);
   glLineWidth(1);
+  QColor lc = "#9A9A9A";
+  glColor3d(lc.redF(), lc.greenF(), lc.blueF());
   glDrawArrays(GL_LINES, 0, position_count);
 }
 
