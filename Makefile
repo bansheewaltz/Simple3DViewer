@@ -1,6 +1,6 @@
-BIN_DIR ?= build
-BUILD_TYPE ?= Debug
-BUILD_DIR ?= build/$(BUILD_TYPE)
+BIN_DIR     ?= build
+BUILD_TYPE  ?= Debug
+BUILD_DIR   ?= build/$(BUILD_TYPE)
 INSTALL_DIR ?= installation
 
 all: build
