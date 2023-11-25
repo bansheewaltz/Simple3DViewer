@@ -1,0 +1,6 @@
+[submodule "src/lib/test/3rdparty/clgm"]
+	path = src/lib/test/3rdparty/cglm
+	url = https://github.com/recp/cglm.git
+[submodule "src/lib/test/3rdparty/fastobj"]
+	path = src/lib/test/3rdparty/fast_obj
+	url = https://github.com/thisistherk/fast_obj.git
