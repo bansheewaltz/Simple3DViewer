@@ -43,6 +43,7 @@ class MainWindow : public QMainWindow {
   void resetSettings();
   void saveSettings(QString file_name);
   void loadSettings();
+  void showFileStats();
 
  private slots:
   /* Display */

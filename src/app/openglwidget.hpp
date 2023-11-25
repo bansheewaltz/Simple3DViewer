@@ -17,8 +17,15 @@ enum ProjectionType { ORTHOGONAL, PERSPECTIVE };
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
- private:
+ public:
+  /* Statistics */
   std::string file_name;
+  unsigned int vertices_count;
+  unsigned int faces_count;
+  unsigned int edges_count;
+
+ private:
+  /* Geometry and transformations */
   const OWV_Mesh *mesh;
   OWV_MeshBounds mesh_bounds;
   /* Transformed index data */

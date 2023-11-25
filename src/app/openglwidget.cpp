@@ -217,17 +217,18 @@ void OpenGLWidget::loadModel() {
   this->mesh = m;
   if (this->index_array) {
     free(this->index_array);
+    index_count = 0;
   }
-  //  if (this->face_index_list) {
-  //    delete this->face_index_list;
-  //  }
   this->mesh_bounds = owv_mesh_find_bounds(m);
+  /* Break the index array of faces into the index array of UNIQUE lines */
+  this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
+  this->faces_count = m->face_count;
+  this->vertices_count = m->vertex_count - 1;
+  this->edges_count = this->index_count / 2;
   /* Break the index array of faces into the array of index arrays by faces */
   //  owv_index_arr_to_2d_arr(m);
   /* Break the index array of faces into the index array of lines */
   //  this->index_array = owv_to_lines_index_arr(m);
   //  this->index_count = m->index_count * 2;
-  /* Break the index array of faces into the index array of UNIQUE lines */
-  this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
   update();
 }

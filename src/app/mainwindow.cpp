@@ -187,10 +187,21 @@ void MainWindow::loadSettings() {
   settings.endGroup();
   settings.beginGroup("Filename");
   if (settings.contains("model")) {
-    ui->viewport->setFileName(settings.value("model").toString().toStdString());
+    file_name = settings.value("model").toString();
+    ui->viewport->setFileName(file_name.toStdString());
     ui->viewport->loadModel();
+    showFileStats();
   }
   settings.endGroup();
+}
+
+void MainWindow::showFileStats() {
+  QString stats =                                                         //
+      file_name.section("/", -1, -1).section(".", 0, 0) + " | " +         //
+      "verts:" + QString::number(ui->viewport->vertices_count) + " | " +  //
+      "faces:" + QString::number(ui->viewport->faces_count) + " | " +     //
+      "edges:" + QString::number(ui->viewport->edges_count);
+  ui->statisticsLabel->setText(stats);
 }
 
 /* GUI behaviour related helper functions */
@@ -472,6 +483,7 @@ void MainWindow::openFile() {
   this->saveSettings(file_name);
   ui->viewport->setFileName(file_name.toStdString());
   ui->viewport->loadModel();
+  showFileStats();
 }
 
 void MainWindow::on_screenshotPushButton_released() {
