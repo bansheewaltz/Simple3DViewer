@@ -8,6 +8,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 
+#include "cglm/cglm.h"
 #include "owviewer.h"
 
 enum LineStyle { SOLID, DASHED };
@@ -23,6 +24,10 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   unsigned int vertices_count;
   unsigned int faces_count;
   unsigned int edges_count;
+  /* Controls */
+  bool global_axes_enabled = true;
+  bool local_axes_enabled = false;
+  float viewport_default_scale = 0.7;
 
  private:
   /* Geometry and transformations */
@@ -32,15 +37,11 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   size_t index_count;
   unsigned int *index_array;
   /* Affine transformations */
-  // translates to the world origin and scales to 1x1x1 cube
-  //  ObjViewerMatrix4x4 norm_matrix;
-  // glm::mat4 norm_matrix;
-  // model matrix transformations
   float scalex, scaley, scalez, scaleu;
   float rotx, roty, rotz;
   float trnsx, trnsy, trnsz;
-  OWV_Mat4x4 model_matrix;
-  OWV_Mat4x4 view_matrix;
+  // translates the model to the world origin and scales to 1x1x1 cube
+  mat4 norm_matrix;
   /* Display settings */
   QColor background_color;
   QColor line_color;

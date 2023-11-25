@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <iostream>
 
+#include "cglm/cglm.h"
 #include "owviewer.h"
 
 #define VIEWCUBE_SIDE 2.0f
@@ -17,7 +18,6 @@ OpenGLWidget::~OpenGLWidget() { owv_mesh_destroy((OWV_Mesh *)this->mesh); }
 void OpenGLWidget::resetSettings() {
   this->mesh = nullptr;
   this->index_array = nullptr;
-  //  this->face_index_list = nullptr;
   /* Colors */
   setBackgroundColor(QColor("#EFE5D7"));
   setLineColor(QColor("#974F4C"));
@@ -37,6 +37,19 @@ static void GLCheckError() {
   while (GLenum error = glGetError()) {
     std::cout << "OpenGL error: " << error << std::endl;
   }
+}
+
+void printMatrix(float *m, bool native) {
+  if (native) {
+    qDebug() << "native";
+  } else {
+    qDebug() << "cglm";
+  }
+  qDebug() << "address:" << &(m[0]);
+  for (int i = 0; i < 16; i += 4) {
+    qDebug() << m[i] << m[i + 1] << m[i + 2] << m[i + 3];
+  }
+  qDebug() << "";
 }
 
 /* Set up the rendering context, load shaders and other resources, etc. */
@@ -64,36 +77,42 @@ void OpenGLWidget::paintGL() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   if (projection_type == ProjectionType::PERSPECTIVE) {
-    glFrustum(-0.5 * this->ar, 0.5 * this->ar, -0.5, 0.5, 1, 1000);
-    glTranslatef(0, 0, -2 * this->ar);
+    glFrustum(-0.5 * ar, 0.5 * ar, -0.5, 0.5, 1, 1000);
+    glTranslatef(0, 0, -2 * ar);
   } else {
-    glOrtho(-1 * this->ar, 1 * this->ar, -1, 1, -1, 1);
+    static const float c = sqrt(3);  // because of the view cube with side 2
+    glOrtho(-c * ar, c * ar, -c, c, -c, c);
   }
-
-  /* Draw the world axes */
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  // view rotation
-  glRotatef(getCameraRotationX(), 1, 0, 0);
-  glRotatef(getCameraRotationY(), 0, 1, 0);
-  drawAxes();
 
   /* Set the model-view matrix */
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+  /* Perform all the transformations */
   // view rotation
-  glRotatef(getCameraRotationX(), 1, 0, 0);
-  glRotatef(getCameraRotationY(), 0, 1, 0);
+  mat4 transform = GLM_MAT4_IDENTITY_INIT;
+  glm_rotate_x(transform, glm_rad(camera_rotx), transform);
+  glm_rotate_y(transform, glm_rad(camera_roty), transform);
+  if (global_axes_enabled) {
+    glLoadMatrixf((float *)transform);
+    drawAxes();
+  }
   // view scale
-  glScalef(0.7f, 0.7f, 0.7f);
+  //  glm_scale_uni(transform, viewport_default_scale);
   // model translation
-  glTranslatef(getTranslationX(), getTranslationY(), getTranslationZ());
+  glm_translate(transform, (vec3){trnsx, trnsy, trnsz});
   // model rotation
-  glRotatef(getRotationX(), 1, 0, 0);
-  glRotatef(getRotationY(), 0, 1, 0);
-  glRotatef(getRotationZ(), 0, 0, 1);
+  glm_rotate_x(transform, glm_rad(rotx), transform);
+  glm_rotate_y(transform, glm_rad(roty), transform);
+  glm_rotate_z(transform, glm_rad(rotz), transform);
   // model scale
-  glScalef(getScaleUX(), getScaleUY(), getScaleUZ());
+  glm_scale_uni(transform, scaleu);
+  glm_scale(transform, (vec3){scalex, scaley, scalez});
+  if (local_axes_enabled) {
+    glLoadMatrixf((float *)transform);
+    drawAxes();
+  }
+  // multiply with the model's normalisation matrix
+  glm_mul(transform, norm_matrix, transform);
+  glLoadMatrixf((float *)transform);
 
   /* Draw the objects */
   if (!mesh)  // use a template model
@@ -103,18 +122,11 @@ void OpenGLWidget::paintGL() {
 }
 
 void OpenGLWidget::drawCubeScene() {
-  //  drawAxes();
   drawCube(0, 0, 0, 1);
 }
 
 void OpenGLWidget::drawObject(const OWV_Mesh *m) {
   if (!m) return;
-  /* Centre the object */
-  //! make the norm matrix out of this set of transformations
-  const float maxlen = mesh_bounds.maxlen;
-  const float vcs = VIEWCUBE_SIDE;
-  glScalef(vcs / maxlen, vcs / maxlen, vcs / maxlen);
-  glTranslatef(-mesh_bounds.xcen, -mesh_bounds.ycen, -mesh_bounds.zcen);
 
   /* Set up the buffers */
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -148,6 +160,7 @@ void OpenGLWidget::drawObject(const OWV_Mesh *m) {
     /* GL_LINES glDrawElements variation */
     glDrawElements(GL_LINES, this->index_count, GL_UNSIGNED_INT,
                    this->index_array);
+
     glDisable(GL_LINE_STIPPLE);
   }
 
@@ -219,6 +232,7 @@ void OpenGLWidget::loadModel() {
     index_count = 0;
   }
   this->mesh_bounds = owv_mesh_find_bounds(m);
+
   /* Break the index array of faces into the index array of UNIQUE lines */
   this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
   this->faces_count = m->face_count;
@@ -229,5 +243,15 @@ void OpenGLWidget::loadModel() {
   /* Break the index array of faces into the index array of lines */
   //  this->index_array = owv_to_lines_index_arr(m);
   //  this->index_count = m->index_count * 2;
+
+  /* Create a normalization matrix for the model */
+  const float maxlen = mesh_bounds.maxlen;
+  const float divid = VIEWCUBE_SIDE;
+  mat4 nm = GLM_MAT4_IDENTITY_INIT;
+  OWV_MeshBounds &mb = this->mesh_bounds;
+  glm_scale(nm, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
+  glm_translate(nm, (vec3){-mb.xcen, -mb.ycen, -mb.zcen});
+  memcpy(this->norm_matrix, nm, sizeof(nm));
+
   update();
 }
