@@ -1,10 +1,3 @@
-# note: use "cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ ." to generate debug version for coverage
-# Copyright <lwolmer> 2022
-# ############################################################
-# #
-# GLOBAL CMAKE SETUP                      #
-# #
-# ############################################################
 option(ENABLE_CODE_ANALYSIS "Run code cppcheck" OFF)
 cmake_minimum_required(VERSION 3.5)
 
@@ -33,16 +26,10 @@ if(ENABLE_CODE_ANALYSIS)
     endif()
 endif(ENABLE_CODE_ANALYSIS)
 
-# ############################################################
-# #
-# LIBRARY                           #
-# #
-# ############################################################
-
 # dependency
 add_subdirectory(giflib)
 
-project(qtgif VERSION 1.0 LANGUAGES CXX)
+project(QtGifImage VERSION 1.0 LANGUAGES CXX)
 find_package(Qt6Core)
 find_package(Qt6Widgets)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -57,7 +44,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CMAKE_CXX_STANDARD_REQUIRED ON)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE gif_from_src)
+target_link_libraries(${PROJECT_NAME} PRIVATE giflib)
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/giflib
