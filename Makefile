@@ -34,8 +34,8 @@ uninstall: build
 .PHONY: uninstall
 
 clean:
-	rm -r build $(INSTALL_DIR)
-	rm -r *.tar* *.sh
+	rm -rf build $(INSTALL_DIR)
+	rm -rf *.tar* *.sh
 .PHONY: clean
 
 dvi:
