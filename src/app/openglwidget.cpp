@@ -24,8 +24,8 @@ void OpenGLWidget::resetSettings() {
   setPointColor(getLineColor());
   /* Camera */
   setCameraSpeed(0.2f);
-  setCameraRotationX(-30);
-  setCameraRotationY(-30);
+  setCameraRotationX(+30);
+  setCameraRotationY(+40);
   setCameraRotationZ(0);
 }
 
