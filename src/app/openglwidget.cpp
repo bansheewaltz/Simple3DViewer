@@ -12,7 +12,7 @@
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
   resetSettings();
 }
-OpenGLWidget::~OpenGLWidget() { ; }
+OpenGLWidget::~OpenGLWidget() { owv_mesh_destroy((OWV_Mesh *)this->mesh); }
 
 void OpenGLWidget::resetSettings() {
   this->mesh = nullptr;
