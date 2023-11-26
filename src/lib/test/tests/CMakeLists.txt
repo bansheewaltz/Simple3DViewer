@@ -36,7 +36,7 @@ add_custom_target(run_tests ALL
 find_program(GCOVR_EXECUTABLE gcovr)
 
 if(ENABLE_COVERAGE AND GCOVR_EXECUTABLE)
-  set(LIBSMARTCALC_COVERAGE_DIR ${PROJECT_BINARY_DIR}/coverage)
+  set(COVERAGE_DIR ${PROJECT_BINARY_DIR}/coverage)
   target_compile_options(${PROJECT_NAME} PRIVATE --coverage)
   target_link_options(${PROJECT_NAME} PRIVATE --coverage)
   target_link_libraries(${PROJECT_NAME} gcov)
@@ -44,18 +44,18 @@ if(ENABLE_COVERAGE AND GCOVR_EXECUTABLE)
   add_custom_target(coverage ALL
     COMMAND ${GCOVR_EXECUTABLE}
       --txt
-      --html-details=${LIBSMARTCALC_COVERAGE_DIR}/report.html
+      --html-details=${COVERAGE_DIR}/report.html
       --html-self-contained
       --decisions
       --root=${PROJECT_SOURCE_DIR}/
       --filter=${PROJECT_SOURCE_DIR}/include
       --filter=${PROJECT_SOURCE_DIR}/src
       --object-directory=${PROJECT_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --green "You can find html coverage report at ${LIBSMARTCALC_COVERAGE_DIR}/report.html"
+    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --green "You can find html coverage report at ${COVERAGE_DIR}/report.html"
     DEPENDS run_tests create_coverage_dir
   )
   add_custom_target(create_coverage_dir
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBSMARTCALC_COVERAGE_DIR})
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${COVERAGE_DIR})
 elseif(ENABLE_COVERAGE AND NOT GCOVR_EXECUTABLE)
   set(ENABLE_COVERAGE OFF)
   message(WARNING "gcovr program required for code coverage analysis was not found.")
