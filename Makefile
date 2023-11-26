@@ -3,6 +3,7 @@ BUILD_TYPE  ?= Debug
 BUILD_DIR   ?= build/$(BUILD_TYPE)
 INSTALL_DIR ?= installation
 
+
 all: build
 .PHONY: all
 
@@ -37,6 +38,7 @@ uninstall: build
 clean:
 	rm -rf build $(INSTALL_DIR)
 	rm -rf *.tar* *.sh
+	rm -rf _CPack_Packages
 .PHONY: clean
 
 dvi:
@@ -47,14 +49,12 @@ docs: configure
 	cmake --build $(BUILD_DIR) --target docs
 .PHONY: docs
 
-dist: build
+dist: configure
 	cpack --config $(BUILD_DIR)/CPackSourceConfig.cmake
-	rm -r _CPack_Packages
 .PHONY: dist
 
-bdist: build
+bdist: configure
 	cpack --config $(BUILD_DIR)/CPackConfig.cmake
-	rm -r _CPack_Packages
 .PHONY: bdist
 
 test: configure
