@@ -5,7 +5,6 @@
 #include <QWidget>
 #include <iostream>
 
-#include "cglm/cglm.h"
 #include "owviewer.h"
 
 #define VIEWCUBE_SIDE 2.0f
@@ -43,7 +42,7 @@ void printMatrix(float *m, bool native) {
   if (native) {
     qDebug() << "native";
   } else {
-    qDebug() << "cglm";
+    qDebug() << "custom";
   }
   qDebug() << "address:" << &(m[0]);
   for (int i = 0; i < 16; i += 4) {
@@ -88,30 +87,30 @@ void OpenGLWidget::paintGL() {
   glMatrixMode(GL_MODELVIEW);
   /* Perform all the transformations */
   // view rotation
-  mat4 transform = GLM_MAT4_IDENTITY_INIT;
-  glm_rotate_x(transform, glm_rad(camera_rotx), transform);
-  glm_rotate_y(transform, glm_rad(camera_roty), transform);
+  mat4 transform = OWVM_IDENTITY_INIT;
+  owvm_rotate_x(transform, camera_rotx, transform);
+  owvm_rotate_y(transform, camera_roty, transform);
   if (global_axes_enabled) {
     glLoadMatrixf((float *)transform);
     drawAxes();
   }
   // view scale
-  //  glm_scale_uni(transform, viewport_default_scale);
+  //  owvm_scale_uni(transform, viewport_default_scale);
   // model translation
-  glm_translate(transform, (vec3){trnsx, trnsy, trnsz});
+  owvm_translate(transform, (vec3){trnsx, trnsy, trnsz});
   // model rotation
-  glm_rotate_x(transform, glm_rad(rotx), transform);
-  glm_rotate_y(transform, glm_rad(roty), transform);
-  glm_rotate_z(transform, glm_rad(rotz), transform);
+  owvm_rotate_x(transform, rotx, transform);
+  owvm_rotate_y(transform, roty, transform);
+  owvm_rotate_z(transform, rotz, transform);
   // model scale
-  glm_scale_uni(transform, scaleu);
-  glm_scale(transform, (vec3){scalex, scaley, scalez});
+  owvm_scale_uni(transform, scaleu);
+  owvm_scale(transform, (vec3){scalex, scaley, scalez});
   if (local_axes_enabled) {
     glLoadMatrixf((float *)transform);
     drawAxes();
   }
   // multiply with the model's normalisation matrix
-  glm_mul(transform, norm_matrix, transform);
+  owvm_mul(transform, norm_matrix, transform);
   glLoadMatrixf((float *)transform);
 
   /* Draw the objects */
@@ -245,10 +244,10 @@ void OpenGLWidget::loadModel() {
   /* Create a normalization matrix for the model */
   const float maxlen = mesh_bounds.maxlen;
   const float divid = VIEWCUBE_SIDE;
-  mat4 nm = GLM_MAT4_IDENTITY_INIT;
+  mat4 nm = OWVM_IDENTITY_INIT;
   OWV_MeshBounds &mb = this->mesh_bounds;
-  glm_scale(nm, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
-  glm_translate(nm, (vec3){-mb.xcen, -mb.ycen, -mb.zcen});
+  owvm_scale(nm, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
+  owvm_translate(nm, (vec3){-mb.xcen, -mb.ycen, -mb.zcen});
   memcpy(this->norm_matrix, nm, sizeof(nm));
 
   update();

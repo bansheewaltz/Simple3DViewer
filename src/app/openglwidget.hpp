@@ -8,7 +8,6 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 
-#include "cglm/cglm.h"
 #include "owviewer.h"
 
 enum LineStyle { SOLID, DASHED };
