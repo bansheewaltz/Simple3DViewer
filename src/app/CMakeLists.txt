@@ -31,6 +31,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::OpenGLWidgets
     QtGifImage
     libowviewer
+    d_classic
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
