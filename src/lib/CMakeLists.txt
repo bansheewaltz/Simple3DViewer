@@ -11,6 +11,7 @@ set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(PUBLIC_INCLUDES
     include/owviewer.h
     include/owviewer/details.h
+    include/owviewer/affine.h
 )
 
 add_library(${PROJECT_NAME} STATIC
@@ -21,10 +22,9 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories(${PROJECT_NAME} PUBLIC include include/owviewer)
 
-#add_executable(test_time test/tests/time_test.cpp)
-#target_link_libraries(test_time ${PROJECT_NAME})
-#target_include_directories(test_time PRIVATE test/3rdparty)
-
+# add_executable(test_time test/tests/time_test.cpp)
+# target_link_libraries(test_time ${PROJECT_NAME})
+# target_include_directories(test_time PRIVATE test/3rdparty)
 option(ENABLE_DOCS "Build documenation" ON)
 
 if(ENABLE_DOCS)

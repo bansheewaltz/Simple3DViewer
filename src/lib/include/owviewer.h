@@ -48,7 +48,7 @@ unsigned int** owv_iarr_to_2d_iarr(const OWV_Mesh* m);
 
 /* Affine transformations */
 
-// #include "affine.h"
+#include "owviewer/affine.h"
 
 #ifdef __cplusplus
 }
