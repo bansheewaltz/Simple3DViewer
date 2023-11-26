@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(cmake/updateSubmodules.cmake)
 
 option(ENABLE_DOCS "Build documenation" ON)
 option(ENABLE_TESTING "Enable testing" ON)
@@ -19,7 +20,6 @@ add_subdirectory(extern/gifimage)
 add_subdirectory(src/lib)
 add_subdirectory(src/app)
 target_include_directories(${PROJECT_NAME} PRIVATE extern)
-target_include_directories(${PROJECT_NAME} PRIVATE src/lib/test/3rdparty/cglm/include)
 
 # Target uninstall
 if(NOT TARGET uninstall)
