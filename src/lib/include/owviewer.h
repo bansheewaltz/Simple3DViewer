@@ -48,18 +48,7 @@ unsigned int** owv_iarr_to_2d_iarr(const OWV_Mesh* m);
 
 /* Affine transformations */
 
-typedef struct {
-  float arr[16];
-} OWV_Mat4x4;
-
-typedef struct {
-  float x, y, z;
-} OWV_Vec3;
-
-void owv_mat_rotate(OWV_Mat4x4* mat, float angle, OWV_Vec3 axis,
-                          bool normalize);
-void owv_mat_scale(OWV_Mat4x4* mat, float x, float y, float z);
-void owv_mat_translate(OWV_Mat4x4* mat, float x, float y, float z);
+// #include "affine.h"
 
 #ifdef __cplusplus
 }

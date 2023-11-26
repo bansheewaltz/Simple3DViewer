@@ -17,18 +17,13 @@ add_library(${PROJECT_NAME} STATIC
     ${PUBLIC_INCLUDES}
     src/parsing.c
     src/processing.c
-
-    src/rotation.c
-    src/scale.c
-    src/translation.c
-    src/projection.c
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include include/owviewer)
 
-add_executable(test_time test/tests/time_test.cpp)
-target_link_libraries(test_time ${PROJECT_NAME})
-target_include_directories(test_time PRIVATE test/3rdparty)
+#add_executable(test_time test/tests/time_test.cpp)
+#target_link_libraries(test_time ${PROJECT_NAME})
+#target_include_directories(test_time PRIVATE test/3rdparty)
 
 option(ENABLE_DOCS "Build documenation" ON)
 
